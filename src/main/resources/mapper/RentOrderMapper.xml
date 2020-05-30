@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.RentOrderMapper">
+    <resultMap id="BaseResultMap" type="com.allinpay.entity.RentOrder">
+        <id column="ORDER_NO" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="AMOUNT" jdbcType="VARCHAR" property="amount"/>
+        <result column="PAY_STATUS" jdbcType="VARCHAR" property="payStatus"/>
+        <result column="PAY_TYPE" jdbcType="VARCHAR" property="payType"/>
+        <result column="PAY_TIME" jdbcType="VARCHAR" property="payTime"/>
+        <result column="TENANT_NAME" jdbcType="VARCHAR" property="tenantName"/>
+        <result column="TENANT_PHONE" jdbcType="VARCHAR" property="tenantPhone"/>
+        <result column="AREA_ID" jdbcType="DECIMAL" property="areaId"/>
+        <result column="AREA" jdbcType="VARCHAR" property="area"/>
+        <result column="STALL" jdbcType="VARCHAR" property="stall"/>
+        <result column="RENT_START_TIME" jdbcType="VARCHAR" property="rentStartTime"/>
+        <result column="RENT_END_TIME" jdbcType="VARCHAR" property="rentEndTime"/>
+        <result column="TRX_ID" jdbcType="VARCHAR" property="trxId"/>
+        <result column="CHANNEL_TRX_ID" jdbcType="VARCHAR" property="channelTrxId"/>
+        <result column="OPEN_ID" jdbcType="VARCHAR" property="openId"/>
+        <result column="INSERT_TIME" jdbcType="VARCHAR" property="insertTime"/>
+        <result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime"/>
+        <result column="PERIOD" jdbcType="VARCHAR" property="period"/>
+        <result column="CONTINUE_RENT" jdbcType="CHAR" property="continueRent"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from T_GWJ_ORDER
+    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.allinpay.entity.RentOrder">
+    insert into T_GWJ_ORDER (ORDER_NO, AMOUNT, PAY_STATUS, 
+      PAY_TYPE, PAY_TIME, TENANT_NAME, 
+      TENANT_PHONE, AREA_ID, AREA, 
+      STALL, RENT_START_TIME, RENT_END_TIME, 
+      TRX_ID, CHANNEL_TRX_ID, OPEN_ID, 
+      INSERT_TIME, UPDATE_TIME, PERIOD, 
+      CONTINUE_RENT)
+    values (#{orderNo,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{payStatus,jdbcType=VARCHAR}, 
+      #{payType,jdbcType=VARCHAR}, #{payTime,jdbcType=VARCHAR}, #{tenantName,jdbcType=VARCHAR}, 
+      #{tenantPhone,jdbcType=VARCHAR}, #{areaId,jdbcType=DECIMAL}, #{area,jdbcType=VARCHAR}, 
+      #{stall,jdbcType=VARCHAR}, #{rentStartTime,jdbcType=VARCHAR}, #{rentEndTime,jdbcType=VARCHAR}, 
+      #{trxId,jdbcType=VARCHAR}, #{channelTrxId,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
+      #{insertTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{period,jdbcType=VARCHAR}, 
+      #{continueRent,jdbcType=CHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.allinpay.entity.RentOrder">
+    update T_GWJ_ORDER
+    set AMOUNT = #{amount,jdbcType=VARCHAR},
+      PAY_STATUS = #{payStatus,jdbcType=VARCHAR},
+      PAY_TYPE = #{payType,jdbcType=VARCHAR},
+      PAY_TIME = #{payTime,jdbcType=VARCHAR},
+      TENANT_NAME = #{tenantName,jdbcType=VARCHAR},
+      TENANT_PHONE = #{tenantPhone,jdbcType=VARCHAR},
+      AREA_ID = #{areaId,jdbcType=DECIMAL},
+      AREA = #{area,jdbcType=VARCHAR},
+      STALL = #{stall,jdbcType=VARCHAR},
+      RENT_START_TIME = #{rentStartTime,jdbcType=VARCHAR},
+      RENT_END_TIME = #{rentEndTime,jdbcType=VARCHAR},
+      TRX_ID = #{trxId,jdbcType=VARCHAR},
+      CHANNEL_TRX_ID = #{channelTrxId,jdbcType=VARCHAR},
+      OPEN_ID = #{openId,jdbcType=VARCHAR},
+      INSERT_TIME = #{insertTime,jdbcType=VARCHAR},
+      UPDATE_TIME = #{updateTime,jdbcType=VARCHAR},
+      PERIOD = #{period,jdbcType=VARCHAR},
+      CONTINUE_RENT = #{continueRent,jdbcType=CHAR}
+    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select ORDER_NO, AMOUNT, PAY_STATUS, PAY_TYPE, PAY_TIME, TENANT_NAME, TENANT_PHONE, 
+    AREA_ID, AREA, STALL, RENT_START_TIME, RENT_END_TIME, TRX_ID, CHANNEL_TRX_ID, OPEN_ID, 
+    INSERT_TIME, UPDATE_TIME, PERIOD, CONTINUE_RENT
+    from T_GWJ_ORDER
+    where ORDER_NO = #{orderNo,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select ORDER_NO, AMOUNT, PAY_STATUS, PAY_TYPE, PAY_TIME, TENANT_NAME, TENANT_PHONE, 
+    AREA_ID, AREA, STALL, RENT_START_TIME, RENT_END_TIME, TRX_ID, CHANNEL_TRX_ID, OPEN_ID, 
+    INSERT_TIME, UPDATE_TIME, PERIOD, CONTINUE_RENT
+    from T_GWJ_ORDER
+  </select>
+    <select id="selectByCondition" parameterType="com.allinpay.entity.OrderQueryVO" resultMap="BaseResultMap">
+        select ORDER_NO, AMOUNT, PAY_STATUS, decode(PAY_TYPE,'VSP501','微信','VSP511','支付宝',PAY_TYPE) PAY_TYPE, PAY_TIME,
+        TENANT_NAME, TENANT_PHONE,
+        AREA_ID, AREA, STALL, RENT_START_TIME, RENT_END_TIME, TRX_ID, CHANNEL_TRX_ID, OPEN_ID,
+        INSERT_TIME, UPDATE_TIME, decode(PERIOD,'1','一天','4','一月','12','一季',PERIOD) PERIOD,
+        decode(CONTINUE_RENT,'0','已续租','1','未续租',CONTINUE_RENT) CONTINUE_RENT
+        from T_GWJ_ORDER
+        <where>
+            <trim prefixOverrides="and">
+                <if test="orderNo != '' and orderNo != null">
+                    and ORDER_NO = #{orderNo}
+                </if>
+                <if test="tenantName != '' and tenantName != null">
+                    and TENANT_NAME like '%' || #{tenantName} || '%'
+                </if>
+                <if test="period != '' and period != null">
+                    and PERIOD = #{period}
+                </if>
+                <if test="areaId != null">
+                    and AREA_ID = #{areaId}
+                </if>
+                <if test="stall != '' and stall != null">
+                    and STALL like '%' || #{stall} || '%'
+                </if>
+            </trim>
+            and pay_status = '0000'
+            order by pay_time desc
+        </where>
+    </select>
+</mapper>

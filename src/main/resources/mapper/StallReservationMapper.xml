@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.StallReservationMapper">
+    <resultMap id="BaseResultMap" type="com.allinpay.entity.StallReservation">
+        <id column="AREA_ID" jdbcType="DECIMAL" property="areaId"/>
+        <id column="STALL" jdbcType="VARCHAR" property="stall"/>
+        <result column="AREA" jdbcType="VARCHAR" property="area"/>
+        <result column="STATUS" jdbcType="CHAR" property="status"/>
+        <result column="RENT_START_TIME" jdbcType="VARCHAR" property="rentStartTime"/>
+        <result column="RENT_END_TIME" jdbcType="VARCHAR" property="rentEndTime"/>
+        <result column="PRICE" jdbcType="VARCHAR" property="price"/>
+        <result column="IS_LOCK" jdbcType="CHAR" property="isLock"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from T_GWJ_STALL_RESERVATION
+    where AREA_ID = #{areaId,jdbcType=DECIMAL}
+      and STALL = #{stall,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.allinpay.entity.StallReservation">
+    insert into T_GWJ_STALL_RESERVATION (AREA_ID, STALL, AREA, 
+      STATUS, RENT_START_TIME, RENT_END_TIME, 
+      PRICE, IS_LOCK)
+    values (#{areaId,jdbcType=DECIMAL}, #{stall,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{rentStartTime,jdbcType=VARCHAR}, #{rentEndTime,jdbcType=VARCHAR}, 
+      #{price,jdbcType=VARCHAR}, #{isLock,jdbcType=CHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.allinpay.entity.StallReservation">
+    update T_GWJ_STALL_RESERVATION
+    set AREA = #{area,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=CHAR},
+      RENT_START_TIME = #{rentStartTime,jdbcType=VARCHAR},
+      RENT_END_TIME = #{rentEndTime,jdbcType=VARCHAR},
+      PRICE = #{price,jdbcType=VARCHAR},
+      IS_LOCK = #{isLock,jdbcType=CHAR}
+    where AREA_ID = #{areaId,jdbcType=DECIMAL}
+      and STALL = #{stall,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select AREA_ID, STALL, AREA, STATUS, RENT_START_TIME, RENT_END_TIME, PRICE, IS_LOCK
+    from T_GWJ_STALL_RESERVATION
+    where AREA_ID = #{areaId,jdbcType=DECIMAL}
+      and STALL = #{stall,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select AREA_ID, STALL, AREA, STATUS, RENT_START_TIME, RENT_END_TIME, PRICE, IS_LOCK
+    from T_GWJ_STALL_RESERVATION
+  </select>
+    <select id="selectByCondition" parameterType="com.allinpay.entity.StallQueryVO" resultMap="BaseResultMap">
+        select AREA_ID, STALL, AREA, decode(STATUS,'0','启用','1','停用',STATUS) STATUS, RENT_START_TIME, RENT_END_TIME,
+        PRICE, IS_LOCK
+        from T_GWJ_STALL_RESERVATION
+        <where>
+            <trim prefixOverrides="and">
+                <if test="areaId != '' and areaId != null">
+                    and AREA_ID = #{areaId}
+                </if>
+                <if test="stall != '' and stall != null">
+                    and STALL like '%' || #{stall} || '%'
+                </if>
+                <if test="status != '' and status != null">
+                    and STATUS = #{status}
+                </if>
+            </trim>
+        </where>
+    </select>
+</mapper>

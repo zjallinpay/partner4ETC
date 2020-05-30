@@ -85,4 +85,14 @@ public class RedirectController {
     public String notiry() {
         return "bank/notifyinfo";
     }
+
+    @RequestMapping("/stall")
+    public String stall() {
+        return "gwj/stallmanage";
+    }
+
+    @RequestMapping("/orderquery")
+    public String order() {
+        return "gwj/orderquery";
+    }
 }
