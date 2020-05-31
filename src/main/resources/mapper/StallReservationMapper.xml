@@ -63,4 +63,22 @@
             </trim>
         </where>
     </select>
+
+    <update id="updateStatusBatch" parameterType="string">
+        update T_GWJ_STALL_RESERVATION
+        set status = #{status}
+    </update>
+
+    <update id="updateRentEndTimeBatch" parameterType="list">
+        update T_GWJ_STALL_RESERVATION
+        set RENT_END_TIME =
+        <foreach collection="list" item="item" open="case" close="end">
+            when AREA_ID = #{item.areaId} and STALL = #{item.stall}
+            then #{item.rentEndTime}
+        </foreach>
+        where
+        <foreach collection="list" item="item" separator="or">
+            (AREA_ID = #{item.areaId} and STALL = #{item.stall})
+        </foreach>
+    </update>
 </mapper>

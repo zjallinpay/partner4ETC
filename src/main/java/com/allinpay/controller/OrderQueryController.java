@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * data: 2020-05-25
  **/
 @Controller
-@RequestMapping("/trade")
+@RequestMapping("/manage/trade")
 public class OrderQueryController {
 
     @Autowired

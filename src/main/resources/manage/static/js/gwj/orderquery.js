@@ -12,7 +12,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             //表格生成的位置：#ID
             elem: '#orderQueryTable',
             //请求地址
-            url: '/trade/list',
+            url: '/manage/trade/list',
             //是否分页
             page: true,
             //请求参数

@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -28,8 +31,14 @@ public class OrderQueryServiceImpl implements IOrderQueryService {
     public PageVO<RentOrder> getList(OrderQueryVO queryVO) {
         PageHelper.startPage(queryVO.getPageNum(), queryVO.getPageSize());
         List<RentOrder> rentOrderList = orderMapper.selectByCondition(queryVO);
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         rentOrderList.forEach(order -> {
             order.setAmount(MoneyUtil.centToYuanFormat(new BigDecimal(order.getAmount())));
+            try {
+                order.setPayTime(simpleDateFormat.format(dateFormat.parse(order.getPayTime())));
+            } catch (ParseException e) {
+            }
         });
         return PageVOUtil.convert(new PageInfo<>(rentOrderList));
     }

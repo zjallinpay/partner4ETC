@@ -6,4 +6,8 @@ import com.allinpay.entity.StallVO;
 
 public interface IStallManageService {
     PageVO<StallVO> getList(StallQueryVO queryVO);
+
+    int updateStatusBatch(String status);
+
+    void delayStallInfo();
 }

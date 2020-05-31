@@ -18,4 +18,8 @@ public interface StallReservationMapper {
     int updateByPrimaryKey(StallReservation record);
 
     List<StallReservation> selectByCondition(StallQueryVO queryVO);
+
+    int updateStatusBatch(@Param("status") String status);
+
+    int updateRentEndTimeBatch(@Param("list") List<StallReservation> reservationList);
 }

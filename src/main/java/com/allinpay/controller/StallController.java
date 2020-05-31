@@ -7,6 +7,7 @@ import com.allinpay.entity.StallVO;
 import com.allinpay.service.IStallManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * data: 2020-05-30
  **/
 @RestController
-@RequestMapping("/stall")
+@RequestMapping("/manage/stall")
 public class StallController {
 
     @Autowired
@@ -24,5 +25,17 @@ public class StallController {
     public ResponseData getList(StallQueryVO queryVO) {
         PageVO<StallVO> pageVO = stallManageService.getList(queryVO);
         return ResponseData.success().setData(pageVO);
+    }
+
+    @RequestMapping("/change")
+    public ResponseData changeStallStatus(@RequestParam String status) {
+        stallManageService.updateStatusBatch(status);
+        return ResponseData.success().setData(null);
+    }
+
+    @RequestMapping("/delay")
+    public ResponseData delay() {
+        stallManageService.delayStallInfo();
+        return ResponseData.success().setData(null);
     }
 }

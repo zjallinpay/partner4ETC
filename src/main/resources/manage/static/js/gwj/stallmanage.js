@@ -12,7 +12,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             //表格生成的位置：#ID
             elem: '#stallTable',
             //请求地址
-            url: '/stall/list',
+            url: '/manage/stall/list',
             //是否分页
             page: true,
             //请求参数
@@ -63,6 +63,67 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
     $("#queryBtn").on("click", function () {
         search();
     });
+
+    //歇业、开业
+    $("#cancelBtn").on("click", function () {
+        var status = "";
+        var btnName = $("#cancelBtn").text();
+        if (btnName == "歇业") {
+            status = "1";
+        } else {
+            status = "0";
+        }
+        var index = layer.confirm("确定" + btnName + "吗？", function () {
+            $.ajax({
+                url: "/manage/stall/change",
+                method: "POST",
+                data: {
+                    status: status
+                },
+                dataType: "json",
+                success: function (data) {
+                    layer.close(index);
+                    if (data.code == "00000") {
+                        if (btnName == "歇业") {
+                            $("#cancelBtn").text("开业");
+                        } else {
+                            $("#cancelBtn").text("歇业");
+                        }
+                        search();
+                    } else {
+                        layer.alert(data.msg);
+                    }
+                },
+                error: function () {
+                    layer.alert("系统开小差，请稍后再试");
+                }
+            })
+        })
+    });
+
+    //场次延期
+    $("#delayBtn").on("click", function () {
+        var index = layer.confirm("确定将场次延期到下周吗？", function () {
+            $.ajax({
+                url: "/manage/stall/delay",
+                method: "POST",
+                dataType: "json",
+                success: function (data) {
+                    layer.close(index);
+                    if (data.code == "00000") {
+                        layer.alert("操作成功");
+                        search();
+                    } else {
+                        layer.alert(data.msg);
+                    }
+                },
+                error: function () {
+                    layer.alert("系统开小差，请稍后再试");
+                }
+            })
+        })
+    });
+
 
     // $("#addBtn").on("click", function () {
     //     $("#addForm").find("input[name='bankId']").val("");

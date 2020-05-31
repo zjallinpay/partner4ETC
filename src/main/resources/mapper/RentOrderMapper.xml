@@ -106,4 +106,26 @@
             order by pay_time desc
         </where>
     </select>
+    <select id="findOrderNeedToDelay" parameterType="string" resultMap="BaseResultMap">
+        select ORDER_NO,RENT_START_TIME, RENT_END_TIME,AREA_ID,STALL
+        from T_GWJ_ORDER
+        where pay_status = '0000'
+        and to_date(rent_end_time, 'yyyy-MM-dd') >= to_date(#{nearlySunday}, 'yyyy-MM-dd')
+        order by RENT_END_TIME desc
+    </select>
+
+    <update id="updateRentEndTimeBatch" parameterType="list">
+        update T_GWJ_ORDER
+        set RENT_END_TIME =
+        <foreach collection="list" item="item" open="case ORDER_NO" close="end">
+            when #{item.orderNo} then #{item.rentEndTime}
+        </foreach>
+
+        where
+        ORDER_NO
+        in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.orderNo}
+        </foreach>
+    </update>
 </mapper>
