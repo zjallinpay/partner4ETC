@@ -65,7 +65,8 @@ public enum BizEnums {
      * 机构保证金配置
      */
     ORG_SIGN_RESULT_NOTIFY_CONFIG_EXIST("60001", "签约结果通知配置信息已存在"),
-    STALL_IN_USE("80001", "营业状态，不可操作");
+    STALL_IN_USE("80001", "营业状态，不可操作"),
+    NO_STALL_DEALY("80002", "操作过延期或者没有可延期的场次");
 
     private String code;
     private String msg;

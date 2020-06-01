@@ -22,5 +22,6 @@ public interface RentOrderMapper {
 
     List<RentOrder> findOrderNeedToDelay(String nearlySunday);
 
-    int updateRentEndTimeBatch(@Param("list") List<RentOrder> orderList);
+    int updateRentEndTimeBatch(@Param("list") List<RentOrder> orderList,
+                               @Param("sunday") String sunday);
 }

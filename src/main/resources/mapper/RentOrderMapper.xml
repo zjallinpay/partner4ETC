@@ -111,12 +111,14 @@
         from T_GWJ_ORDER
         where pay_status = '0000'
         and to_date(rent_end_time, 'yyyy-MM-dd') >= to_date(#{nearlySunday}, 'yyyy-MM-dd')
+        and (delay_time is null or delay_time != #{nearlySunday})
         order by RENT_END_TIME desc
     </select>
 
-    <update id="updateRentEndTimeBatch" parameterType="list">
+    <update id="updateRentEndTimeBatch">
         update T_GWJ_ORDER
-        set RENT_END_TIME =
+        set DELAY_TIME = #{sunday},
+        RENT_END_TIME =
         <foreach collection="list" item="item" open="case ORDER_NO" close="end">
             when #{item.orderNo} then #{item.rentEndTime}
         </foreach>

@@ -73,7 +73,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
         } else {
             status = "0";
         }
-        var index = layer.confirm("确定" + btnName + "吗？", function () {
+        var index = layer.confirm("确定【" + btnName + "】吗？", function () {
             $.ajax({
                 url: "/manage/stall/change",
                 method: "POST",

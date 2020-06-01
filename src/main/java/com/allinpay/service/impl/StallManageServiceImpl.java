@@ -1,5 +1,6 @@
 package com.allinpay.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.allinpay.core.common.PageVO;
 import com.allinpay.core.constant.enums.BizEnums;
 import com.allinpay.core.exception.AllinpayException;
@@ -14,17 +15,21 @@ import com.allinpay.mapper.StallReservationMapper;
 import com.allinpay.service.IStallManageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class StallManageServiceImpl implements IStallManageService {
     @Autowired
     private StallReservationMapper stallReservationMapper;
@@ -46,8 +51,10 @@ public class StallManageServiceImpl implements IStallManageService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delayStallInfo() {
+        log.info("本周场次延期开始。。。");
+        //延期时间 做接口幂等控制
         //先确认当前已歇业
         List<StallReservation> stallReservations = stallReservationMapper.selectAll();
         stallReservations.forEach(reservation -> {
@@ -57,6 +64,9 @@ public class StallManageServiceImpl implements IStallManageService {
         });
         //查找需要延期的订单
         List<RentOrder> orderList = rentOrderMapper.findOrderNeedToDelay(DateUtil.getNearlySunday());
+        if (CollectionUtils.isEmpty(orderList)) {
+            throw new AllinpayException(BizEnums.NO_STALL_DEALY.getCode(), BizEnums.NO_STALL_DEALY.getMsg());
+        }
         List<StallReservation> reservationList = new ArrayList<>();
         orderList.forEach(order -> {
             try {
@@ -75,11 +85,13 @@ public class StallManageServiceImpl implements IStallManageService {
             }
         });
         //更新订单的场次时间和摊位的场次时间，只能延期到下周
-        rentOrderMapper.updateRentEndTimeBatch(orderList);
+        log.info("延期订单列表：{}", JSON.toJSONString(orderList.stream().map(order -> order.getOrderNo()).collect(Collectors.toList())));
+        rentOrderMapper.updateRentEndTimeBatch(orderList, DateUtil.getNearlySunday());
 
         //摊位信息去重，如果有相同的摊位，保留到期时间长的摊位信息
+        log.info("延期摊位信息：{}", JSON.toJSONString(reservationList));
         stallReservationMapper.updateRentEndTimeBatch(filterStallReservation(reservationList));
-        //接口幂等控制
+        log.info("本周场次延期完成。。。");
     }
 
     private List<StallReservation> filterStallReservation(List<StallReservation> reservationList) {
