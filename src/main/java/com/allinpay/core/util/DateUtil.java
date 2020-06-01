@@ -1,5 +1,6 @@
 package com.allinpay.core.util;
 
+import com.allinpay.core.exception.AllinpayException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -105,13 +106,13 @@ public class DateUtil {
             calendar.setTime(simpleDateFormat.parse(time));
             if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
                 log.warn("传入的日期不为星期天");
-                return "";
+                throw new AllinpayException("传入的日期不为星期天");
             }
             calendar.add(Calendar.DAY_OF_MONTH, 7);
             return simpleDateFormat.format(calendar.getTime());
         } catch (Exception e) {
             log.error("日期格式解析失败");
-            return "";
+            throw new AllinpayException("日期格式解析失败");
         }
     }
 

@@ -22,10 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,7 +70,7 @@ public class StallManageServiceImpl implements IStallManageService {
         List<StallReservation> reservationList = new ArrayList<>();
         orderList.forEach(order -> {
             try {
-                order.setRentEndTime(DateUtil.getSimpleSunnday(2));
+                order.setRentEndTime(DateUtil.getNearlySunday(order.getRentEndTime()));
 
                 String[] stallArray = order.getStall().split(",");
                 for (String stall : stallArray) {
@@ -80,8 +80,8 @@ public class StallManageServiceImpl implements IStallManageService {
                     stallReservation.setRentEndTime(order.getRentEndTime());
                     reservationList.add(stallReservation);
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } catch (AllinpayException e) {
+                throw e;
             }
         });
         //更新订单的场次时间和摊位的场次时间，只能延期到下周
@@ -89,28 +89,19 @@ public class StallManageServiceImpl implements IStallManageService {
         rentOrderMapper.updateRentEndTimeBatch(orderList, DateUtil.getNearlySunday());
 
         //摊位信息去重，如果有相同的摊位，保留到期时间长的摊位信息
-        log.info("延期摊位信息：{}", JSON.toJSONString(reservationList));
-        stallReservationMapper.updateRentEndTimeBatch(filterStallReservation(reservationList));
+        List<StallReservation> updateList = filterStallReservation(reservationList);
+        log.info("延期摊位信息：{}", JSON.toJSONString(updateList));
+        stallReservationMapper.updateRentEndTimeBatch(updateList);
         log.info("本周场次延期完成。。。");
     }
 
     private List<StallReservation> filterStallReservation(List<StallReservation> reservationList) {
-        ListIterator<StallReservation> outerIterator = reservationList.listIterator();
-        ListIterator<StallReservation> innerIterator = reservationList.listIterator();
-        while (outerIterator.hasNext()) {
-            StallReservation outer = outerIterator.next();
-            while (innerIterator.hasNext()) {
-                StallReservation inner = innerIterator.next();
-                if (outer.getAreaId().equals(inner.getAreaId())
-                        && outer.getStall().equals(inner.getStall())) {
-                    if (DateUtil.compare(outer.getRentEndTime(), inner.getRentEndTime()) > 0) {
-                        innerIterator.remove();
-                    }
-                }
-            }
+        //StallReservation 设置了equals和hashcode方法
+        Set<StallReservation> set = new HashSet<>();
+        for (StallReservation reservation : reservationList) {
+            set.add(reservation);
         }
-
-        return reservationList;
+        return new ArrayList<>(set);
     }
 
     private List<StallVO> transefer(List<StallReservation> reservationList) {

@@ -2,6 +2,8 @@ package com.allinpay.entity;
 
 import lombok.Data;
 
+import java.util.Objects;
+
 @Data
 public class StallReservation {
     private Integer areaId;
@@ -19,4 +21,18 @@ public class StallReservation {
     private String price;
 
     private String isLock;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StallReservation that = (StallReservation) o;
+        return areaId.equals(that.areaId) &&
+                stall.equals(that.stall);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(areaId, stall);
+    }
 }
