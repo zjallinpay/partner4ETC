@@ -40,11 +40,11 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/*.xml
   type-aliases-package: com.allinpay.entity
 
-# 分页配置
+# 分页配置P
 pagehelper:
   helperDialect: oracle
   reasonable: false
-  supportMethodsArguments: true
+  supportMethodsArguments: false
   params: count=countSql
 # druid控制台相关参数设置
 druid:

@@ -60,8 +60,17 @@
                 <if test="status != '' and status != null">
                     and STATUS = #{status}
                 </if>
+                <if test='rentStatus == "0"'>
+                    and (RENT_END_TIME is null or to_date(#{nearlySunday}, 'yyyy-MM-dd') &gt; to_date(RENT_END_TIME,
+                    'yyyy-MM-dd'))
+                </if>
+                <if test='rentStatus == "1"'>
+                    and to_date(#{nearlySunday}, 'yyyy-MM-dd') &lt;= to_date(RENT_END_TIME, 'yyyy-MM-dd')
+
+                </if>
             </trim>
         </where>
+        order by stall
     </select>
 
     <update id="updateStatusBatch" parameterType="string">
@@ -80,5 +89,10 @@
         <foreach collection="list" item="item" separator="or">
             (AREA_ID = #{item.areaId} and STALL = #{item.stall})
         </foreach>
+    </update>
+    <update id="updateStatus" parameterType="com.allinpay.entity.StallQueryVO">
+        update T_GWJ_STALL_RESERVATION
+        set status = #{status}
+        where area_id = #{areaId} and stall = #{stall}
     </update>
 </mapper>

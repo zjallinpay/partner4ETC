@@ -24,4 +24,6 @@ public interface RentOrderMapper {
 
     int updateRentEndTimeBatch(@Param("list") List<RentOrder> orderList,
                                @Param("sunday") String sunday);
+
+    String selectTotalAmountByCondition(OrderQueryVO queryVO);
 }

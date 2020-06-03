@@ -1,10 +1,18 @@
 //element 展示左边菜单栏; 预加载需要使用的模块
 //由于layer弹层依赖jQuery，所以可以直接得到
-layui.use(['table', 'element', 'layer', 'form'], function () {
+layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
     var table = layui.table;
     var $ = layui.$;
     var layer = layui.layer;
     var form = layui.form;
+    var laydate = layui.laydate;
+
+    //日期控件
+    laydate.render({
+        elem: '#tradeTime',
+        range: "~",
+        trigger: 'click'
+    });
 
     //抽取查询方法
     var search = function () {
@@ -21,7 +29,9 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 tenantName: $.trim($("#tenantName").val()),
                 period: $.trim($("#period").val()),
                 areaId: $.trim($("#areaId").val()),
-                stall: $.trim($("#stall").val())
+                stall: $.trim($("#stall").val()),
+                tradeStartTime: $("#tradeTime").val() != "" ? $("#tradeTime").val().split(" ~ ")[0] + " 00:00:00" : "",
+                tradeEndTime: $("#tradeTime").val() != "" ? $("#tradeTime").val().split(" ~ ")[1] + " 23:59:59" : ""
             },
             //分页信息
             request: {
@@ -34,7 +44,8 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                     "code": res.code,
                     "msg": res.msg,
                     "count": res.data.total,
-                    "data": res.data.list
+                    "data": res.data.list,
+                    "totalAmount": res.data.totalAmount
                 };
             },
             //设置返回的属性值，依据此值进行解析
@@ -64,7 +75,11 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 {field: 'tenantPhone', title: '手机号', width: 130},
                 {field: 'trxId', title: '渠道流水号', width: 200}
                 // {fixed: 'right', title: '操作', toolbar: '#operator', width: 130}
-            ]]
+            ]],
+            done: function (data) {
+                //展示汇总金额
+                $("#summary").text("汇总金额(元)：" + data.totalAmount);
+            }
         });
     };
     //页面加载就查询列表

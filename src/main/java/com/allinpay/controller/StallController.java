@@ -27,9 +27,15 @@ public class StallController {
         return ResponseData.success().setData(pageVO);
     }
 
-    @RequestMapping("/change")
-    public ResponseData changeStallStatus(@RequestParam String status) {
+    @RequestMapping("/changeAll")
+    public ResponseData changeAllStallStatus(@RequestParam String status) {
         stallManageService.updateStatusBatch(status);
+        return ResponseData.success().setData(null);
+    }
+
+    @RequestMapping("/changeSingle")
+    public ResponseData changeSingleStallStatus(StallQueryVO stallVO) {
+        stallManageService.updateStatus(stallVO);
         return ResponseData.success().setData(null);
     }
 

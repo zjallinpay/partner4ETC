@@ -62,6 +62,16 @@
                         </select>
                     </div>
                 </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">出租状态</label>
+                    <div class="layui-input-inline" style="width: 180px;">
+                        <select id="rentStatus">
+                            <option value="">全部</option>
+                            <option value="0">未出租</option>
+                            <option value="1">已出租</option>
+                        </select>
+                    </div>
+                </div>
             </div>
             <div class="layui-form-item">
                 <div class="layui-input-block" style="margin-left: 145px;">
@@ -127,16 +137,15 @@
     <!--</div>-->
     <!--</form>-->
     <!--操作菜单页面-->
-    <!--<div id="operator" style="display: none;">-->
-    <!--<a class="layui-btn layui-btn-xs" lay-event="edit" targetAuthority="22">编辑</a>-->
-    <!--{{# if(d.status == "1"){ }}-->
-    <!--<a class="layui-btn layui-btn-xs layui-btn-danger forbiddenBtn" lay-event="forbidden"-->
-    <!--targetAuthority="23">禁用</a>-->
-    <!--{{# } else { }}-->
-    <!--<a class="layui-btn layui-btn-xs layui-btn-danger forbiddenBtn" lay-event="forbidden"-->
-    <!--targetAuthority="23">有效</a>-->
-    <!--{{# } }}-->
-    <!--</div>-->
+    <div id="operator" style="display: none;">
+        {{# if(d.status == "启用"){ }}
+        <a class="layui-btn layui-btn-xs layui-btn-danger forbiddenBtn" lay-event="forbidden"
+           targetAuthority="23">关闭</a>
+        {{# } else { }}
+        <a class="layui-btn layui-btn-xs layui-btn-danger forbiddenBtn" lay-event="forbidden"
+           targetAuthority="23">开启</a>
+        {{# } }}
+    </div>
 </div>
 </body>
 <!--快速加载 -->

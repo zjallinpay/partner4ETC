@@ -10,4 +10,6 @@ public interface IStallManageService {
     int updateStatusBatch(String status);
 
     void delayStallInfo();
+
+    int updateStatus(StallQueryVO stallVO);
 }

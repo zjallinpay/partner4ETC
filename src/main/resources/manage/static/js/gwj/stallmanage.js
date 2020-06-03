@@ -19,7 +19,8 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             where: {
                 areaId: $.trim($("#areaId").val()),
                 stall: $.trim($("#stall").val()),
-                status: $.trim($("#status").val())
+                status: $.trim($("#status").val()),
+                rentStatus: $.trim($("#rentStatus").val())
             },
             //分页信息
             request: {
@@ -53,7 +54,8 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 {field: 'status', title: '启用状态'},
                 {field: 'rentStartTime', title: '开始时间'},
                 {field: 'rentEndTime', title: '结束时间'},
-                {field: 'rentStatus', title: '出租状态'}
+                {field: 'rentStatus', title: '出租状态'},
+                {fixed: 'right', title: '操作', toolbar: '#operator', width: 80}
             ]]
         });
     };
@@ -75,7 +77,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
         }
         var index = layer.confirm("确定【" + btnName + "】吗？", function () {
             $.ajax({
-                url: "/manage/stall/change",
+                url: "/manage/stall/changeAll",
                 method: "POST",
                 data: {
                     status: status
@@ -132,50 +134,42 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
     // });
 
     //监听table行工具事件 如详情、编辑、删除操作
-    // table.on('tool(tableFilter)', function (obj) {
-    //     //获取所在行的数据
-    //     var myData = obj.data;
-    //     //审核
-    //     if (obj.event === 'edit') {
-    //         //form表单初始化
-    //         form.val("editFilter", {
-    //             "bankId": myData.bankId,
-    //             "bankName": myData.bankName
-    //         });
-    //         //打开模态框
-    //         openModal("编辑", "editForm");
-    //     } else if (obj.event === 'forbidden') {
-    //         var btnName = $(this).html();
-    //         var status;
-    //         if (btnName == "禁用") {
-    //             status = "0";
-    //         } else {
-    //             status = "1";
-    //         }
-    //         var index = layer.confirm("确定置为" + btnName + "吗？", function () {
-    //             $.ajax({
-    //                 url: '/bank/status',
-    //                 type: 'post',
-    //                 data: {
-    //                     bankId: myData.bankId,
-    //                     status: status
-    //                 },
-    //                 dataType: 'json',
-    //                 success: function (data) {
-    //                     layer.close(index);
-    //                     if (data.code == "00000") {
-    //                         search();
-    //                     } else {
-    //                         layer.alert(data.msg);
-    //                     }
-    //                 },
-    //                 error: function () {
-    //                     layer.alert("操作失败，请重试！");
-    //                 }
-    //             });
-    //         })
-    //     }
-    // });
+    table.on('tool(tableFilter)', function (obj) {
+        //获取所在行的数据
+        var myData = obj.data;
+        if (obj.event === 'forbidden') {
+            var btnName = $(this).html();
+            var status;
+            if (btnName == "关闭") {
+                status = "1";
+            } else {
+                status = "0";
+            }
+            var index = layer.confirm("确定置为" + btnName + "吗？", function () {
+                $.ajax({
+                    url: '/manage/stall/changeSingle',
+                    type: 'post',
+                    data: {
+                        areaId: myData.areaId,
+                        stall: myData.stall,
+                        status: status
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        layer.close(index);
+                        if (data.code == "00000") {
+                            search();
+                        } else {
+                            layer.alert(data.msg);
+                        }
+                    },
+                    error: function () {
+                        layer.alert("系统开小差，请重试！");
+                    }
+                });
+            })
+        }
+    });
 
     //监听form表单提交事件 防止页面跳转
     // form.on('submit(addFilter)', function (data) {

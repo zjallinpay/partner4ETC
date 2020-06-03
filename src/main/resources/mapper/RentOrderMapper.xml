@@ -101,10 +101,16 @@
                 <if test="stall != '' and stall != null">
                     and STALL like '%' || #{stall} || '%'
                 </if>
+                <if test="tradeStartTime != null">
+                    and to_date(PAY_TIME, 'yyyyMMddHH24miss') &gt; #{tradeStartTime}
+                </if>
+                <if test="tradeEndTime != null">
+                    and to_date(PAY_TIME, 'yyyyMMddHH24miss') &lt; #{tradeEndTime}
+                </if>
             </trim>
             and pay_status = '0000'
-            order by pay_time desc
         </where>
+        order by pay_time desc
     </select>
     <select id="findOrderNeedToDelay" parameterType="string" resultMap="BaseResultMap">
         select ORDER_NO,RENT_START_TIME, RENT_END_TIME,AREA_ID,STALL
@@ -113,6 +119,39 @@
         and to_date(rent_end_time, 'yyyy-MM-dd') >= to_date(#{nearlySunday}, 'yyyy-MM-dd')
         and (delay_time is null or delay_time != #{nearlySunday})
         order by RENT_END_TIME desc
+    </select>
+
+    <select id="selectTotalAmountByCondition" resultType="java.lang.String"
+            parameterType="com.allinpay.entity.OrderQueryVO">
+        select sum(amount) totalAmount
+        from T_GWJ_ORDER
+        <where>
+            <trim prefixOverrides="and">
+                <if test="orderNo != '' and orderNo != null">
+                    and ORDER_NO = #{orderNo}
+                </if>
+                <if test="tenantName != '' and tenantName != null">
+                    and TENANT_NAME like '%' || #{tenantName} || '%'
+                </if>
+                <if test="period != '' and period != null">
+                    and PERIOD = #{period}
+                </if>
+                <if test="areaId != null">
+                    and AREA_ID = #{areaId}
+                </if>
+                <if test="stall != '' and stall != null">
+                    and STALL like '%' || #{stall} || '%'
+                </if>
+                <if test="tradeStartTime != null">
+                    and to_date(PAY_TIME, 'yyyyMMddHH24miss') &gt; #{tradeStartTime}
+                </if>
+                <if test="tradeEndTime != null">
+                    and to_date(PAY_TIME, 'yyyyMMddHH24miss') &lt; #{tradeEndTime}
+                </if>
+            </trim>
+            and pay_status = '0000'
+        </where>
+        order by pay_time desc
     </select>
 
     <update id="updateRentEndTimeBatch">

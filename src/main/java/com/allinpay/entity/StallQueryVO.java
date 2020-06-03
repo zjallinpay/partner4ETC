@@ -11,6 +11,8 @@ public class StallQueryVO {
     private Integer areaId;
     private String stall;
     private String status;
+    private String rentStatus;
+    private String nearlySunday;
     private Integer pageNum;
     private Integer pageSize;
 }

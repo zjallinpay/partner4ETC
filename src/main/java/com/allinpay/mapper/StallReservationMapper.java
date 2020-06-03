@@ -22,4 +22,6 @@ public interface StallReservationMapper {
     int updateStatusBatch(@Param("status") String status);
 
     int updateRentEndTimeBatch(@Param("list") List<StallReservation> reservationList);
+
+    int updateStatus(StallQueryVO stallVO);
 }

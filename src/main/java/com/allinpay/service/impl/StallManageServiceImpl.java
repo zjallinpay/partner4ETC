@@ -38,10 +38,12 @@ public class StallManageServiceImpl implements IStallManageService {
 
     @Override
     public PageVO<StallVO> getList(StallQueryVO queryVO) {
+        String nearlySunday = DateUtil.getNearlySunday();
+        queryVO.setNearlySunday(nearlySunday);
         PageHelper.startPage(queryVO.getPageNum(), queryVO.getPageSize());
         List<StallReservation> reservationList = stallReservationMapper.selectByCondition(queryVO);
         PageVO pageVO = PageVOUtil.convert(new PageInfo<>(reservationList));
-        pageVO.setList(transefer(pageVO.getList()));
+        pageVO.setList(transefer(pageVO.getList(), queryVO));
         return pageVO;
     }
 
@@ -95,6 +97,11 @@ public class StallManageServiceImpl implements IStallManageService {
         log.info("本周场次延期完成。。。");
     }
 
+    @Override
+    public int updateStatus(StallQueryVO stallVO) {
+        return stallReservationMapper.updateStatus(stallVO);
+    }
+
     private List<StallReservation> filterStallReservation(List<StallReservation> reservationList) {
         //StallReservation 设置了equals和hashcode方法
         Set<StallReservation> set = new HashSet<>();
@@ -104,13 +111,18 @@ public class StallManageServiceImpl implements IStallManageService {
         return new ArrayList<>(set);
     }
 
-    private List<StallVO> transefer(List<StallReservation> reservationList) {
+    private List<StallVO> transefer(List<StallReservation> reservationList, StallQueryVO queryVO) {
         List<StallVO> stallVOList = new ArrayList<>();
-        String nearlySunday = DateUtil.getNearlySunday();
         reservationList.forEach(reservation -> {
             StallVO stallVO = new StallVO();
             BeanUtils.copyProperties(reservation, stallVO);
-            stallVO.setRentStatus(DateUtil.compare(nearlySunday, reservation.getRentEndTime()) > 0 ? "未出租" : "已出租");
+            if ("0".equals(queryVO.getRentStatus())) {
+                stallVO.setRentStatus("未出租");
+            } else if ("1".equals(queryVO.getRentStatus())) {
+                stallVO.setRentStatus("已出租");
+            } else {
+                stallVO.setRentStatus(DateUtil.compare(queryVO.getNearlySunday(), reservation.getRentEndTime()) > 0 ? "未出租" : "已出租");
+            }
             stallVOList.add(stallVO);
         });
         return stallVOList;
