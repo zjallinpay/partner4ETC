@@ -95,4 +95,9 @@ public class RedirectController {
     public String order() {
         return "gwj/orderquery";
     }
+
+    @RequestMapping("/hzcc/employee")
+    public String employee() {
+        return "hzcc/employee";
+    }
 }

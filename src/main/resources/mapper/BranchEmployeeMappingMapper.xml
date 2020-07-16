@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.BranchEmployeeMappingMapper">
+    <resultMap id="BaseResultMap" type="com.allinpay.entity.BranchEmployeeMapping">
+        <result column="KID" jdbcType="DECIMAL" property="kid"/>
+        <result column="TL_CUST_ID" jdbcType="VARCHAR" property="tlCustId"/>
+        <result column="BRANCH_ID" jdbcType="VARCHAR" property="branchId"/>
+        <result column="BRANCH_NAME" jdbcType="VARCHAR" property="branchName"/>
+        <result column="EMPLOYEE_ID" jdbcType="VARCHAR" property="employeeId"/>
+        <result column="EMPLOYEE_NAME" jdbcType="VARCHAR" property="employeeName"/>
+        <result column="STATUS" jdbcType="VARCHAR" property="status"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.allinpay.entity.BranchEmployeeMapping">
+        <selectKey keyColumn="KID" keyProperty="kid" order="BEFORE" resultType="int">
+            SELECT MAX(KID) + 1 FROM T_CC_BRANCH_EMPLOYEE_MAPPING
+        </selectKey>
+        insert into T_CC_BRANCH_EMPLOYEE_MAPPING (KID, TL_CUST_ID, BRANCH_ID,
+        BRANCH_NAME, EMPLOYEE_ID, EMPLOYEE_NAME,
+        STATUS)
+        values (#{kid,jdbcType=DECIMAL}, #{tlCustId,jdbcType=VARCHAR}, #{branchId,jdbcType=VARCHAR},
+        #{branchName,jdbcType=VARCHAR}, #{employeeId,jdbcType=VARCHAR}, #{employeeName,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateStatus" parameterType="com.allinpay.entity.BranchEmployeeMapping">
+        update T_CC_BRANCH_EMPLOYEE_MAPPING
+        set status = #{employee.status}
+        where kid = #{employee.kid}
+    </update>
+    <update id="update" parameterType="com.allinpay.entity.BranchEmployeeMapping">
+        update T_CC_BRANCH_EMPLOYEE_MAPPING
+        set TL_CUST_ID = #{employee.tlCustId, jdbcType=VARCHAR},
+        BRANCH_ID = #{employee.branchId, jdbcType=VARCHAR},
+        BRANCH_NAME = #{employee.branchName, jdbcType=VARCHAR},
+        EMPLOYEE_ID = #{employee.employeeId, jdbcType=VARCHAR},
+        EMPLOYEE_NAME = #{employee.employeeName, jdbcType=VARCHAR}
+        where kid = #{employee.kid}
+    </update>
+    <select id="selectByCondition" parameterType="com.allinpay.entity.vo.EmployeeQueryVO" resultMap="BaseResultMap">
+        select KID, TL_CUST_ID, BRANCH_ID,
+        BRANCH_NAME, EMPLOYEE_ID, EMPLOYEE_NAME,
+        STATUS from T_CC_BRANCH_EMPLOYEE_MAPPING
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="queryVO.tlCustId != '' and queryVO.tlCustId != null">
+                and TL_CUST_ID like '%' || #{queryVO.tlCustId} || '%'
+            </if>
+            <if test="queryVO.branchId != '' and queryVO.branchId != null">
+                and BRANCH_ID like '%' || #{queryVO.branchId} || '%'
+            </if>
+            <if test="queryVO.branchName != '' and queryVO.branchName != null">
+                and BRANCH_NAME like '%' || #{queryVO.branchName} || '%'
+            </if>
+            <if test="queryVO.employeeId != '' and queryVO.employeeId != null">
+                and EMPLOYEE_ID like '%' || #{queryVO.employeeId} || '%'
+            </if>
+            <if test="queryVO.employeeName != '' and queryVO.employeeName != null">
+                and EMPLOYEE_NAME like '%' || #{queryVO.employeeName} || '%'
+            </if>
+            <if test="queryVO.status != '' and queryVO.status != null">
+                and STATUS = #{queryVO.status}
+            </if>
+        </trim>
+        order by BRANCH_ID, EMPLOYEE_ID
+    </select>
+
+    <select id="selectOneByCondition" parameterType="com.allinpay.entity.BranchEmployeeMapping"
+            resultMap="BaseResultMap">
+        select KID, TL_CUST_ID, BRANCH_ID,
+      BRANCH_NAME, EMPLOYEE_ID, EMPLOYEE_NAME,
+      STATUS from T_CC_BRANCH_EMPLOYEE_MAPPING
+      WHERE BRANCH_ID = #{employee.branchId} AND EMPLOYEE_ID = #{employee.employeeId}
+    </select>
+</mapper>
