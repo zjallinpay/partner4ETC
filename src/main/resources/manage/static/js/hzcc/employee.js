@@ -79,6 +79,8 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
     });
 
     $("#addBtn").on("click", function () {
+        // $("#addForm").find("input[name='branchId']").attr('disabled',true);
+        // $("#addForm").find("input[name='tlCustId']").attr('disabled',true);
         $("#addForm").find("input[name='branchId']").val("");
         $("#addForm").find("input[name='branchName']").val("");
         $("#addForm").find("input[name='employeeId']").val("");
@@ -139,31 +141,31 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
 
     //监听form表单提交事件 防止页面跳转
     form.on('submit(addFilter)', function (data) {
-        $.ajax({
-            url: '/manage/employee/add',
-            type: 'post',
-            data: {
-                branchId: $.trim($("#addForm").find("input[name='branchId']").val()),
-                branchName: $.trim($("#addForm").find("input[name='branchName']").val()),
-                employeeId: $.trim($("#addForm").find("input[name='employeeId']").val()),
-                employeeName: $.trim($("#addForm").find("input[name='employeeName']").val()),
-                tlCustId: $.trim($("#addForm").find("input[name='tlCustId']").val())
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (data.code == "00000") {
-                    var index = layer.alert("保存成功", function () {
-                        layer.closeAll();
-                        search();
-                    });
-                } else {
-                    layer.alert(data.msg);
+            $.ajax({
+                url: '/manage/employee/add',
+                type: 'post',
+                data: {
+                    branchId: $.trim($("#addForm").find("input[name='branchId']").val()),
+                    branchName: $.trim($("#addForm").find("input[name='branchName']").val()),
+                    employeeId: $.trim($("#addForm").find("input[name='employeeId']").val()),
+                    employeeName: $.trim($("#addForm").find("input[name='employeeName']").val()),
+                    tlCustId: $.trim($("#addForm").find("input[name='tlCustId']").val())
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == "00000") {
+                        var index = layer.alert("保存成功", function () {
+                            layer.closeAll();
+                            search();
+                        });
+                    } else {
+                        layer.alert(data.msg);
+                    }
+                },
+                error: function () {
+                    layer.alert("新增失败，请重试！");
                 }
-            },
-            error: function () {
-                layer.alert("新增失败，请重试！");
-            }
-        });
+            });
         return false;
     });
     form.on('submit(editFilter)', function (data) {

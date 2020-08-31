@@ -64,24 +64,25 @@
         </div>
     </div>
 
+
     <div class="layui-form-item">
-        <label class="layui-form-label">角色</label>
+        <label class="layui-form-label">机构</label>
         <div class="layui-input-inline">
-            <select name="roleId" id="roleId" xm-select="role-select" lay-verify="required" lay-vertype="tips">
-                <option value="">请选择角色</option>
-                <option th:each="role:${roles}" th:value="${role.roleId}" th:text="${role.roleName}"
-                        th:selected="${#arrays.contains((roleIds == null ? #arrays.toIntegerArray(new Integer[]{}) : roleIds), role.roleId)}"></option>
+            <select id="partnerId" lay-verify="required" lay-vertype="tips" name="partnerId" xm-select="role-select">
+                <option value="">请选择机构</option>
+                <option th:each="partner:${partners}" th:selected="${#arrays.contains((partNers == null ? #arrays.toIntegerArray(new Integer[]{}) : partNers), partner.partnerId)}" th:text="${partner.partnerName}"
+                        th:value="${partner.partnerId}"></option>
             </select>
         </div>
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">机构</label>
+        <label class="layui-form-label">角色</label>
         <div class="layui-input-inline">
-            <select id="partnerId" name="partnerId" >
-                <option value="">请选择机构</option>
-                <option th:each="partner:${partners}" th:selected="${#arrays.contains((partNers == null ? #arrays.toIntegerArray(new Integer[]{}) : partNers), partner.partnerId)}" th:text="${partner.partnerName}"
-                        th:value="${partner.partnerId}"></option>
+            <select id="roleId" lay-verify="required" lay-vertype="tips" name="roleId" xm-select="role-select">
+                <option value="">请选择角色</option>
+                <option th:each="role:${roles}" th:selected="${#arrays.contains((roleIds == null ? #arrays.toIntegerArray(new Integer[]{}) : roleIds), role.roleId)}" th:text="${role.roleName}"
+                        th:value="${role.roleId}"></option>
             </select>
         </div>
     </div>

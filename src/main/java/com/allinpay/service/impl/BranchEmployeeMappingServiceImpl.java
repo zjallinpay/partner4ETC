@@ -5,6 +5,8 @@ import com.allinpay.core.constant.enums.BizEnums;
 import com.allinpay.core.exception.AllinpayException;
 import com.allinpay.core.util.PageVOUtil;
 import com.allinpay.entity.BranchEmployeeMapping;
+import com.allinpay.entity.CredentialsQueryMapping;
+import com.allinpay.entity.vo.CredentialsQueryVo;
 import com.allinpay.entity.vo.EmployeeQueryVO;
 import com.allinpay.mapper.BranchEmployeeMappingMapper;
 import com.allinpay.service.IBranchEmployeeMappingService;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -61,6 +64,19 @@ public class BranchEmployeeMappingServiceImpl implements IBranchEmployeeMappingS
     public void changeStatus(BranchEmployeeMapping employeeMapping) {
         branchEmployeeMappingMapper.updateStatus(employeeMapping);
     }
+
+    @Override
+    public PageVO<CredentialsQueryMapping> queryCredentials(CredentialsQueryVo credentialsQueryVo) {
+        PageHelper.startPage(credentialsQueryVo.getPageNum(), credentialsQueryVo.getPageSize());
+        List<CredentialsQueryMapping> credentialsQueryMappings = branchEmployeeMappingMapper.queryCredentials(credentialsQueryVo);
+        return PageVOUtil.convert(new PageInfo<>(credentialsQueryMappings));
+    }
+
+    @Override
+    public List<Map> getBranchId(String tlCustId) {
+        return branchEmployeeMappingMapper.getBranchId(tlCustId);
+    }
+
 
     private boolean validateParams(BranchEmployeeMapping employeeMapping) {
         if (StringUtils.isBlank(employeeMapping.getTlCustId()) || StringUtils.isBlank(employeeMapping.getBranchId()) ||

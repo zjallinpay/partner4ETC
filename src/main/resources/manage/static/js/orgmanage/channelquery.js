@@ -225,11 +225,12 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
         layer.open({
             title: operateName,
             content: $('#' + modalName),
-            area: ['700px', '560px'],
+            area: '700px',
             //点击遮罩关闭窗口
             shadeClose: true,
             //0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
-            type: 1
+            type: 1,
+            moveOut: true
         });
     }
 

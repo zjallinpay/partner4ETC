@@ -135,6 +135,7 @@
         <result column="LICENSE_COLOR" property="licensecolor" jdbcType="VARCHAR"/>
         <result column="REFERER" property="referer" jdbcType="VARCHAR"/>
         <result column="SERVICE_ADDRESS" property="serviceaddress" jdbcType="VARCHAR"/>
+        <result column="PARTNER_NAME" property="partnername" jdbcType="VARCHAR"/>
     </resultMap>
     <select id="queryUserhairpin" resultMap="UserhairMap" parameterType="com.allinpay.entity.UserhairpinVo">
         select suerhair.PARTNER_ID,suerhair.AUTH_ID,suerhair.AUTH_NAME,
@@ -164,9 +165,11 @@
         end DELIVERY_METHOD,
         suerhair.LICENSE_COLOR,
         paruser.REFERER,
-        paruser.SERVICE_ADDRESS
+        paruser.SERVICE_ADDRESS,
+        partner.PARTNER_NAME
         from T_ETC_ISSUE suerhair
         left join T_ETC_PARTNER_USER paruser on suerhair.auth_id = paruser.user_id
+        left join T_ETC_PARTNER_INFO partner on suerhair.PARTNER_ID = partner.PARTNER_ID
         <trim prefix="WHERE" prefixOverrides="AND">
             ISSUE_STATUS ='0'
             <if test="usrh.authId != null and usrh.authId != ''">

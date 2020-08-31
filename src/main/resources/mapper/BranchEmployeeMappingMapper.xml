@@ -69,4 +69,70 @@
       STATUS from T_CC_BRANCH_EMPLOYEE_MAPPING
       WHERE BRANCH_ID = #{employee.branchId} AND EMPLOYEE_ID = #{employee.employeeId}
     </select>
+
+    <select id="getBranchId" parameterType="String" resultType="Map">
+        select branch_id "branchId"
+        from T_CC_BRANCH_EMPLOYEE_MAPPING t
+        where tl_cust_id =#{tlCustId}
+        group by branch_id
+    </select>
+    <resultMap id="OrderResultMap" type="com.allinpay.entity.CredentialsQueryMapping">
+        <result column="TRX_ID" jdbcType="VARCHAR" property="trxId"/>
+        <result column="ORDER_NO" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="PAY_STATUS" jdbcType="VARCHAR" property="payStatus"/>
+        <result column="PAY_AMOUNT" jdbcType="VARCHAR" property="payAmount"/>
+        <result column="PAY_TIME" jdbcType="VARCHAR" property="payTime"/>
+        <result column="PAY_TYPE" jdbcType="VARCHAR" property="payType"/>
+        <result column="TL_CUST_ID" jdbcType="VARCHAR" property="tlCustId"/>
+
+        <result column="BRANCH_ID" jdbcType="VARCHAR" property="branchId"/>
+        <result column="BRANCH_NAME" jdbcType="VARCHAR" property="branchName"/>
+        <result column="EMPLOYEE_ID" jdbcType="VARCHAR" property="employeeId"/>
+        <result column="EMPLOYEE_NAME" jdbcType="VARCHAR" property="employeeName"/>
+        <result column="CUST_NAME" jdbcType="VARCHAR" property="custName"/>
+        <result column="CUST_PHONE" jdbcType="VARCHAR" property="custPhone"/>
+
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        <result column="INSERT_TIME" jdbcType="VARCHAR" property="insertTime"/>
+        <result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime"/>
+        <result column="TERM_NO" jdbcType="VARCHAR" property="termNo"/>
+        <result column="TRACE_NO" jdbcType="VARCHAR" property="traceNo"/>
+        <result column="ACCT_TYPE" jdbcType="VARCHAR" property="acctType"/>
+        <result column="ACCT" jdbcType="VARCHAR" property="acct"/>
+        <result column="FEE" jdbcType="VARCHAR" property="fee"/>
+    </resultMap>
+    <select id="queryCredentials" parameterType="com.allinpay.entity.vo.CredentialsQueryVo" resultMap="OrderResultMap">
+        select *
+        from T_CC_ORDER ccorder
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="credentialsQueryVo.tlCustId != '' and credentialsQueryVo.tlCustId != null">
+                and TL_CUST_ID =#{credentialsQueryVo.tlCustId}
+            </if>
+            <if test="credentialsQueryVo.customerName != '' and credentialsQueryVo.customerName != null">
+                and CUST_NAME like '%' || #{credentialsQueryVo.customerName} || '%'
+            </if>
+            <if test="credentialsQueryVo.employeeName != '' and credentialsQueryVo.employeeName != null">
+                and EMPLOYEE_NAME like '%' || #{credentialsQueryVo.employeeName} || '%'
+            </if>
+            <if test="credentialsQueryVo.status != '' and credentialsQueryVo.status != null">
+                and PAY_STATUS =#{credentialsQueryVo.status}
+            </if>
+            <if test="credentialsQueryVo.branchName != '' and credentialsQueryVo.branchName != null">
+                and BRANCH_NAME  like '%' || #{credentialsQueryVo.branchName} || '%'
+            </if>
+            <if test="credentialsQueryVo.orderNo != '' and credentialsQueryVo.orderNo != null">
+                and ORDER_NO =#{credentialsQueryVo.orderNo}
+            </if>
+            <if test="credentialsQueryVo.status != '' and credentialsQueryVo.status != null">
+                and PAY_STATUS = #{credentialsQueryVo.status}
+            </if>
+            <if test="credentialsQueryVo.tradeType != '' and credentialsQueryVo.tradeType != null">
+                and PAY_TYPE = #{credentialsQueryVo.tradeType}
+            </if>
+            <if test="credentialsQueryVo.endTime != '' and credentialsQueryVo.endTime != null">
+                and PAY_TIME between #{credentialsQueryVo.startTime} and #{credentialsQueryVo.endTime}
+            </if>
+        </trim>
+        order by pay_time desc
+    </select>
 </mapper>

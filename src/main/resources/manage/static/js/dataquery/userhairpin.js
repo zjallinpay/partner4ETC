@@ -73,6 +73,7 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                 // {field: 'phone',  title: '机构请求手机号'},
                 // {field: 'orderNo',  title: '请求流水号'},
                 // {field: 'reqtime',  title: '请求时间'},
+                {field: 'partnername', title: '机构名称'},
                 {field: 'carno',  title: '车牌号'},
                 {field: 'licensecolor',  title: '车牌颜色'},
                 {field: 'realphone',  title: '绑定手机号'},
@@ -145,6 +146,7 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                 // {field: 'partnerId', title: '机构编号'},
                 // {field: 'authId', title: '用户标识'},
                 // {field: 'authName', title: '用户名称'},
+                {field: 'partnername', title: '机构名称'},
                 {field: 'carno', title: '车牌号'},
                 // {field: 'phone', title: '机构请求手机号'},
                 // {field: 'orderNo', title: '请求流水号'},
@@ -172,7 +174,8 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                     // 'partnerId'
                     // , 'authId'
                     // , 'authName'
-                     'carno'
+                    'partnername'
+                     ,'carno'
                     // , 'phone'
                     // , 'orderNo'
                     // , 'reqtime'
@@ -195,6 +198,7 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                     // phone: "机构请求手机号",
                     // orderNo: "请求流水号",
                     // reqtime: "请求时间",
+                    partnername:"机构名称",
                     carno: "车牌号",
                     licensecolor:"车牌颜色",
                     realphone: "绑定手机号",
