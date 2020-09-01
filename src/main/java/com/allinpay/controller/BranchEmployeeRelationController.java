@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 杭叉员工信息配置
@@ -47,12 +46,63 @@ public class BranchEmployeeRelationController {
     @RequestMapping("/add")
     public ResponseData add(BranchEmployeeMapping employeeMapping) {
         String tlCustId = employeeMapping.getTlCustId();
+        String branchIdMater = employeeMapping.getBranchId();
+        EmployeeQueryVO employeeQueryVO = new EmployeeQueryVO();
+        employeeQueryVO.setPageNum(1);
+        employeeQueryVO.setPageSize(1000000);
+        PageVO<BranchEmployeeMapping> selectByCondition = branchEmployeeMappingService.selectByCondition(employeeQueryVO);
+        List<BranchEmployeeMapping> branchEmployeeMappingList = selectByCondition.getList();
         TEtcSysUser user = (TEtcSysUser) SecurityUtils.getSubject().getPrincipal();
         if ( !"56133105533AK04".equals(user.getUsername()) && !"admin".equals(user.getUsername())) {
-            List<Map> branchId = branchEmployeeMappingService.getBranchId(tlCustId);//获取分店编号
+            if (!tlCustId.equals(user.getUsername())) {
+                //添加的商户号不对应
+                return ResponseData.failure("", "请确认公司对应通联商户号!");
+            }
+            String flag = "0";
+            for (BranchEmployeeMapping branchEmployeeMapping : branchEmployeeMappingList) {
+                //公司编号与商户号对应
+                if (tlCustId.equals(branchEmployeeMapping.getTlCustId()) && branchIdMater.equals(branchEmployeeMapping.getBranchId())) {
+                    flag = "1";
+                    break;
+                }
+            }
             //非本公司录入
-            if( !branchId.get(0).get("branchId").equals(tlCustId) ){
+            if ("0".equals(flag)) {
                 return ResponseData.failure("","请确认公司编号!");
+            }
+        }
+        if ("56133105533AK04".equals(user.getUsername()) || "admin".equals(user.getUsername())) {
+            String flag = "0";
+            String hasFlag = "0";
+            for (BranchEmployeeMapping branchEmployeeMapping : branchEmployeeMappingList) {
+                //公司编号与商户号对应已有，在原有基础上新增情况
+                if (tlCustId.equals(branchEmployeeMapping.getTlCustId()) && branchIdMater.equals(branchEmployeeMapping.getBranchId())) {
+                    flag = "1";
+                    break;
+                }
+                //公司编号与商户号对应没有，新添加情况
+                if (tlCustId.equals(branchEmployeeMapping.getTlCustId())) {
+                    hasFlag = "1";
+                }
+                if (branchIdMater.equals(branchEmployeeMapping.getBranchId())) {
+                    hasFlag = "1";
+                }
+                if (tlCustId.equals(branchEmployeeMapping.getTlCustId())) {
+                    if (branchIdMater.equals(branchEmployeeMapping.getBranchId())) {
+                        flag = "1";
+                        break;
+                    }
+                }
+                if (branchIdMater.equals(branchEmployeeMapping.getBranchId())) {
+                    if (tlCustId.equals(branchEmployeeMapping.getTlCustId())) {
+                        flag = "1";
+                        break;
+                    }
+                }
+            }
+            //非本公司录入
+            if ("0".equals(flag) && "1".equals(hasFlag)) {
+                return ResponseData.failure("", "已有公司或商户号对应关系录入，请确认后添加!");
             }
         }
         branchEmployeeMappingService.addEmployee(employeeMapping);

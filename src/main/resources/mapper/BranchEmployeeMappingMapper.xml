@@ -70,12 +70,6 @@
       WHERE BRANCH_ID = #{employee.branchId} AND EMPLOYEE_ID = #{employee.employeeId}
     </select>
 
-    <select id="getBranchId" parameterType="String" resultType="Map">
-        select branch_id "branchId"
-        from T_CC_BRANCH_EMPLOYEE_MAPPING t
-        where tl_cust_id =#{tlCustId}
-        group by branch_id
-    </select>
     <resultMap id="OrderResultMap" type="com.allinpay.entity.CredentialsQueryMapping">
         <result column="TRX_ID" jdbcType="VARCHAR" property="trxId"/>
         <result column="ORDER_NO" jdbcType="VARCHAR" property="orderNo"/>

@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -72,10 +71,6 @@ public class BranchEmployeeMappingServiceImpl implements IBranchEmployeeMappingS
         return PageVOUtil.convert(new PageInfo<>(credentialsQueryMappings));
     }
 
-    @Override
-    public List<Map> getBranchId(String tlCustId) {
-        return branchEmployeeMappingMapper.getBranchId(tlCustId);
-    }
 
 
     private boolean validateParams(BranchEmployeeMapping employeeMapping) {

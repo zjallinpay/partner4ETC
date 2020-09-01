@@ -7,9 +7,6 @@ import com.allinpay.entity.CredentialsQueryMapping;
 import com.allinpay.entity.vo.CredentialsQueryVo;
 import com.allinpay.entity.vo.EmployeeQueryVO;
 
-import java.util.List;
-import java.util.Map;
-
 public interface IBranchEmployeeMappingService {
 
     PageVO<BranchEmployeeMapping> selectByCondition(EmployeeQueryVO queryVO);
@@ -22,5 +19,4 @@ public interface IBranchEmployeeMappingService {
 
     PageVO<CredentialsQueryMapping> queryCredentials(CredentialsQueryVo credentialsQueryVo);
 
-    List<Map> getBranchId(String tlCustId);
 }
