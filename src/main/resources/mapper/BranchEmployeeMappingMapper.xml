@@ -81,6 +81,7 @@
 
         <result column="BRANCH_ID" jdbcType="VARCHAR" property="branchId"/>
         <result column="BRANCH_NAME" jdbcType="VARCHAR" property="branchName"/>
+        <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName"/>
         <result column="EMPLOYEE_ID" jdbcType="VARCHAR" property="employeeId"/>
         <result column="EMPLOYEE_NAME" jdbcType="VARCHAR" property="employeeName"/>
         <result column="CUST_NAME" jdbcType="VARCHAR" property="custName"/>
@@ -94,37 +95,100 @@
         <result column="ACCT_TYPE" jdbcType="VARCHAR" property="acctType"/>
         <result column="ACCT" jdbcType="VARCHAR" property="acct"/>
         <result column="FEE" jdbcType="VARCHAR" property="fee"/>
+        <result column="UPDATE_DATE" jdbcType="VARCHAR" property="updateDate"/>
     </resultMap>
     <select id="queryCredentials" parameterType="com.allinpay.entity.vo.CredentialsQueryVo" resultMap="OrderResultMap">
-        select *
+        select ORDER_NO,TRX_ID,
+        case
+        when PAY_STATUS ='0000' then '成功'
+        else '失败'
+        end PAY_STATUS,
+        PAY_AMOUNT,PAY_TIME,
+        case
+        when PAY_TYPE ='VSP001' then '消费'
+        when PAY_TYPE ='VSP501' then '微信支付'
+        when PAY_TYPE ='VSP511' then '支付宝支付'
+        when PAY_TYPE ='VSP505' then '手机QQ支付'
+        when PAY_TYPE ='VSP551' then '银联扫码支付'
+        else ''
+        end PAY_TYPE,
+        ccorder.TL_CUST_ID,
+        case
+        when ccorder.BRANCH_ID is null then branchinfo.branch_id
+        else ccorder.BRANCH_ID
+        end BRANCH_ID,
+        case
+        when ccorder.BRANCH_NAME is null then branchinfo.branch_name
+        else ccorder.branch_name
+        end branch_name,
+        case
+        when ccorder.BRANCH_NAME is null then branchinfo.branch_name
+        else ccorder.branch_name
+        end merchant_name,
+        EMPLOYEE_ID,EMPLOYEE_NAME,CUST_NAME,CUST_PHONE,REMARK,INSERT_TIME,
+        case
+        when UPDATE_TIME is null then INSERT_TIME
+        else UPDATE_TIME end UPDATE_TIME,
+        case
+        when UPDATE_TIME is null then substr(INSERT_TIME,0,10)
+        else substr(UPDATE_TIME,0,10)
+        end update_date,
+        TERM_NO,
+        TRACE_NO,
+        case
+        when PAY_TYPE = 'VSP001' and ACCT_TYPE = '00' then '借记卡'
+        when PAY_TYPE = 'VSP001' and ACCT_TYPE = '01' then '存折'
+        when PAY_TYPE = 'VSP001' and ACCT_TYPE = '02' then '信用卡'
+        when PAY_TYPE = 'VSP001' and ACCT_TYPE = '03' then '借记卡'
+        when PAY_TYPE = 'VSP001' and ACCT_TYPE = '04' then '预付费卡'
+        when PAY_TYPE = 'VSP001' and ACCT_TYPE = '05' then '境外卡'
+        when PAY_TYPE = 'VSP001' and ACCT_TYPE = '99' then '其他'
+        when PAY_TYPE != 'VSP001' and ACCT_TYPE = '02' then '信用卡'
+        when PAY_TYPE != 'VSP001' and ACCT_TYPE != '02' then ''
+        else ACCT_TYPE
+        end ACCT_TYPE,
+        case
+        when acct is not null
+        then substr(ACCT,0,6) || '******' || substr(acct,length(acct)-3,length(acct)-1)
+        else acct
+        end acct,
+        case
+        when FEE is null then '0.00'
+        else fee
+        end fee
         from T_CC_ORDER ccorder
+        left join (
+        select tl_cust_id,max(branch_id) branch_id,max(branch_name) branch_name
+        from T_CC_BRANCH_EMPLOYEE_MAPPING t
+        group by tl_cust_id
+        )branchinfo on ccorder.tl_cust_id = branchinfo.tl_cust_id
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="credentialsQueryVo.tlCustId != '' and credentialsQueryVo.tlCustId != null">
-                and TL_CUST_ID =#{credentialsQueryVo.tlCustId}
+                and ccorder.TL_CUST_ID =#{credentialsQueryVo.tlCustId}
             </if>
             <if test="credentialsQueryVo.customerName != '' and credentialsQueryVo.customerName != null">
-                and CUST_NAME like '%' || #{credentialsQueryVo.customerName} || '%'
+                and ccorder.CUST_NAME like '%' || #{credentialsQueryVo.customerName} || '%'
             </if>
             <if test="credentialsQueryVo.employeeName != '' and credentialsQueryVo.employeeName != null">
-                and EMPLOYEE_NAME like '%' || #{credentialsQueryVo.employeeName} || '%'
+                and ccorder.EMPLOYEE_NAME like '%' || #{credentialsQueryVo.employeeName} || '%'
             </if>
             <if test="credentialsQueryVo.status != '' and credentialsQueryVo.status != null">
-                and PAY_STATUS =#{credentialsQueryVo.status}
+                and ccorder.PAY_STATUS =#{credentialsQueryVo.status}
             </if>
             <if test="credentialsQueryVo.branchName != '' and credentialsQueryVo.branchName != null">
-                and BRANCH_NAME  like '%' || #{credentialsQueryVo.branchName} || '%'
+                and branchinfo.BRANCH_NAME like '%' || #{credentialsQueryVo.branchName} || '%'
             </if>
             <if test="credentialsQueryVo.orderNo != '' and credentialsQueryVo.orderNo != null">
-                and ORDER_NO =#{credentialsQueryVo.orderNo}
+                and ccorder.ORDER_NO =#{credentialsQueryVo.orderNo}
             </if>
             <if test="credentialsQueryVo.status != '' and credentialsQueryVo.status != null">
-                and PAY_STATUS = #{credentialsQueryVo.status}
+                and ccorder.PAY_STATUS = #{credentialsQueryVo.status}
             </if>
             <if test="credentialsQueryVo.tradeType != '' and credentialsQueryVo.tradeType != null">
-                and PAY_TYPE = #{credentialsQueryVo.tradeType}
+                and ccorder.PAY_TYPE = #{credentialsQueryVo.tradeType}
             </if>
             <if test="credentialsQueryVo.endTime != '' and credentialsQueryVo.endTime != null">
-                and PAY_TIME between #{credentialsQueryVo.startTime} and #{credentialsQueryVo.endTime}
+                and ccorder.PAY_TIME between #{credentialsQueryVo.startTime} and #{credentialsQueryVo.endTime}
             </if>
         </trim>
         order by pay_time desc

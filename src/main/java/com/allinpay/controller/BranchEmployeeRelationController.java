@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -142,71 +141,7 @@ public class BranchEmployeeRelationController {
     public PageVO<CredentialsQueryMapping> exportCredentials(CredentialsQueryVo credentialsQueryVo) {
         credentialsQueryVo.setPageSize(10000000);
         credentialsQueryVo.setPageNum(1);
-        PageVO<CredentialsQueryMapping> credentialsQueryList = credentialsQueryList(credentialsQueryVo);
-        List<CredentialsQueryMapping> newList = new ArrayList<>();
-        if (credentialsQueryList != null) {
-            for (CredentialsQueryMapping credentialsQueryMapping : credentialsQueryList.getList()) {
-                credentialsQueryMapping.setMerchantName(credentialsQueryMapping.getBranchName());
-                if(credentialsQueryMapping.getUpdateTime() != null && !"".equals(credentialsQueryMapping.getUpdateTime())){
-                    String date = credentialsQueryMapping.getUpdateTime().substring(0,10);
-                    credentialsQueryMapping.setUpdateDate(date);
-                }
-                if ("VSP001".equals(credentialsQueryMapping.getPayType())) {
-                    credentialsQueryMapping.setPayType("消费");
-                }
-                if ("VSP501".equals(credentialsQueryMapping.getPayType())) {
-                    credentialsQueryMapping.setPayType("微信支付");
-                }
-                if ("VSP511".equals(credentialsQueryMapping.getPayType())) {
-                    credentialsQueryMapping.setPayType("支付宝支付");
-                }
-                if ("VSP505".equals(credentialsQueryMapping.getPayType())) {
-                    credentialsQueryMapping.setPayType("手机QQ支付");
-                }
-                if ("VSP551".equals(credentialsQueryMapping.getPayType())) {
-                    credentialsQueryMapping.setPayType("银联扫码支付");
-                }
-
-                if ("VSP001".equals(credentialsQueryMapping.getPayType())) {
-                    if ("00".equals(credentialsQueryMapping.getAcctType())) {
-                        credentialsQueryMapping.setAcctType("借记卡");
-                    }
-                    if ("01".equals(credentialsQueryMapping.getAcctType())) {
-                        credentialsQueryMapping.setAcctType("存折");
-                    }
-                    if ("02".equals(credentialsQueryMapping.getAcctType())) {
-                        credentialsQueryMapping.setAcctType("信用卡");
-                    }
-                    if ("03".equals(credentialsQueryMapping.getAcctType())) {
-                        credentialsQueryMapping.setAcctType("准贷记卡");
-                    }
-                    if ("04".equals(credentialsQueryMapping.getAcctType())) {
-                        credentialsQueryMapping.setAcctType("预付费卡");
-                    }
-                    if ("05".equals(credentialsQueryMapping.getAcctType())) {
-                        credentialsQueryMapping.setAcctType("境外卡");
-                    }
-                    if ("99".equals(credentialsQueryMapping.getAcctType())) {
-                        credentialsQueryMapping.setAcctType("其他");
-                    }
-                } else {
-                    if ("02".equals(credentialsQueryMapping.getAcctType())) {
-                        credentialsQueryMapping.setAcctType("信用卡");
-                    } else {
-                        credentialsQueryMapping.setAcctType("借记卡");
-                    }
-                }
-                if("0000".equals(credentialsQueryMapping.getPayStatus())){
-                    credentialsQueryMapping.setPayStatus("成功");
-                }else{
-                    credentialsQueryMapping.setPayStatus("失败");
-                }
-                newList.add(credentialsQueryMapping);
-            }
-        }
-
-        credentialsQueryList.setList(newList);
-        return credentialsQueryList;
+        return credentialsQueryList(credentialsQueryVo);
     }
 
     /**

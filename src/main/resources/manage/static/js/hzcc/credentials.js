@@ -42,7 +42,7 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                 orderNo: $.trim($("#orderNoQuery").val()),
                 tradeType: $.trim($("#tradeTypeQuery").val()),
                 startTime: $("#tradeDateQuery").val() == "" || $("#tradeDateQuery").val() ==undefined ? "" : $("#tradeDateQuery").val().substr(0, 10) + " 00:00:00",//查询创建时间起
-                endTime: $("#tradeDateQuery").val() == "" || $("#tradeDateQuery").val() ==undefined ? "" : $("#tradeDateQuery").val().substr(13, 11) + " 00:00:00"//查询创建时间止
+                endTime: $("#tradeDateQuery").val() == "" || $("#tradeDateQuery").val() == undefined ? "" : $("#tradeDateQuery").val().substr(13, 11) + " 24:00:00"//查询创建时间止
             },
             //分页信息
             request: {
@@ -85,29 +85,6 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                 {fixed: 'right', title: '操作', toolbar: '#operator'}
             ]],
             done: function () {
-                $("[data-field='payType']").children().each(function () {
-                    if ($(this).text() == 'VSP001') {
-                        $(this).text("消费")
-                    }
-                    if ($(this).text() == 'VSP501') {
-                        $(this).text("微信支付")
-                    }
-                    if ($(this).text() == 'VSP511') {
-                        $(this).text("支付宝支付")
-                    }
-                    if ($(this).text() == 'VSP505') {
-                        $(this).text("手机QQ支付")
-                    }
-                    if ($(this).text() == 'VSP551') {
-                        $(this).text("银联扫码支付")
-                    }
-                });
-
-                $("[data-field='payStatus']").children().each(function () {
-                    if ($(this).text() == '0000') {
-                        $(this).text("成功")
-                    }
-                });
             }
         });
     };
@@ -144,6 +121,14 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                         document.getElementById('printIframe').contentWindow.iframePrint(checkData[i]);
                     }
                 }
+                // var LODOP; //声明为全局变量
+                // LODOP=getLodop();
+                // LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_表单一");
+                // LODOP.SET_PRINT_STYLE("FontSize",18);
+                // LODOP.SET_PRINT_STYLE("Bold",1);
+                // LODOP.ADD_PRINT_TEXT(50,231,260,39,"打印页面部分内容");
+                // LODOP.ADD_PRINT_HTM(88,200,350,600,document.getElementById("form1").innerHTML);
+
                 break;
             case 'exportData':
                 var ins1 = table.render({
@@ -194,8 +179,8 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                             , 'updateTime'
                             ,'updateDate'
                             , 'payType'
-                            ,'acc'
-                            ,'accType'
+                            , 'acct'
+                            , 'acctType'
                             , 'payAmount'
                             ,'fee'
                             ,'payStatus'
@@ -215,8 +200,8 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                             updateTime: "完成时间",
                             updateDate:"完成日期",
                             payType: "交易类型",
-                            acc:"交易账号",
-                            accType:"卡类别",
+                            acct: "交易账号",
+                            acctType: "卡类别",
                             payAmount: "交易金额(元)",
                             fee:"手续费",
                             payStatus: "处理状态",
@@ -258,68 +243,17 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
             //0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
             type: 2,
             success: function (layero, index) {    //成功获得加载changefile.html时，预先加载，将值从父窗口传到 子窗口
-                console.log(contentData);
                 var _body = parent.layer.getChildFrame('body', index);
                 _body.find("#trxIdDetail").val(contentData.trxId);
                 _body.find("#merchantInfoDetail").val(contentData.tlCustId);
-                // _body.find("#merchantNameDetail").val(contentData.);
+                _body.find("#merchantNameDetail").val(contentData.branchName);
                 _body.find("#branchNameDetail").val(contentData.branchName);
                 _body.find("#submitTimeDetail").val(contentData.payTime);
                 _body.find("#finishTimeDetail").val(contentData.updateTime);
-
-                if(contentData.payType == 'VSP001'){
-                    _body.find("#tradeTypeDetail").val("消费");
-                }
-                if(contentData.payType == 'VSP501'){
-                    _body.find("#tradeTypeDetail").val("微信支付");
-                }
-                if(contentData.payType == 'VSP511'){
-                    _body.find("#tradeTypeDetail").val("支付宝支付");
-                }
-                if(contentData.payType == 'VSP505'){
-                    _body.find("#tradeTypeDetail").val("手机QQ支付");
-                }
-                if(contentData.payType == 'VSP551'){
-                    _body.find("#tradeTypeDetail").val("银联扫码支付");
-                }
-
+                _body.find("#tradeTypeDetail").val(contentData.payType);
                 _body.find("#tradeCountDetail").val(contentData.acct);
-                if(contentData.payType == 'VSP001'){
-                    if('00' == contentData.acctType){
-                        _body.find("#cardTypeDetail").val("借记卡");
-                    }
-                    if('01' == contentData.acctType){
-                        _body.find("#cardTypeDetail").val("存折");
-                    }
-                    if('02' == contentData.acctType){
-                        _body.find("#cardTypeDetail").val("信用卡");
-                    }
-                    if('03' == contentData.acctType){
-                        _body.find("#cardTypeDetail").val("准贷记卡");
-                    }
-                    if('04' == contentData.acctType){
-                        _body.find("#cardTypeDetail").val("预付费卡");
-                    }
-                    if('05' == contentData.acctType){
-                        _body.find("#cardTypeDetail").val("境外卡");
-                    }
-                    if('99' == contentData.acctType){
-                        _body.find("#cardTypeDetail").val("其他");
-                    }
-                }else{
-                    if('02' == contentData.acctType){
-                        _body.find("#cardTypeDetail").val("信用卡");
-                    }else if('' == contentData.acctType || contentData.acctType == null || contentData.acctType == undefined){
-                        _body.find("#cardTypeDetail").val("");
-                    }else{
-                        _body.find("#cardTypeDetail").val("借记卡");
-                    }
-                }
-
-                if(contentData.payStatus == '0000'){
-                    _body.find("#statusDetail").val("成功");
-                }
-
+                _body.find("#cardTypeDetail").val(contentData.acctType);
+                _body.find("#statusDetail").val(contentData.payStatus);
                 _body.find("#tradeAmountDetail").val(contentData.payAmount);
                 _body.find("#feeDetail").val(contentData.fee);
                 _body.find("#termNoDetail").val(contentData.termNo);
