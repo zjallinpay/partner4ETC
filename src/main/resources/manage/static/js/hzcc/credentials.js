@@ -145,7 +145,7 @@ layui.use(['table', 'element', 'laypage', 'layer', 'form'], function () {
                         orderNo: $.trim($("#orderNoQuery").val()),
                         tradeType: $.trim($("#tradeTypeQuery").val()),
                         startTime: $("#tradeDateQuery").val() == "" ? "" : $("#tradeDateQuery").val().substr(0, 10) + " 00:00:00",//查询创建时间起
-                        endTime: $("#tradeDateQuery").val() == "" ? "" : $("#tradeDateQuery").val().substr(13, 11) + " 00:00:00"//查询创建时间止
+                        endTime: $("#tradeDateQuery").val() == "" || $("#tradeDateQuery").val() == undefined ? "" : $("#tradeDateQuery").val().substr(13, 11) + " 24:00:00"//查询创建时间止
                     },
                     cols: [[
                         {field: 'custName', title: '客户名称'},
