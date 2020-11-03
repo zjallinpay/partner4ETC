@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.BankCardIdMappingMapper">
+    <resultMap id="BaseResultMap" type="com.allinpay.entity.BankCardIdMapping">
+        <result column="KID" jdbcType="DECIMAL" property="kid"/>
+        <result column="BANK_ID_NO" jdbcType="VARCHAR" property="bankId"/>
+        <result column="CARD_TYPE" jdbcType="VARCHAR" property="cardType"/>
+        <result column="BANK_NAME" jdbcType="VARCHAR" property="bankName"/>
+        <result column="CARD_NAME" jdbcType="VARCHAR" property="cardName"/>
+        <result column="STATUS" jdbcType="VARCHAR" property="status"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.allinpay.entity.BankCardIdMapping">
+        <selectKey keyColumn="KID" keyProperty="kid" order="BEFORE" resultType="int">
+            SELECT MAX(KID) + 1 FROM T_CJM_BIN_CONFIG
+        </selectKey>
+        insert into T_CJM_BIN_CONFIG (KID, BANK_ID_NO, CARD_TYPE,
+        BANK_NAME, CARD_NAME,INSERT_TIME,UPDATE_TIME,
+        STATUS)
+        values (#{kid,jdbcType=DECIMAL}, #{bankId,jdbcType=VARCHAR},#{cardType,jdbcType=VARCHAR},
+        #{bankName,jdbcType=VARCHAR},#{cardName,jdbcType=VARCHAR}, #{insertTime,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateStatus" parameterType="com.allinpay.entity.BankCardIdMapping">
+        update T_CJM_BIN_CONFIG
+        set status = #{bankcardid.status},update_time = #{bankcardid.updateTime}
+        where kid = #{bankcardid.kid}
+    </update>
+    <update id="update" parameterType="com.allinpay.entity.BankCardIdMapping">
+        update T_CJM_BIN_CONFIG
+        set BANK_ID_NO = #{bankcardid.bankId, jdbcType=VARCHAR},
+        CARD_TYPE = #{bankcardid.cardType, jdbcType=VARCHAR},
+        BANK_NAME = #{bankcardid.bankName, jdbcType=VARCHAR},
+        CARD_NAME = #{bankcardid.cardName, jdbcType=VARCHAR},
+        UPDATE_TIME = #{bankcardid.updateTime, jdbcType=VARCHAR}
+        where kid = #{bankcardid.kid,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByCondition" parameterType="com.allinpay.entity.vo.BankcardidQueryVo" resultMap="BaseResultMap">
+        select KID, BANK_ID_NO, CARD_TYPE,
+        BANK_NAME, CARD_NAME, STATUS
+        from T_CJM_BIN_CONFIG
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="queryVO.bankId != '' and queryVO.bankId != null">
+                BANK_ID_NO like '%' || #{queryVO.bankId} || '%'
+            </if>
+        </trim>
+        order by KID
+    </select>
+
+    <select id="selectOneByCondition" parameterType="com.allinpay.entity.BankCardIdMapping"
+            resultMap="BaseResultMap">
+        select KID, BANK_ID_NO, STATUS
+      from T_CJM_BIN_CONFIG
+      WHERE BANK_ID_NO = #{bankcardid.bankId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectEditByCondition" parameterType="com.allinpay.entity.BankCardIdMapping"
+            resultMap="BaseResultMap">
+        select KID, BANK_ID_NO, STATUS
+      from T_CJM_BIN_CONFIG
+      WHERE  KID = #{bankcardid.kid,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

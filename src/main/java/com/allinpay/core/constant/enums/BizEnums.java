@@ -68,7 +68,9 @@ public enum BizEnums {
     STALL_IN_USE("80001", "营业状态，不可操作"),
     NO_STALL_DEALY("80002", "操作过延期或者没有可延期的场次"),
 
-    EMPLOYEE_ALREADY_EXIST("90001", "员工信息已存在");;
+    EMPLOYEE_ALREADY_EXIST("90001", "员工信息已存在"),
+
+    BANKCARDBIN_ALREADY_EXIST("90002", "卡bin信息已存在");
 
     private String code;
     private String msg;
