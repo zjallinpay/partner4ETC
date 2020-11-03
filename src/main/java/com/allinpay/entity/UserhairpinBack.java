@@ -19,6 +19,11 @@ public class UserhairpinBack {
      * 机构编号
      */
     private String partnerId;
+
+    /**
+     * 机构名称
+     */
+    private String partnername;
 //
 //    /**
 //     * 接口版本号
