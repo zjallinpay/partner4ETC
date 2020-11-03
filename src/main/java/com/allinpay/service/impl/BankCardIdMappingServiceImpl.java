@@ -20,14 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-//public class BankCardIdServiceImpl {
-//
-//}
 
-/**
- * author: tanguang
- * data: 2020/7/10
- **/
 @Service
 @Slf4j
 public class BankCardIdMappingServiceImpl implements BankCardIdMappingService {
