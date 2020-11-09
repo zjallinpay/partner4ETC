@@ -35,6 +35,12 @@ public class DiscountConfigMappingServiceImpl implements DiscountConfigMappingSe
     }
 
     @Override
+    public PageVO<DiscountConfigMapping> selectActivity(DiscountConfigQueryVo discountConfigQueryVo) {
+        List<DiscountConfigMapping> discountConfigMappingList = discountConfigMappingMapper.selectActivity(discountConfigQueryVo);
+        return PageVOUtil.convert(new PageInfo<>(discountConfigMappingList));
+    }
+
+    @Override
     public void addDiscontconfig(DiscountConfigMapping discountConfigMapping) {
         DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         discountConfigMapping.setStatus("0");

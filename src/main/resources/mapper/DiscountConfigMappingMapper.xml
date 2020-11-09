@@ -70,6 +70,12 @@
       from T_CJM_DISCOUNT_CONFIG
       WHERE  KID = #{discountconfig.kid,jdbcType=VARCHAR}
     </select>
+    <select id="selectActivity" parameterType="com.allinpay.entity.DiscountConfigMapping"
+            resultMap="BaseResultMap">
+        select  ACTIVITY_ID, STATUS
+      from T_CJM_DISCOUNT_CONFIG
+      WHERE  STATUS = '0'
+    </select>
 
 
 </mapper>

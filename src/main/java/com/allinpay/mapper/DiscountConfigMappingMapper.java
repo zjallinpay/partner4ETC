@@ -11,6 +11,8 @@ public interface DiscountConfigMappingMapper {
     //查询方法
     List<DiscountConfigMapping> selectByCondition(@Param("queryVO") DiscountConfigQueryVo discountConfigQueryVo);
 
+    List<DiscountConfigMapping> selectActivity(@Param("queryVO") DiscountConfigQueryVo discountConfigQueryVo);
+
     int insert(DiscountConfigMapping record);
 
     int update(@Param("discountconfig") DiscountConfigMapping discountConfigMapping);

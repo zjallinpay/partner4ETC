@@ -44,4 +44,12 @@ public class DiscountConfigController {
         return ResponseData.success().setData(null);
     }
 
+    @RequestMapping("/select")
+    public ResponseData select(DiscountConfigQueryVo discountConfigQueryVo) {
+        PageVO<DiscountConfigMapping> pageVO = null;
+        pageVO = discountConfigMappingService.selectActivity(discountConfigQueryVo);
+
+        return ResponseData.success().setData(pageVO);
+    }
+
 }
