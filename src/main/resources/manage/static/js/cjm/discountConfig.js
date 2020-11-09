@@ -77,7 +77,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
 
     $("#addBtn").on("click", function () {
         // $("#addForm").find("input[name='kid']").val("");
-        $("#addForm").find("input[name='discountId']").val("");
+        // $("#addForm").find("input[name='discountId']").val("");
         $("#addForm").find("input[name='discountName']").val("");
         $("#addForm").find("input[name='discountstartDate']").val("");
         $("#addForm").find("input[name='discountendDate']").val("");
@@ -150,7 +150,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             type: 'post',
             data: {
                 // kid: $.trim($("#editForm").find("input[name='kid']").val()),
-                discountId: $.trim($("#addForm").find("input[name='discountId']").val()),
+                // discountId: $.trim($("#addForm").find("input[name='discountId']").val()),
                 discountName: $.trim($("#addForm").find("input[name='discountName']").val()),
                 discountstartDate: $.trim($("#addForm").find("input[name='discountstartDate']").val()),
                 discountendDate: $.trim($("#addForm").find("input[name='discountendDate']").val()),

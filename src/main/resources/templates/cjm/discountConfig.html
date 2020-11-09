@@ -57,19 +57,10 @@
         <!-- 数据展示 table框 -->
         <table class="layui-hide" id="discountConfigTable" lay-filter="tableFilter"></table>
     </div>
-    <!--<div th:include="common/footer :: footer"></div>-->
     <!-- 新增表单 -->
     <form class="layui-form" id="addForm" lay-filter="addFilter"
           style="display: none;margin: 10px; text-align: center">
         <div style="color: red;text-align: left;margin-bottom: 10px">注：活动号填写准确</div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <label class="layui-form-label">活动号</label>
-                <div class="layui-input-inline" style="width: 200px;">
-                    <input class="layui-input" lay-verify="required" maxlength="40" name="discountId" type="text">
-                </div>
-            </div>
-        </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <label class="layui-form-label">活动名称</label>
@@ -124,7 +115,7 @@
             <div class="layui-input-block">
                 <label class="layui-form-label">备注</label>
                 <div class="layui-input-inline" style="width: 200px;">
-                    <input class="layui-input" lay-verify="required" maxlength="40" name="remark" type="text">
+                    <input class="layui-input" lay-verify="" maxlength="40" name="remark" type="text">
                 </div>
             </div>
         </div>
@@ -140,14 +131,6 @@
         <input hidden name="kid"/>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <label class="layui-form-label">活动号</label>
-                <div class="layui-input-inline" style="width: 200px;">
-                    <input class="layui-input" lay-verify="required" maxlength="40" name="discountId" type="text">
-                </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
                 <label class="layui-form-label">活动名称</label>
                 <div class="layui-input-inline" style="width: 200px;">
                     <input class="layui-input" lay-verify="required" maxlength="40" name="discountName" type="text">
@@ -200,7 +183,7 @@
             <div class="layui-input-block">
                 <label class="layui-form-label">备注</label>
                 <div class="layui-input-inline" style="width: 200px;">
-                    <input class="layui-input" lay-verify="required" maxlength="40" name="remark" type="text">
+                    <input class="layui-input" lay-verify="" maxlength="40" name="remark" type="text">
                 </div>
             </div>
         </div>

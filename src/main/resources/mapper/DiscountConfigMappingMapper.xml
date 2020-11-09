@@ -22,7 +22,7 @@
         DISCOUNT_RATE, SINGLE_MAX_DISCOUNT,DISCOUNT_MAX_TIMES,REMARK,INSERT_TIME,UPDATE_TIME,
         STATUS)
         values (#{kid,jdbcType=DECIMAL},
-        #{discountId,jdbcType=VARCHAR},#{discountName,jdbcType=VARCHAR},#{discountstartDate,jdbcType=VARCHAR},
+        #{kid,jdbcType=VARCHAR},#{discountName,jdbcType=VARCHAR},#{discountstartDate,jdbcType=VARCHAR},
         #{discountendDate,jdbcType=VARCHAR},#{discountRate,jdbcType=VARCHAR},#{singlemaxDiscount,jdbcType=VARCHAR},
         #{discountmaxTimes,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{insertTime,jdbcType=VARCHAR},
         #{updateTime,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
@@ -34,7 +34,7 @@
     </update>
     <update id="update" parameterType="com.allinpay.entity.BankCardIdMapping">
         update T_CJM_DISCOUNT_CONFIG
-        set ACTIVITY_ID = #{discountconfig.discountId, jdbcType=VARCHAR},
+        set
          DISCOUNT_NAME = #{discountconfig.discountName, jdbcType=VARCHAR},
         DISCOUNT_START_DATE = #{discountconfig.discountstartDate, jdbcType=VARCHAR},
         DISCOUNT_END_DATE = #{discountconfig.discountendDate, jdbcType=VARCHAR},
@@ -58,18 +58,18 @@
         order by KID
     </select>
 
-    <select id="selectOneByCondition" parameterType="com.allinpay.entity.DiscountConfigMapping"
-            resultMap="BaseResultMap">
-        select KID, ACTIVITY_ID, STATUS
-      from T_CJM_DISCOUNT_CONFIG
-      WHERE ACTIVITY_ID = #{discountconfig.discountId,jdbcType=VARCHAR}
-    </select>
-    <select id="selectEditByCondition" parameterType="com.allinpay.entity.DiscountConfigMapping"
-            resultMap="BaseResultMap">
-        select KID, ACTIVITY_ID, STATUS
-      from T_CJM_DISCOUNT_CONFIG
-      WHERE  KID = #{discountconfig.kid,jdbcType=VARCHAR}
-    </select>
+    <!--    <select id="selectOneByCondition" parameterType="com.allinpay.entity.DiscountConfigMapping"-->
+    <!--            resultMap="BaseResultMap">-->
+    <!--        select KID, ACTIVITY_ID, STATUS-->
+    <!--      from T_CJM_DISCOUNT_CONFIG-->
+    <!--      WHERE ACTIVITY_ID = #{discountconfig.discountId,jdbcType=VARCHAR}-->
+    <!--    </select>-->
+    <!--    <select id="selectEditByCondition" parameterType="com.allinpay.entity.DiscountConfigMapping"-->
+    <!--            resultMap="BaseResultMap">-->
+    <!--        select KID, ACTIVITY_ID, STATUS-->
+    <!--      from T_CJM_DISCOUNT_CONFIG-->
+    <!--      WHERE  KID = #{discountconfig.kid,jdbcType=VARCHAR}-->
+    <!--    </select>-->
     <select id="selectActivity" parameterType="com.allinpay.entity.DiscountConfigMapping"
             resultMap="BaseResultMap">
         select  ACTIVITY_ID, STATUS
