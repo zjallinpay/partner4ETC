@@ -21,4 +21,5 @@ public interface MerchantConfigMappingMapper {
     MerchantConfigMapping selectEditByCondition(@Param("merchantconfig") MerchantConfigMapping merchantConfigMapping);
 
 
+    MerchantConfigMapping selectByMerchantId(String merchantId);
 }

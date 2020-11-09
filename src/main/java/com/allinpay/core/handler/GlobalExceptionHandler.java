@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AllinpayException.class)
     @ResponseBody
     public ResponseData allinpayExceptionHandler(AllinpayException e) {
+        log.info("业务异常：{}->{}", e.getErrorCode(), e.getErrorMsg());
         return ResponseData.failure(e.getErrorCode(), e.getErrorMsg());
     }
 

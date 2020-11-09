@@ -57,6 +57,11 @@
       from T_CJM_MERCHANT_CONFIG
       WHERE  KID = #{merchantconfig.kid,jdbcType=VARCHAR}
     </select>
+    <select id="selectByMerchantId" resultMap="BaseResultMap">
+         select KID, MERCHANT_ID, MERCHANT_NAME
+      from T_CJM_MERCHANT_CONFIG
+      WHERE MERCHANT_ID = #{merchantId,jdbcType=VARCHAR}
+    </select>
 
 
 </mapper>
