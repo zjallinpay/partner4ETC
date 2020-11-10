@@ -82,6 +82,23 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
+                <label class="layui-form-label">appid</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input class="layui-input" lay-verify="required" name="appId"
+                           oninput="if(value.length>8)value=value.slice(0,7);" type="number">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">md5key</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input class="layui-input" lay-verify="required" maxlength="8" name="secretKey" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
                 <label class="layui-form-label">活动号</label>
                 <div class="layui-input-inline" style="width: 200px;">
                     <div class="layui-input-inline" id="activityIdSelect" style="width: 200px;">
@@ -114,6 +131,23 @@
                 <label class="layui-form-label">商户名称</label>
                 <div class="layui-input-inline" style="width: 200px;">
                     <input class="layui-input" lay-verify="required" maxlength="40" name="merchantName" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">appid</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input class="layui-input" lay-verify="required" maxlength="40" name="appId"
+                           oninput="if(value.length>8)value=value.slice(0,7);" type="number">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">md5key</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input class="layui-input" lay-verify="required" maxlength="40" name="secretKey" type="text">
                 </div>
             </div>
         </div>

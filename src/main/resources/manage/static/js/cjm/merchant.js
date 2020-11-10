@@ -58,6 +58,8 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 {field: 'merchantId', title: '商户号'},
                 {field: 'merchantName', title: '商户名称'},
                 {field: 'activityId', title: '活动号'},
+                {field: 'appId', title: 'appid'},
+                {field: 'secretKey', title: 'md5key'},
                 {field: 'status', title: '状态'},
                 {fixed: 'right', title: '操作', toolbar: '#operator'}
             ]]
@@ -73,7 +75,8 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
     $("#addBtn").on("click", function () {
         // $("#addForm").find("input[name='kid']").val("");
         $("#addForm").find("SELECT[name='activityId']").val("");
-        // var activityId = $("select[name='activityId']");
+        $("#appId").find("input[name='appId']").val("");
+        $("#secretKey").find("input[name='secretKey']").val("");
         $("#addForm").find("input[name='merchantId']").val("");
         $("#addForm").find("input[name='merchantName']").val("");
         openModal("新增", "addForm");
@@ -91,6 +94,8 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 "activityId": myData.activityId,
                 "merchantId": myData.merchantId,
                 "merchantName": myData.merchantName,
+                "appId": myData.appId,
+                "secretKey": myData.secretKey
             });
 
             //打开模态框
@@ -138,6 +143,8 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 activityId: $.trim($("#addForm").find("SELECT[name='activityId']").val()),
                 // activityId: $("select[name='activityId']"),
                 merchantId: $.trim($("#addForm").find("input[name='merchantId']").val()),
+                appId: $.trim($("#addForm").find("input[name='appId']").val()),
+                secretKey: $.trim($("#addForm").find("input[name='secretKey']").val()),
                 merchantName: $.trim($("#addForm").find("input[name='merchantName']").val()),
             },
             dataType: 'json',
@@ -164,6 +171,8 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             type: 'post',
             data: {
                 kid: $.trim($("#editForm").find("input[name='kid']").val()),
+                appId: $.trim($("#editForm").find("input[name='appId']").val()),
+                secretKey: $.trim($("#editForm").find("input[name='secretKey']").val()),
                 activityId: $.trim($("#editForm").find("select[name='activityId']").val()),
                 merchantId: $.trim($("#editForm").find("input[name='merchantId']").val()),
                 merchantName: $.trim($("#editForm").find("input[name='merchantName']").val()),

@@ -21,4 +21,8 @@ public class MerchantConfigQueryVo {
     private Integer pageNum;
 
     private Integer pageSize;
+
+    private String appId;
+
+    private String secretKey;
 }
