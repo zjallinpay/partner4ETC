@@ -41,10 +41,15 @@
             <scope>test</scope>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>com.oracle</groupId>-->
+<!--            <artifactId>ojdbc6</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
-            <version>1.0</version>
+            <version>11.2.0.2.0</version>
         </dependency>
 
         <dependency>
@@ -145,6 +150,24 @@
             <groupId>org.patchca</groupId>
             <artifactId>captcha</artifactId>
             <version>0.5.0</version>
+        </dependency>
+
+        <!--H5收银台码牌-->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <!-- 文档操作 poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.8</version>
         </dependency>
     </dependencies>
 

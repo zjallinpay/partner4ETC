@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.QrcodeMapper">
+    <resultMap id="MerchantResultMap" type="Qrcode">
+        <result column="MCHT_ID" property="mchtId" jdbcType="VARCHAR"/>
+        <result column="MCHT_NAME" property="mchtName" jdbcType="VARCHAR"/>
+        <result column="APP_ID" property="appId" jdbcType="VARCHAR"/>
+        <result column="SECRET_KEY" property="appKey" jdbcType="VARCHAR"/>
+        <result column="PARTNER_MODEL" property="partnerModel" jdbcType="VARCHAR"/>
+        <result column="ORG_ID" property="orgId" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="saveMerchant" parameterType="com.allinpay.entity.Qrcode">
+        INSERT INTO T_SJQ_MERCHANT_INFO (MCHT_ID,MCHT_NAME,APP_ID,SECRET_KEY,ORG_ID,
+            INSERT_TIME,UPDATE_TIME,PARTNER_MODEL,STATUS) values
+        (#{mchtId,jdbcType=VARCHAR},
+        #{mchtName,jdbcType=VARCHAR},#{appId,jdbcType=VARCHAR},
+        #{appKey,jdbcType=VARCHAR},
+        #{orgId,jdbcType=VARCHAR},TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),
+        TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),#{partnerModel,jdbcType=VARCHAR},'1')
+    </insert>
+
+    <select id="queryMerchants" parameterType="Qrcode" resultMap="MerchantResultMap">
+        select * from T_SJQ_MERCHANT_INFO
+        <where>
+            <if test="mchtId!='' and mchtId!=null">
+             MCHT_ID=#{mchtId}
+            </if>
+            <if test="mchtName!='' and mchtName!=null">
+             and MCHT_NAME like '%${mchtName}%'
+            </if>
+        </where>
+        order by update_time desc
+    </select>
+
+    <update id="updateMerchant" parameterType="Qrcode">
+        UPDATE T_SJQ_MERCHANT_INFO T
+        <set>
+            T.UPDATE_TIME = TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),
+            <if test="mchtId!=null and mchtId!=''">
+                T.MCHT_ID = #{mchtId},
+            </if>
+            <if test="mchtName!=null and mchtName!=''">
+                T.MCHT_NAME = #{mchtName},
+            </if>
+            <if test="appId!=null and appId!=''">
+                T.APP_ID = #{appId},
+            </if>
+            <if test="appKey!=null and appKey!=''">
+                T.SECRET_KEY = #{appKey},
+            </if>
+            <if test="partnerModel!=null and partnerModel!=''">
+                T.PARTNER_MODEL = #{partnerModel},
+            </if>
+            <if test="orgId!=null and orgId!=''">
+                T.ORG_ID = #{orgId},
+            </if>
+            <if test="status!=null and status!=''">
+                T.STATUS = #{status}
+            </if>
+
+        </set>
+        WHERE T.MCHT_ID = #{mchtId}
+    </update>
+
+    <insert id="batchSaveMerchants" parameterType="Qrcode">
+        INSERT INTO T_SJQ_MERCHANT_INFO (MCHT_ID,MCHT_NAME,APP_ID,SECRET_KEY,ORG_ID,
+            INSERT_TIME,UPDATE_TIME,PARTNER_MODEL,STATUS)
+        <foreach collection="list" item="item" index="index" separator="union all" >
+            select #{item.mchtId,jdbcType=VARCHAR},
+            #{item.mchtName,jdbcType=VARCHAR},#{item.appId,jdbcType=VARCHAR},
+            #{item.appKey,jdbcType=VARCHAR},
+            #{item.orgId,jdbcType=VARCHAR},TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),
+            TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),#{item.partnerModel,jdbcType=VARCHAR},'1'
+            from dual
+        </foreach>
+    </insert>
+
+    <select id="queryMerchantById" parameterType="Qrcode" resultMap="MerchantResultMap">
+        SELECT * FROM T_SJQ_MERCHANT_INFO T WHERE T.MCHT_ID = #{mchtId}
+    </select>
+</mapper>

@@ -56,4 +56,15 @@ public class CommonConstant {
      */
     public static String CARD_TYPE_DEBT = "1";
     public static String CARD_TYPE_CREDIT = "2";
+
+    /**
+     * 码牌管理
+     */
+    public static String DEST_FILE_NAME = "批导模板.xlsx";
+    public static String SOURCE_FILE_NAME = "E:\\项目资料\\码牌管理\\批量导入模板.xlsx";
+    public static String QR_CODE_IMAGE_PATH = "E:\\项目资料\\码牌管理\\QRIMAGE\\";
+    public static String BATCH_IMPORT_FILE_PATH = "E:\\项目资料\\码牌管理\\批导文件\\";
+    public static int QR_IMAGE_WIDTH = 350;
+    public static int QR_IMAGE_LENGTH = 300;
+    public static String QR_URL = "https://issue.allinpay.com/h5pay/sjq/index/";
 }
