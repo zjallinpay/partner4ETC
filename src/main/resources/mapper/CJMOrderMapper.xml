@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.CJMOrderMapper">
+    <resultMap id="BaseResultMap" type="com.allinpay.entity.CJMOrder">
+        <result column="ORDER_NO" jdbcType="VARCHAR" property="orderNo"/>
+        <result column="TRX_ID" jdbcType="VARCHAR" property="trxId"/>
+        <result column="SRC_TRX_ID" jdbcType="VARCHAR" property="srcTrxId"/>
+        <result column="TERMINAL_NO" jdbcType="VARCHAR" property="terminalNo"/>
+        <result column="PAY_STATUS" jdbcType="VARCHAR" property="payStatus"/>
+        <result column="ERP_STATUS" jdbcType="VARCHAR" property="erpStatus"/>
+        <result column="PAY_AMOUNT" jdbcType="VARCHAR" property="payAmount"/>
+        <result column="PAY_TIME" jdbcType="VARCHAR" property="payTime"/>
+        <result column="PAY_TYPE" jdbcType="VARCHAR" property="payType"/>
+        <result column="TL_CUST_ID" jdbcType="VARCHAR" property="tlCustId"/>
+        <result column="BIZ_JSON" jdbcType="VARCHAR" property="bizJson"/>
+        <result column="EXT_INFO" jdbcType="VARCHAR" property="extInfo"/>
+        <result column="INSERT_TIME" jdbcType="VARCHAR" property="insertTime"/>
+        <result column="UPDATE_TIME" jdbcType="VARCHAR" property="updateTime"/>
+        <result column="FEE" jdbcType="VARCHAR" property="fee"/>
+        <result column="NOTIFY_JSON" jdbcType="VARCHAR" property="notifyJson"/>
+        <result column="USER_ID" jdbcType="VARCHAR" property="userId"/>
+        <result column="ACTIVITY_ID" jdbcType="VARCHAR" property="activityId"/>
+        <result column="DISCOUNT_AMOUNT" jdbcType="VARCHAR" property="discountAmount"/>
+        <result column="SOURCE_AMOUNT" jdbcType="VARCHAR" property="sourceAmount"/>
+    </resultMap>
+
+    <select id="selectByCondition" parameterType="com.allinpay.entity.OrderQueryVO" resultMap="BaseResultMap">
+        select ORDER_NO, TRX_ID, TERMINAL_NO, PAY_STATUS, PAY_AMOUNT,
+        PAY_TIME, PAY_TYPE, TL_CUST_ID, EXT_INFO,DISCOUNT_AMOUNT,SOURCE_AMOUNT
+        from T_CJM_ORDER
+        <where>
+            <trim prefixOverrides="and">
+                <if test="orderNo != '' and orderNo != null">
+                    and ORDER_NO like '%' || #{orderNo} || '%'
+                </if>
+                <if test="tradeStartTime != null">
+                    and to_date(PAY_TIME, 'yyyy-MM-dd HH24:mi:ss') &gt; #{tradeStartTime}
+                </if>
+                <if test="tradeEndTime != null">
+                    and to_date(PAY_TIME, 'yyyy-MM-dd HH24:mi:ss') &lt; #{tradeEndTime}
+                </if>
+                <choose>
+                    <when test="payStatus == '0'">
+                        and PAY_STATUS in ('0','4')
+                    </when>
+                    <when test="payStatus == '1'">
+                        and PAY_STATUS in ('1')
+                    </when>
+                    <otherwise>
+                        and PAY_STATUS in ('0','1','4')
+                    </otherwise>
+                </choose>
+                and TL_CUST_ID = #{merchantId}
+            </trim>
+        </where>
+        order by pay_time desc
+    </select>
+</mapper>

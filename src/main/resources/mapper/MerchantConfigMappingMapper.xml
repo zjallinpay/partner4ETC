@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.MerchantConfigMappingMapper">
+    <resultMap id="BaseResultMap" type="com.allinpay.entity.MerchantConfigMapping">
+        <result column="KID" jdbcType="DECIMAL" property="kid"/>
+        <result column="ACTIVITY_ID" jdbcType="DECIMAL" property="activityId"/>
+        <result column="MERCHANT_ID" jdbcType="VARCHAR" property="merchantId"/>
+        <result column="MERCHANT_NAME" jdbcType="VARCHAR" property="merchantName"/>
+        <result column="STATUS" jdbcType="VARCHAR" property="status"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.allinpay.entity.MerchantConfigMapping">
+        <selectKey keyColumn="KID" keyProperty="kid" order="BEFORE" resultType="int">
+            SELECT MAX(KID) + 1 FROM T_CJM_MERCHANT_CONFIG
+        </selectKey>
+
+        insert into T_CJM_MERCHANT_CONFIG (KID,MERCHANT_ID, MERCHANT_NAME,ACTIVITY_ID,APP_ID,SECRET_KEY,
+        STATUS,INSERT_TIME,UPDATE_TIME)
+        values (#{kid,jdbcType=DECIMAL},
+        #{merchantId,jdbcType=VARCHAR},#{merchantName,jdbcType=VARCHAR},#{activityId,jdbcType=VARCHAR},
+        #{appId,jdbcType=VARCHAR},#{secretKey,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR},#{insertTime,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateStatus" parameterType="com.allinpay.entity.MerchantConfigMapping">
+        update T_CJM_MERCHANT_CONFIG
+        set status = #{merchantconfig.status},update_time = #{merchantconfig.updateTime}
+        where kid = #{merchantconfig.kid}
+    </update>
+    <update id="update" parameterType="com.allinpay.entity.MerchantConfigMapping">
+        update T_CJM_MERCHANT_CONFIG
+        set MERCHANT_ID = #{merchantconfig.merchantId, jdbcType=VARCHAR},
+         MERCHANT_NAME = #{merchantconfig.merchantName, jdbcType=VARCHAR},
+        ACTIVITY_ID = #{merchantconfig.activityId, jdbcType=VARCHAR},
+        APP_ID = #{merchantconfig.appId, jdbcType=VARCHAR},
+        SECRET_KEY = #{merchantconfig.secretKey, jdbcType=VARCHAR},
+        UPDATE_TIME = #{merchantconfig.updateTime, jdbcType=VARCHAR}
+        where kid = #{merchantconfig.kid,jdbcType=VARCHAR}
+    </update>
+    <select id="selectByCondition" parameterType="com.allinpay.entity.vo.MerchantConfigQueryVo"
+            resultMap="BaseResultMap">
+        select KID, ACTIVITY_ID,MERCHANT_NAME,MERCHANT_ID ,APP_ID,SECRET_KEY,STATUS
+        from T_CJM_MERCHANT_CONFIG
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="queryVO.merchantId != '' and queryVO.merchantId != null">
+                MERCHANT_ID like '%' || #{queryVO.merchantId} || '%'
+            </if>
+        </trim>
+        order by KID
+    </select>
+
+    <select id="selectOneByCondition" parameterType="com.allinpay.entity.MerchantConfigMapping"
+            resultMap="BaseResultMap">
+        select KID, MERCHANT_ID, STATUS
+      from T_CJM_MERCHANT_CONFIG
+      WHERE MERCHANT_ID = #{merchantconfig.merchantId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectEditByCondition" parameterType="com.allinpay.entity.MerchantConfigMapping"
+            resultMap="BaseResultMap">
+        select KID, MERCHANT_ID, STATUS
+      from T_CJM_MERCHANT_CONFIG
+      WHERE  KID = #{merchantconfig.kid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByMerchantId" resultMap="BaseResultMap">
+         select KID, MERCHANT_ID, MERCHANT_NAME
+      from T_CJM_MERCHANT_CONFIG
+      WHERE MERCHANT_ID = #{merchantId,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

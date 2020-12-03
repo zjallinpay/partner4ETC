@@ -62,7 +62,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             limit: 10,
             //单元格设置
             cols: [[
-                {field: 'kid', title: '卡bin编号'},
+                {field: 'kid', title: '序号'},
                 {field: 'bankId', title: '卡bin'},
                 {field: 'bankName', title: '银行名称', width: 200},
                 {field: 'cardName', title: '卡片名'},
@@ -84,7 +84,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
         $("#addForm").find("input[name='bankId']").val("");
         $("#addForm").find("input[name='bankName']").val("");
         $("#addForm").find("input[name='cardName']").val("");
-        $("#addForm").find("input[name='cardType']").val("");
+        $("#addForm").find("select[name='cardType']").val("");
         openModal("新增", "addForm");
     });
 
@@ -149,7 +149,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 bankId: $.trim($("#addForm").find("input[name='bankId']").val()),
                 bankName: $.trim($("#addForm").find("input[name='bankName']").val()),
                 cardName: $.trim($("#addForm").find("input[name='cardName']").val()),
-                cardType: $.trim($("#addForm").find("input[name='cardType']").val())
+                cardType: $.trim($("#addForm").find("select[name='cardType']").val())
             },
             dataType: 'json',
             success: function (data) {
@@ -178,7 +178,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 bankId: $.trim($("#editForm").find("input[name='bankId']").val()),
                 bankName: $.trim($("#editForm").find("input[name='bankName']").val()),
                 cardName: $.trim($("#editForm").find("input[name='cardName']").val()),
-                cardType: $.trim($("#editForm").find("input[name='cardType']").val()),
+                cardType: $.trim($("#editForm").find("select[name='cardType']").val()),
             },
             dataType: 'json',
             success: function (data) {

@@ -70,7 +70,11 @@ public enum BizEnums {
 
     EMPLOYEE_ALREADY_EXIST("90001", "员工信息已存在"),
 
-    BANKCARDBIN_ALREADY_EXIST("90002", "卡bin信息已存在");
+    BANKCARDBIN_ALREADY_EXIST("90002", "卡bin信息已存在"),
+
+    ACTIVITYID_ALREADY_EXIST("90003", "活动号重复"),
+
+    MERCHANTID_ALREADY_EXIST("90004", "商户号重复");
 
     private String code;
     private String msg;

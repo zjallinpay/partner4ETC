@@ -47,12 +47,28 @@ var vm = new Vue({
     },
     methods: {
         getMenuList: function (event) {
-            $.getJSON("/manage/menu/nav?_" + $.now(), function (r) {
-                if (r.code !== 0) {
-                    alert("暂未开通菜单访问权限！");
+            $.ajax({
+                url: "/manage/menu/nav?_" + $.now(),
+                method: "GET",
+                dataType: 'json',
+                success: function (r) {
+                    if (r.code !== 0) {
+                        alert("暂未开通菜单访问权限！");
+                    }
+                    vm.menuList = r.menuList;
+                },
+                error: function () {
+                    //非200触发
+                    window.location.href = "/manage/login"
                 }
-                vm.menuList = r.menuList;
             });
+            // $.getJSON("/manage/menu/nav?_" + $.now(), function (r) {
+            //     if (r.code !== 0) {
+            //         alert("暂未开通菜单访问权限！");
+            //     }
+            //     vm.menuList = r.menuList;
+            // });
+
         },
 
         updatePassword: function () {
@@ -60,11 +76,11 @@ var vm = new Vue({
                 type: 1,
                 skin: 'layui-layer-molv',
                 title: "修改密码",
-                area: ['330px', '205px'],
+                area: ['450px', '260px'],
                 shadeClose: true,
                 shade: 0.05,
                 content: jQuery("#passwordLayer"),
-                btn: ['修改', '取消'],
+                btn: ['修改'],
                 btn1: function (index) {
                     var data = "password=" + vm.password + "&newPassword=" + vm.newPassword;
                     $.ajax({
