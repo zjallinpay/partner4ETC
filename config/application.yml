@@ -10,34 +10,61 @@ spring:
     #开发模式关闭缓存，看到实时页面
     cache: false
 
+
   #数据源配置
   datasource:
-    url: jdbc:oracle:thin:@10.48.1.253:1521:ora11g
-    username: zjallinpaytest
-    password: zjallinpaytest
-    #    url: jdbc:oracle:thin:@172.16.211.26:1566:qjsdb
-    #    username: zjjtdev
-    #    password: Asd_13579
-    driverClassName: oracle.jdbc.OracleDriver
-    #连接池的配置信息
-    initialSize: 5
-    minIdle: 5
-    maxActive: 200
-    maxWait: 60000
-    timeBetweenEvictionRunsMillis: 60000
-    minEvictableIdleTimeMillis: 300000
-    validationQuery: SELECT 1 FROM DUAL
-    testWhileIdle: true
-    testOnBorrow: false
-    testOnReturn: false
-    poolPreparedStatements: true
-    maxPoolPreparedStatementPerConnectionSize: 20
-    multiStatementAllow: true
-    #配置该过滤器StatFilter druid后台才能看到SQL监控记录,为支持oracle批量出入，暂时去除wall过滤器
-    filters: stat,slf4j,config
+    primarydb:
+#      url: jdbc:oracle:thin:@10.48.1.253:1521:ora11g
+#      username: zjallinpaytest
+#      password: zjallinpaytest
+      url: jdbc:oracle:thin:@172.16.211.26:1566:qjsdb
+      username: zjjtdev
+      password: Asd_13579
+      driverClassName: oracle.jdbc.OracleDriver
+      #连接池的配置信息
+      initialSize: 5
+      minIdle: 5
+      maxActive: 200
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      multiStatementAllow: true
+      #配置该过滤器StatFilter druid后台才能看到SQL监控记录,为支持oracle批量出入，暂时去除wall过滤器
+      filters: stat,slf4j,config
+
+    seconddb:
+#       url: jdbc:oracle:thin:@10.48.1.253:1521:ora11g
+#       username: zjallinpaytest
+#       password: zjallinpaytest
+       url: jdbc:oracle:thin:@172.16.211.24:1566:appdb
+       username: zjjtdev
+       password: Asd_13579
+       driverClassName: oracle.jdbc.OracleDriver
+
+       initialSize: 5
+       minIdle: 5
+       maxActive: 200
+       maxWait: 60000
+       timeBetweenEvictionRunsMillis: 60000
+       minEvictableIdleTimeMillis: 300000
+       validationQuery: SELECT 1 FROM DUAL
+       testWhileIdle: true
+       testOnBorrow: false
+       testOnReturn: false
+       poolPreparedStatements: true
+       maxPoolPreparedStatementPerConnectionSize: 20
+       multiStatementAllow: true
+       #配置该过滤器StatFilter druid后台才能看到SQL监控记录,为支持oracle批量出入，暂时去除wall过滤器
+       filters: stat,slf4j,config
 
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/*.xml
+#  mapper-locations: classpath*:/mapper/*.xml
   type-aliases-package: com.allinpay.entity
 
 # 分页配置P

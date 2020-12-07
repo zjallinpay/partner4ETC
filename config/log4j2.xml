@@ -62,7 +62,7 @@
         <logger name="com.netflix" level="ERROR"></logger>
         <logger name="org.mybatis" level="ERROR"></logger>
         <logger name="springfox.documentation" level="ERROR"></logger>
-
+        <logger name="com.allinpay.mapper" level="debug"></logger>
         <!-- 可设置spring, mybatis等框架的日志输出级别-->
         <root level="INFO">
             <appender-ref ref="Console"/>

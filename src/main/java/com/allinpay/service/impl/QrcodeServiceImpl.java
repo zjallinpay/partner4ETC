@@ -8,7 +8,7 @@ import com.allinpay.core.util.ExcelRead;
 import com.allinpay.core.util.FileDownloader;
 import com.allinpay.core.util.PageVOUtil;
 import com.allinpay.entity.Qrcode;
-import com.allinpay.mapper.QrcodeMapper;
+import com.allinpay.mapper2.QrcodeMapper;
 import com.allinpay.service.IQrcodeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -101,7 +101,7 @@ public class QrcodeServiceImpl implements IQrcodeService {
 
     @Override
     public ResponseData batchImportNew(MultipartFile multipartFile) {
-
+        int counts = 0;
         try {
             Workbook workbook;
             String fileName = multipartFile.getOriginalFilename();
@@ -118,22 +118,24 @@ public class QrcodeServiceImpl implements IQrcodeService {
                 for (int line=1;line<rownum;line++) {
                     Row row = sheet.getRow(line);
                     Qrcode qrcode = new Qrcode();
-                    qrcode.setMchtId(ExcelRead.getCellFormatValue(row.getCell(0)).toString());
+                    if (ExcelRead.getCellFormatValue(row.getCell(0))==null)
+                        continue;
+                    qrcode.setMchtId(ExcelRead.getCellFormatValue(row.getCell(0)).toString().trim());
                     qrcode.setMchtName(ExcelRead.getCellFormatValue(row.getCell(1)).toString());
-                    qrcode.setAppId(ExcelRead.getCellFormatValue(row.getCell(2)).toString());
-                    qrcode.setAppKey(ExcelRead.getCellFormatValue(row.getCell(3)).toString());
+                    qrcode.setAppId(ExcelRead.getCellFormatValue(row.getCell(2)).toString().trim());
+                    qrcode.setAppKey(ExcelRead.getCellFormatValue(row.getCell(3)).toString().trim());
                     qrcode.setPartnerModel(ExcelRead.getCellFormatValue(row.getCell(4)).toString());
                     qrcode.setOrgId(ExcelRead.getCellFormatValue(row.getCell(5)).toString());
                     qrcodeList.add(qrcode);
                 }
             }
             log.info("批量导入商户：{}",JSON.toJSONString(qrcodeList));
-            qrcodeMapper.batchSaveMerchants(qrcodeList);
+            counts = qrcodeMapper.batchSaveMerchants(qrcodeList);
         } catch (Exception e) {
             log.error("批导存储失败：{}",e);
             return ResponseData.failure("5005","批量导入失败："+e.getMessage());
         }
-        return ResponseData.success();
+        return ResponseData.success().setData(counts);
     }
 
     @Override

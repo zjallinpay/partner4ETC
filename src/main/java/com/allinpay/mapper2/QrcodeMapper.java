@@ -1,12 +1,11 @@
-package com.allinpay.mapper;
+package com.allinpay.mapper2;
 
 import com.allinpay.entity.Qrcode;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Component
+@Mapper
 public interface QrcodeMapper {
 
     List<Qrcode> queryMerchants(Qrcode qrcode);
@@ -15,7 +14,7 @@ public interface QrcodeMapper {
 
     void updateMerchant(Qrcode qrcode);
 
-    void batchSaveMerchants(List<Qrcode> qrcodes);
+    int batchSaveMerchants(List<Qrcode> qrcodes);
 
     Qrcode queryMerchantById(Qrcode qrcode);
 }

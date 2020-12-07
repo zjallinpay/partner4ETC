@@ -60,9 +60,13 @@ public class CommonConstant {
     /**
      * 码牌管理
      */
-    public static String DEST_FILE_NAME = "批导模板.xlsx";
-    public static String SOURCE_FILE_NAME = "E:\\项目资料\\码牌管理\\批量导入模板.xlsx";
-    public static String QR_CODE_IMAGE_PATH = "E:\\项目资料\\码牌管理\\QRIMAGE\\";
+    public static String DEST_FILE_NAME = "batchImportQrMerchant.xlsx";
+//    public static String SOURCE_FILE_NAME = "E:\\项目资料\\码牌管理\\批量导入模板.xlsx";
+//    public static String QR_CODE_IMAGE_PATH = "E:\\项目资料\\码牌管理\\QRIMAGE\\";
+
+    public static String SOURCE_FILE_NAME = "/app/zjjt/etc-manage/tempfile/batchImportQrMerchant.xlsx";
+    public static String QR_CODE_IMAGE_PATH = "/app/zjjt/etc-manage/qrimage/";
+
     public static String BATCH_IMPORT_FILE_PATH = "E:\\项目资料\\码牌管理\\批导文件\\";
     public static int QR_IMAGE_WIDTH = 350;
     public static int QR_IMAGE_LENGTH = 300;

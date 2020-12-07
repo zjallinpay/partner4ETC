@@ -103,7 +103,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             contentType:'multipart/form-data;charset=utf-8',
             done: function (result) {
                 if (result.code == "00000") {
-                    layer.alert("批导成功");
+                    layer.alert("批导成功，共"+result.data+"条。");
                 } else {
                     layer.alert("批导失败："+result.msg);
                 }
