@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@PropertySource(value = "file:config/resource.properties")
+@PropertySource("file:config/resource.properties")
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private AuthorityInterceptor interceptor;

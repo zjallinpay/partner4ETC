@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class FileDownloader {
 
@@ -16,7 +17,7 @@ public class FileDownloader {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" +
-                    new String(destFile.getBytes("gbk"), "iso-8859-1"));
+                    URLEncoder.encode(destFile,"UTF-8"));
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             return new ResponseEntity<>(new FileSystemResource(new File(sourceFile)), headers, HttpStatus.OK);
         } catch (UnsupportedEncodingException e) {

@@ -20,6 +20,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -30,6 +31,7 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@PropertySource("file:config/resource.properties")
 public class OrgAuditServiceImpl implements IOrgAuditService {
     @Autowired
     private PartnerAuditMapper auditMapper;

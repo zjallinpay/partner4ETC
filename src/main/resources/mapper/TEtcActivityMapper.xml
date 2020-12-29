@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.TEtcActivityMapper">
+
+
+    <select id="queryActMerIds" parameterType="int" resultType="int">
+        SELECT tma.MER_ID FROM "T_ETC_MERCHANTS_ACTIVITY" tma WHERE tma.ACTIVITY_ID=#{actId}
+    </select>
+
+    <insert id="insertByMerId" parameterType="com.allinpay.entity.vo.MerchantActivityVo">
+        INSERT INTO T_ETC_MERCHANTS_ACTIVITY (MER_ID,ACTIVITY_ID,CREATE_TIME,MODIFY_TIME) VALUES(#{merId},#{activityId},#{createTime},#{modifyTime})
+    </insert>
+
+    <delete id="deleteByMerId" parameterType="com.allinpay.entity.vo.MerchantActivityVo">
+        delete from T_ETC_MERCHANTS_ACTIVITY WHERE MER_ID=#{merId} AND ACTIVITY_ID=#{activityId}
+    </delete>
+
+    <delete id="deleteByActId"  parameterType="int">
+        delete from T_ETC_MERCHANTS_ACTIVITY WHERE ACTIVITY_ID=#{activityId}
+    </delete>
+
+</mapper>

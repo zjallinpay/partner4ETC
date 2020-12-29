@@ -14,12 +14,12 @@ spring:
   #数据源配置
   datasource:
     primarydb:
-#      url: jdbc:oracle:thin:@10.48.1.253:1521:ora11g
-#      username: zjallinpaytest
-#      password: zjallinpaytest
-      url: jdbc:oracle:thin:@172.16.211.26:1566:qjsdb
-      username: zjjtdev
-      password: Asd_13579
+      url: jdbc:oracle:thin:@10.48.1.253:1521:ora11g
+      username: zjallinpaytest
+      password: zjallinpaytest
+  #    url: jdbc:oracle:thin:@172.16.211.26:1566:qjsdb
+  #    username: zjjtdev
+  #    password: Asd_13579
       driverClassName: oracle.jdbc.OracleDriver
       #连接池的配置信息
       initialSize: 5
@@ -39,12 +39,12 @@ spring:
       filters: stat,slf4j,config
 
     seconddb:
-#       url: jdbc:oracle:thin:@10.48.1.253:1521:ora11g
-#       username: zjallinpaytest
-#       password: zjallinpaytest
-       url: jdbc:oracle:thin:@172.16.211.24:1566:appdb
-       username: zjjtdev
-       password: Asd_13579
+       url: jdbc:oracle:thin:@10.48.1.253:1521:ora11g
+       username: zjallinpaytest
+       password: zjallinpaytest
+  #     url: jdbc:oracle:thin:@172.16.211.24:1566:appdb
+  #     username: zjjtdev
+  #     password: Asd_13579
        driverClassName: oracle.jdbc.OracleDriver
 
        initialSize: 5

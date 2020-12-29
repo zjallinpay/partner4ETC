@@ -12,11 +12,8 @@ import java.util.Map;
 
 import com.allinpay.core.constant.CommonConstant;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,7 +40,7 @@ public class ExcelRead {
     public static Object getCellFormatValue(Cell cell) {
         Object cellValue = null;
         if (cell != null) {
-            cell.setCellType(Cell.CELL_TYPE_STRING);
+            cell.setCellType(CellType.STRING);
             cellValue = cell.getStringCellValue();
 //			// 判断cell类型
 //			switch (cell.getCellType()) {

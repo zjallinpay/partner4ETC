@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="webkit" name="renderer">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+    <title>营销活动管理</title>
+    <link href="/manage/static/layui/css/layui.css" rel="stylesheet">
+    <link href="/manage/static/css/common.css" rel="stylesheet">
+    <style type="text/css">
+        .layui-layout-admin .layui-body {
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            margin-left: -200px;
+        }
+        .layui-form-label {
+            width: 115px;
+        }
+
+        .layui-input-block {
+            margin-left: 38px;
+        }
+
+        .layui-upload-img {
+            width: 150px;
+            float: left;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--查询页面 -->
+    <div class="layui-body">
+        <input hidden id="pdfUrl"/>
+        <!--面包屑-->
+        <div style="margin: 10px">
+            <span class="layui-breadcrumb">
+                <a href="">营销平台</a>
+                <a><cite>营销活动管理</cite></a>
+            </span>
+        </div>
+
+        <!--查询条件-->
+        <form class="layui-form"  lay-filter="queryFilter">
+            <div class="layui-form-item" style="margin-top: 20px;">
+                <div class="layui-inline">
+                    <label class="layui-form-label">活动名称</label>
+                    <div class="layui-input-inline" style="width: 180px;">
+                        <input autocomplete="off" class="layui-input" id="activityName" type="text">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">活动批次号</label>
+                    <div class="layui-input-inline" style="width: 180px;">
+                        <input autocomplete="off" class="layui-input" id="activityBatchno" type="text">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">合作机构</label>
+                    <div class="layui-input-inline" style="width: 180px;">
+                        <input autocomplete="off" class="layui-input" id="coopOrgan" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 20px;">
+                <div class="layui-inline">
+                    <label class="layui-form-label">优惠类型</label>
+                    <div class="layui-input-inline" style="width: 180px;">
+                        <select  id="discountType" style="width: 200px">
+                            <option value="">请选择优惠类型</option>
+                            <option value="代金券">代金券</option>
+                            <option value="随机立减">随机立减</option>
+                            <option value="折扣">折扣</option>
+                            <option value="满减">满减</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">活动渠道</label>
+                    <div class="layui-input-inline" style="width: 180px;">
+                        <select  id="activityChnnal" style="width: 200px">
+                            <option value="">请选择活动渠道</option>
+                            <option value="收银宝活动">收银宝活动</option>
+                            <option value="微信原生活动">微信原生活动</option>
+                            <option value="支付宝原生活动">支付宝原生活动</option>
+                            <option value="云闪付原生活动">云闪付原生活动</option>
+                            <option value="其他类型活动">其他类型活动</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">资金模式</label>
+                    <div class="layui-input-inline" style="width: 180px;">
+                        <select  id="fundType" style="width: 200px">
+                            <option value="">请选择资金模式</option>
+                            <option value="免充值">免充值</option>
+                            <option value="预充值（垫资）">预充值（垫资）</option>
+                            <option value="预充值（不垫资）">预充值（不垫资）</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left: 145px;">
+                    <button class="layui-btn" id="queryBtn">查询</button>
+                    <button class="layui-btn layui-btn-primary" id="resetBtn">重置</button>
+                    <button class="layui-btn layui-btn-normal" id="addBtn">新增活动</button>
+                    <button class="layui-btn layui-btn-normal" id="batchAddBtn">批量导入活动</button>
+                    <button class="layui-btn layui-btn-normal" id="downloadTemplate">下载模板</button>
+                </div>
+            </div>
+        </form>
+        <!-- 数据展示 table框 -->
+        <table class="layui-hide" id="activityTable" lay-filter="tableFilter"></table>
+    </div>
+
+    <!--<div th:include="common/footer :: footer"></div>-->
+    <!-- 新增表单 -->
+    <form class="layui-form" id="addForm" lay-filter="addFilter"
+          style="display: none;margin: 10px; text-align: center">
+        <input name="activityId" hidden="hidden">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动名称*</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input class="layui-input" lay-verify="required" maxlength="40" name="activityName" type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动渠道*</label>
+                <div class="layui-input-inline">
+                    <select  name="activityChnnal" lay-verify="required">
+                        <option value="">请选择活动渠道</option>
+                        <option value="收银宝活动">收银宝活动</option>
+                        <option value="微信原生活动">微信原生活动</option>
+                        <option value="支付宝原生活动">支付宝原生活动</option>
+                        <option value="云闪付原生活动">云闪付原生活动</option>
+                        <option value="其他类型活动">其他类型活动</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动批次号*</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input class="layui-input"  maxlength="40" name="activityBatchno" type="text" lay-verify="required">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">优惠类型*</label>
+                <div class="layui-input-inline">
+                    <select  name="discountType" lay-verify="required">
+                        <option value="">请选择优惠类型</option>
+                        <option value="代金券">代金券</option>
+                        <option value="随机立减">随机立减</option>
+                        <option value="折扣">折扣</option>
+                        <option value="满减">满减</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">资金模式*</label>
+                <div class="layui-input-inline">
+                    <select  name="fundType" lay-verify="required">
+                        <option value="">请选择资金模式</option>
+                        <option value="免充值">免充值</option>
+                        <option value="预充值（垫资）">预充值（垫资）</option>
+                        <option value="预充值（不垫资）">预充值（不垫资）</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动拓展人*</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" lay-verify="required" maxlength="40" name="activityMaster" type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">附件材料</label>
+                <div class="layui-input-inline">
+                    <input class="layui-input"   name="activity_file" type="file">
+                   <!-- <input class="layui-input"   name="activityFile" type="text" hidden="hidden">-->
+                    <a class="iconfont icon-chakanbaogao" style="margin-left: 3%; color: #2196F3;border-radius: 5px; cursor: pointer;text-decoration: underline;" target="_blank"  hidden="hidden"  id="activityFile"></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动开始时间*</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input autocomplete="off" class="layui-input"  lay-verify="required" id="startTime" name="startTime" placeholder="活动开始时间"
+                           type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动结束时间*</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input autocomplete="off" class="layui-input" lay-verify="required" id="endTime" name="endTime" placeholder="活动结束时间"
+                           type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动可用开始时间段</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input autocomplete="off" class="layui-input"  name="ablestartTime"
+                           type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动可用结束时间段</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input autocomplete="off" class="layui-input"  name="ableendTime"
+                           type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动可用日期周</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input class="layui-input"  maxlength="40" name="ableWeek" type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">发卡行限制</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input class="layui-input"  maxlength="40" name="bankLimit" type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">合作机构*</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <input class="layui-input"  maxlength="40" name="coopOrgan" type="text" lay-verify="required" >
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <label class="layui-form-label">活动说明</label>
+                <div class="layui-input-inline" style="width: 200px;">
+                    <textarea name="activityRemark"  placeholder="请输入" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="margin-left: 29px;">
+                <button class="layui-btn" id="addSubmit" lay-submit  lay-filter="saveActivityFilter">保存</button>
+                <button class="layui-btn" id="editbtn"  lay-submit  lay-filter="editActivityFilter" hidden="hidden">编辑</button>
+            </div>
+        </div>
+    </form>
+    <!--操作菜单页面-->
+    <div id="operator" style="display: none;">
+        <a class="layui-btn layui-btn-xs" lay-event="watch">查看</a>
+        <a class="layui-btn layui-btn-xs" lay-event="delete">删除</a>
+    </div>
+</div>
+</body>
+<script src="/manage/static/layui/layui.js"></script>
+<script src="/manage/static/js/yxpt/acitvityManager.js" th:inline="none"></script>
+<script src="/manage/static/js/common/ajaxcommon.js"></script>
+</html>

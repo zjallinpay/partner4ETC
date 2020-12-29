@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Setter
-@Getter
-@ToString
+
 
 /**
  * 用户发卡信息查询参数实体类
@@ -14,6 +12,10 @@ import lombok.ToString;
  * @author xuming
  * @date 2019-07-02
  */
+
+@Setter
+@Getter
+@ToString
 public class UserhairpinVo extends OrgQueryVo {
 
     /**

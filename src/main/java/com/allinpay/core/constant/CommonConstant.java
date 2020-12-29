@@ -57,6 +57,43 @@ public class CommonConstant {
     public static String CARD_TYPE_DEBT = "1";
     public static String CARD_TYPE_CREDIT = "2";
 
+
+
+
+    /**
+     * 营销后台
+     *
+     * */
+    public static String MER_TEMPLATE_FILE_NAME = "mertemplate.xlsx";
+
+    public static String MER_SOURCE_PATH = "D:\\smjproject\\template\\mertemplate.xlsx";
+
+    //public static String MER_SOURCE_PATH = "/project/manage/template/mertemplate.xlsx";
+
+    public static String ACTIVITY_TEMPLATE_FILE_NAME = "activitytemplate.xlsx";
+
+    public static String ACTIVITY_SOURCE_PATH = "D:\\smjproject\\template\\activitytemplate.xlsx";
+
+    //public static String ACTIVITY_SOURCE_PATH = "/project/manage/template/activitytemplate.xlsx";
+
+    public static String ACT_SOURCE_PATH = "D:\\smjproject\\file";
+
+    //public static String ACT_SOURCE_PATH = "/project/manage/file";
+    //活动附件字段
+    public static String ACTIVITY_FILE = "activity_file";
+    //商品附件字段
+    public static String MER_FILE = "mer_file";
+
+    /**
+     * 用于放置活动附件的目录
+     */
+    public static String SUB_DIR_ACTLICENSE = "/actlicense/";
+
+    /**
+     * 用于放置商家附件的目录
+     */
+    public static String SUB_DIR_MERLICENSE = "/merlicense/";
+
     /**
      * 码牌管理
      */

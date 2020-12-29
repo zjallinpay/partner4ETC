@@ -49,6 +49,33 @@ public class FileUtil {
         }
     }
 
+
+    /**
+     * @Description: 文件上传，
+     * @Param: multipartFile, saveDir
+     * @Return: String
+     */
+    public static String updataFile(MultipartFile multipartFile, String saveDir) {
+        try {
+            String fileName = multipartFile.getOriginalFilename();
+            //未上传文件、上传文件大小为0
+            if (StringUtils.isBlank(fileName) ||
+                    multipartFile.getSize() == 0) {
+                return "";
+            }
+
+            File file = new File(saveDir);
+
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            multipartFile.transferTo(new File(saveDir + fileName));
+            return fileName;
+        } catch (Exception e) {
+            log.info("文件上传失败！", e);
+            throw new AllinpayException(BizEnums.FILE_UPLOAD_EXCEPTION.getCode(), BizEnums.FILE_UPLOAD_EXCEPTION.getMsg());
+        }
+    }
     /**
      * @Description: 机构编号生成规则:15位机构编号的生成规则 uuid前4 + 分秒7位 + uuid后4
      * @Param:

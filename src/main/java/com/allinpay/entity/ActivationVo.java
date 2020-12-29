@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Setter
-@Getter
-@ToString
+
 
 /**
  * 合作银行obu激活查询参数实体类
@@ -14,6 +12,9 @@ import lombok.ToString;
  * @author xuming
  * @date 2019-12-11
  */
+@Setter
+@Getter
+@ToString
 public class ActivationVo extends OrgQueryVo {
 
     /**
