@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="webkit" name="renderer">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+    <title>兑付申请</title>
+    <link href="/manage/static/layui/css/layui.css" rel="stylesheet">
+    <link href="/manage/static/css/common.css" rel="stylesheet">
+    <link href="/manage/static/css/jquery.step.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        p {
+            margin-top: 20px;
+        }
+
+        .layui-layout-admin .layui-body {
+            position: fixed;
+            top: 0px;
+            bottom: 0px;
+            margin-left: -200px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <!--查询页面 -->
+    <div class="layui-body">
+        <!--面包屑-->
+        <div style="margin: 10px">
+            <span class="layui-breadcrumb">
+                <a href="">资金募集管理</a>
+                <a><cite>兑付申请</cite></a>
+            </span>
+        </div>
+
+        <div style="text-align: -webkit-center">
+            <div id="step" style="width: 800px"></div>
+        </div>
+
+        <div id="stepOne" style="margin-top: 20px;display: block">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">兑付须知</div>
+                    <div class="layui-card-body">
+                        <p>1.请汇款至机构账户用以兑付资金：6227009087651989003</p>
+                        <p>2.支付成功后可在步骤2查询机构余额。确认余额后进入步骤3。</p>
+                        <p>3.下载客户资金兑付模板，按照样例填写好后上传。将按您上传的客户名单提供兑付功能，请谨慎检查数据后点击兑付按钮。</p>
+                        <p>4.30分钟后可在兑付记录查询菜单查看兑付结果。</p>
+                        注意：一次兑付总额不高于机构余额，否则将兑付失败。
+                        阅读完毕，请点击确定至下一步。
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="stepTwo" style="text-align:center;display: none;">
+            <!--<button class="layui-btn">余额查询</button>-->
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header"></div>
+                    <div class="layui-card-body" style="font-size: 20px;font-weight: bold">
+                        <p>
+                            <span>机构会员号</span>：8898764567
+                            <span style="margin-left: 50px">机构余额</span>：<span style="color: red">19003400.00元</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="stepThree" style="display: none">
+            <div style="margin-top: 10px">
+                请先下载客户资金兑付模板，仔细填写后上传。
+            </div>
+            <div style="margin-top: 10px">
+                文件下载：
+                <a href="/manage/static/file/客户资金兑付模板.xlsx" style="color: #1E9FFF">客户资金兑付模板.xlsx</a>
+            </div>
+            <div style="margin-top: 10px">
+                文件上传：
+                <button class="layui-btn" id="fileUpload">上传</button>
+                <input id="customerFile" name="customerFile" type="file" value=""/>
+            </div>
+            <table class="layui-hide" id="repayApplyTable" lay-filter="tableFilter"></table>
+            <div style="text-align: center">
+                <button class="hide_dom layui-btn layui-btn-normal" disabled id="repay"
+                        style="background-color:grey;margin-top:10px;width: 20%;">
+                    兑付
+                </button>
+            </div>
+        </div>
+
+        <div style="text-align: center">
+            <button class="hide_dom layui-btn layui-btn-normal" id="nextStep" style="margin-top:20px;width: 20%;">
+                下一步
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/manage/static/layui/layui.js"></script>
+<script src="/manage/static/libs/jquery.min.js"></script>
+<script src="/manage/static/libs/jquery.step.min.js"></script>
+<script src="/manage/static/js/jjs/repay_apply.js" th:inline="none"></script>
+<script src="/manage/static/js/common/ajaxcommon.js"></script>
+</html>
