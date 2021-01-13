@@ -52,23 +52,40 @@
                     </div>
                 </div>
             </div>
-
+            <div style="text-align: center">
+                <button class="hide_dom layui-btn layui-btn-normal" name="nextStep" style="margin-top:20px;width: 20%;">
+                    下一步
+                </button>
+            </div>
         </div>
-        <div id="stepTwo" style="text-align:center;display: none;">
-            <!--<button class="layui-btn">余额查询</button>-->
-            <div class="layui-col-md12">
+
+        <div id="stepTwo" style="display: none;">
+            <div class="layui-col-md12" style="text-align:center;">
                 <div class="layui-card">
                     <div class="layui-card-header"></div>
                     <div class="layui-card-body" style="font-size: 20px;font-weight: bold">
+                        <button class="layui-btn" onclick="queryInstAmount()" style="margin-top: 20px;">余额查询</button>
                         <p>
-                            <span>机构会员号</span>：8898764567
-                            <span style="margin-left: 50px">机构余额</span>：<span style="color: red">19003400.00元</span>
+                            <span>机构会员号</span>：<span id="instMemberNo">--</span>
+                            <span style="margin-left: 50px">机构余额</span>：<span id="instAmount"
+                                                                              style="color: red">--元</span>
                         </p>
                     </div>
                 </div>
             </div>
+            <div style="text-align: center">
+                <button class="hide_dom layui-btn layui-btn-normal" name="prevStep" style="margin-top:20px;width: 20%;
+                background-color: grey;opacity: 0.2;">
+                    上一步
+                </button>
+                <button class="hide_dom layui-btn layui-btn-normal" name="nextStep" style="margin-top:20px;width: 20%;">
+                    下一步
+                </button>
+            </div>
         </div>
+
         <div id="stepThree" style="display: none">
+            <input hidden id="batchNo">
             <div style="margin-top: 10px">
                 请先下载客户资金兑付模板，仔细填写后上传。
             </div>
@@ -79,21 +96,23 @@
             <div style="margin-top: 10px">
                 文件上传：
                 <button class="layui-btn" id="fileUpload">上传</button>
-                <input id="customerFile" name="customerFile" type="file" value=""/>
+                <div style="width: 40%">
+                    <form id="fileForm">
+                        <input id="customerFile" name="customerFile" type="file" value=""/>
+                    </form>
+                </div>
             </div>
             <table class="layui-hide" id="repayApplyTable" lay-filter="tableFilter"></table>
             <div style="text-align: center">
+                <button class="hide_dom layui-btn layui-btn-normal" name="prevStep" style="margin-top:10px;width: 20%;
+                background-color: grey;opacity: 0.2;">
+                    上一步
+                </button>
                 <button class="hide_dom layui-btn layui-btn-normal" disabled id="repay"
                         style="background-color:grey;margin-top:10px;width: 20%;">
                     兑付
                 </button>
             </div>
-        </div>
-
-        <div style="text-align: center">
-            <button class="hide_dom layui-btn layui-btn-normal" id="nextStep" style="margin-top:20px;width: 20%;">
-                下一步
-            </button>
         </div>
     </div>
 </div>

@@ -6,20 +6,41 @@ $(function () {
         title: ["告示", "余额查询", "兑付申请"]
     });
 
-    $("#nextStep").on("click", function () {
+    $("button[name='nextStep']").on("click", function () {
         var index = $step.getIndex();
         if (index == 0) {
             $("#stepTwo").show();
             $("#stepOne").hide();
             $("#stepThree").hide();
-            $("#nextStep").show();
         } else if (index == 1) {
+            if ($.trim($("#instMemberNo").text()) == "--" ||
+                $.trim($("#instAmount").text()) == "--") {
+                layer.alert("请先查询余额信息");
+                return;
+            }
+            $("#stepThree").show();
             $("#stepTwo").hide();
             $("#stepOne").hide();
-            $("#stepThree").show();
-            $("#nextStep").hide();
+        } else {
+            return;
         }
         $step.nextStep();
+    });
+
+    $("button[name='prevStep']").on("click", function () {
+        var index = $step.getIndex();
+        if (index == 2) {
+            $("#stepTwo").show();
+            $("#stepOne").hide();
+            $("#stepThree").hide();
+        } else if (index == 1) {
+            $("#stepOne").show();
+            $("#stepTwo").hide();
+            $("#stepThree").hide();
+        } else {
+            return;
+        }
+        $step.prevStep();
     });
 
     $("#customerFile").on("change", function () {
@@ -29,12 +50,27 @@ $(function () {
             $("#customerFile").val("");
         }
     });
-    // $step.getIndex();// 获取当前的index
-    // $step.prevStep();// 上一步
-    // $step.nextStep();// 下一步
-    // $step.toStep(index);// 跳到指定步骤
 });
 
+//机构余额查询
+function queryInstAmount() {
+    $.ajax({
+        url: "/manage/jjs/amount/query",
+        method: "get",
+        dataType: "json",
+        success: function (data) {
+            if (data.code == "00000") {
+                $("#instMemberNo").text(data.data.instMember);
+                $("#instAmount").text(data.data.availableAmt);
+            } else {
+                layer.alert(data.msg);
+            }
+        },
+        error: function () {
+            layer.alert("系统开小差，请稍后再试");
+        }
+    });
+}
 
 //element 展示左边菜单栏; 预加载需要使用的模块
 //由于layer弹层依赖jQuery，所以可以直接得到
@@ -59,33 +95,90 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             limit: 10,
             //单元格设置
             cols: [[
-                {field: 'realName', title: '姓名'},
-                {field: 'idNo', title: '身份证号'},
-                {field: 'cardNo', title: '银行卡号'},
-                {field: 'amount', title: '金额(元)'},
+                {field: 'hldName', title: '姓名'},
+                {field: 'cerNum', title: '身份证号'},
+                {field: 'acctNum', title: '银行卡号'},
+                {field: 'tradeAmount', title: '金额(元)'},
+                {field: 'result', title: '验证结果'},
                 {field: 'remark', title: '备注'}
             ]]
-        });
+        })
     };
 
-    // form.on('submit(queryFilter)', function (data) {
-    //     return false;
-    // });
-
     $("#fileUpload").on("click", function fileUpload() {
-        var data = [];
-        for (var i = 0; i < 200; i++) {
-            var object = {};
-            object.realName = "谭光";
-            object.idNo = "430224199909099090";
-            object.cardNo = "6227009098765678443";
-            object.amount = "150000.00";
-            object.remark = "卡号姓名不符";
-            data.push(object);
+        if ($.trim($("#customerFile").val()) == "") {
+            layer.alert("请选择文件上传");
+            return;
+        }
+        var formData = new FormData(document.getElementById("fileForm"));
+        $.ajax({
+            url: "/manage/jjs/customers/validate",
+            type: 'post',
+            contentType: false,
+            processData: false,
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == "00000") {
+                    if ($.trim(data.data.batchNo) != "") {
+                        //可发起兑付
+                        $("#repay").prop("disabled", false);
+                        $("#repay").css("background-color", "#1E9FFF");
+                        $("#batchNo").val(data.data.batchNo);
+                    } else {
+                        $("#repay").prop("disabled", true);
+                        $("#repay").css("background-color", "grey");
+                    }
+                    search(data.data.list);
+                    //备注标记为红色
+                    $("tbody td[data-field='remark']").children().each(function (index, val) {
+                        $(this).css("color", "red");
+                    })
+                } else {
+                    layer.alert(data.msg);
+                }
+            },
+            error: function () {
+                layer.alert("系统开小差，请稍后再试");
+            }
+        });
+    });
+
+    //发起兑付
+    $("#repay").on("click", function repay() {
+        var batchNo = $("#batchNo").val();
+        if (!$.trim(batchNo)) {
+            layer.alert("批次号为空，不可发起兑付");
+            return;
         }
 
-
-        search(data);
+        layer.confirm("确认发起兑付？", function (index) {
+            //动画展示，防止多次点击兑付按钮
+            layer.close(index);
+            var loading = layer.load(0, {time: 0});
+            $.ajax({
+                url: "/manage/jjs/repay/batch",
+                method: "POST",
+                data: {
+                    "batchNo": batchNo
+                },
+                dataType: "json",
+                success: function (data) {
+                    layer.close(loading);
+                    if (data.code == "00000") {
+                        layer.alert("兑付申请已提交，请30s后在兑付记录查询菜单中查看结果", function () {
+                            location.reload();
+                        });
+                    } else {
+                        layer.alert(data.msg);
+                    }
+                },
+                error: function () {
+                    layer.close(loading);
+                    layer.alert("系统开小差，请稍后再试");
+                }
+            });
+        });
     })
 });
 

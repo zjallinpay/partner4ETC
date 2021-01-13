@@ -19,6 +19,9 @@ public enum BizEnums {
      */
     ILLEGAL_ARGUMENT("50002", "参数不合法"),
 
+    SIGN_ERROR("50003", "签名失败"),
+    SIGN_CHECK_ERROR("50004", "验签失败"),
+
     /**
      * 异常Exception
      */
@@ -31,11 +34,15 @@ public enum BizEnums {
     FILE_COPY_EXCEPTION("40001", "文件拷贝失败"),
     FILE_DELETE_EXCEPTION("40002", "文件删除失败"),
     FILE_OPERATE_EXCEPTION("40003", "文件操作失败"),
+    FILE_TYPE_ERROR("40004", "文件类型有误"),
+    FILE_TEMPLATE_ERROR("40005", "文件模板有误"),
+    FILE_EMPTY_ERROR("40006", "文件为空"),
 
     CAPTCHA_GET_EXCEPTION("60000", "获取验证码失败"),
     CAPTCHA_INVALIDATE("60001", "验证码有误"),
 
     USER_AUTHENTICATION_FAIL("70001", "用户名或密码不正确"),
+    TOTAL_AMOUNT_EXCEED_FAIL("70002", "兑付总金额不能大于机构总余额"),
     /**
      * 机构管理模块业务异常
      */
