@@ -166,7 +166,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 success: function (data) {
                     layer.close(loading);
                     if (data.code == "00000") {
-                        layer.alert("兑付申请已提交，请30s后在兑付记录查询菜单中查看结果", function () {
+                        layer.alert("兑付申请已提交，批次号为：【" + batchNo + "】，请30分钟后在兑付记录查询菜单中查看结果。", function () {
                             location.reload();
                         });
                     } else {

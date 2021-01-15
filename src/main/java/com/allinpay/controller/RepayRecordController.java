@@ -1,6 +1,9 @@
 package com.allinpay.controller;
 
+import com.allinpay.core.common.PageVO;
 import com.allinpay.core.common.ResponseData;
+import com.allinpay.entity.vo.RepayQueryVO;
+import com.allinpay.entity.vo.RepayRecordVO;
 import com.allinpay.service.IRepayRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +24,8 @@ public class RepayRecordController {
      * 兑付记录查询
      */
     @RequestMapping("/repay/record")
-    public ResponseData queryTotalAmount() {
-        repayRecordService.queryRepayRecord();
-        return ResponseData.success().setData(null);
+    public ResponseData queryTotalAmount(RepayQueryVO repayQueryVO) {
+        PageVO<RepayRecordVO> pageVO = repayRecordService.queryRepayRecord(repayQueryVO);
+        return ResponseData.success().setData(pageVO);
     }
 }

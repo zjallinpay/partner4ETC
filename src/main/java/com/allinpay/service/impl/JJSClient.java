@@ -1,8 +1,7 @@
 package com.allinpay.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.alibaba.fastjson.parser.Feature;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.allinpay.core.constant.CommonConstant;
 import com.allinpay.core.constant.enums.BizEnums;
 import com.allinpay.core.exception.AllinpayException;
@@ -13,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -37,8 +38,15 @@ public class JJSClient {
 
         //请求
         Map<String, Object> response = restTemplate.postForObject(reqUrl, bizMap, Map.class);
-        Map<String, String> responseMap = JSON.parseObject(JSON.toJSONString(response), new TypeReference<Map<String, String>>() {
-        }, Feature.OrderedField);
+        Map<String, String> dataMap = new HashMap<>();
+        Map<String, String> responseMap = new HashMap<>();
+        if (response.get("data") != null) {
+            dataMap.putAll((LinkedHashMap) response.get("data"));
+            responseMap.put("code", (String) response.get("code"));
+            responseMap.put("msg", (String) response.get("msg"));
+            responseMap.put("sign", (String) response.get("sign"));
+            responseMap.put("data", JSON.toJSONString(dataMap, SerializerFeature.MapSortField));
+        }
         log.info("jjs response：{}", JSON.toJSONString(responseMap));
 
         //响应处理
