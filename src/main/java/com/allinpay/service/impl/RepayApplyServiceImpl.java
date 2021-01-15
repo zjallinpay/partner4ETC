@@ -47,6 +47,7 @@ public class RepayApplyServiceImpl implements IRepayApplyService {
                 .map(u -> new BigDecimal(u.getTradeAmount()))
                 .reduce((u1, u2) -> u1.add(u2)).get();
         if (countAmount.compareTo(new BigDecimal(jjsInstAmountVO.getAvailableAmt())) > 0) {
+            log.error("兑付总金额：{}-机构总余额：{}", countAmount, jjsInstAmountVO.getAvailableAmt());
             throw new AllinpayException(BizEnums.TOTAL_AMOUNT_EXCEED_FAIL.getCode(),
                     BizEnums.TOTAL_AMOUNT_EXCEED_FAIL.getMsg());
         }
@@ -95,8 +96,8 @@ public class RepayApplyServiceImpl implements IRepayApplyService {
                 for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
                     Row row = sheet.getRow(i);
                     String realName = getCellValue(row.getCell(0));
-                    String cardNo = getCellValue(row.getCell(1));
-                    String idNo = getCellValue(row.getCell(2));
+                    String idNo = getCellValue(row.getCell(1));
+                    String cardNo = getCellValue(row.getCell(2));
                     String amount = getCellValue(row.getCell(3));
                     if (StringUtils.isBlank(realName)
                             || StringUtils.isBlank(cardNo)
