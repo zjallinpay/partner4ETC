@@ -77,7 +77,7 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
                 {field: 'hldName', title: '姓名'},
                 {field: 'cerNum', title: '身份证号'},
                 {field: 'acctNum', title: '银行卡号'},
-                {field: 'tradeAmount', title: '兑付金额'},
+                {field: 'tradeAmount', title: '兑付金额(元)'},
                 {field: 'transDate', title: '兑付时间'},
                 {field: 'result', title: '兑付结果'},
                 {field: 'remark', title: '备注'}

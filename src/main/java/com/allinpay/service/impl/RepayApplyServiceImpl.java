@@ -89,28 +89,28 @@ public class RepayApplyServiceImpl implements IRepayApplyService {
                     && "金额(元)".equals(headRow.getCell(3).getStringCellValue()))) {
                 throw new AllinpayException(BizEnums.FILE_TEMPLATE_ERROR.getCode(), BizEnums.FILE_TEMPLATE_ERROR.getMsg());
             }
-            int number = sheet.getPhysicalNumberOfRows();
-            if (number == 1) {
-                throw new AllinpayException(BizEnums.FILE_EMPTY_ERROR.getCode(), BizEnums.FILE_EMPTY_ERROR.getMsg());
-            } else {
-                for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
-                    Row row = sheet.getRow(i);
-                    String realName = getCellValue(row.getCell(0));
-                    String idNo = getCellValue(row.getCell(1));
-                    String cardNo = getCellValue(row.getCell(2));
-                    String amount = getCellValue(row.getCell(3));
-                    if (StringUtils.isBlank(realName)
-                            || StringUtils.isBlank(cardNo)
-                            || StringUtils.isBlank(idNo)
-                            || StringUtils.isBlank(amount)) {
-                        //存在信息不全记录，过滤
-                        continue;
-                    }
-                    JJSCustomerVO customerVO = new JJSCustomerVO(realName, idNo, cardNo, amount);
-                    list.add(customerVO);
+            for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+                Row row = sheet.getRow(i);
+                String realName = getCellValue(row.getCell(0));
+                String idNo = getCellValue(row.getCell(1));
+                String cardNo = getCellValue(row.getCell(2));
+                String amount = getCellValue(row.getCell(3));
+                if (StringUtils.isBlank(realName)
+                        || StringUtils.isBlank(cardNo)
+                        || StringUtils.isBlank(idNo)
+                        || StringUtils.isBlank(amount)) {
+                    //存在信息不全记录，过滤
+                    continue;
                 }
+                JJSCustomerVO customerVO = new JJSCustomerVO(realName, idNo, cardNo, amount);
+                list.add(customerVO);
+            }
+            if (list.size() == 0) {
+                throw new AllinpayException(BizEnums.FILE_EMPTY_ERROR.getCode(), "请正确填写客户兑付信息");
             }
             return list;
+        } catch (AllinpayException ex) {
+            throw ex;
         } catch (Exception e) {
             log.error("读取excel文件失败：{}", e.getMessage());
             throw new AllinpayException(BizEnums.FILE_OPERATE_EXCEPTION.getCode(), BizEnums.FILE_OPERATE_EXCEPTION.getMsg());

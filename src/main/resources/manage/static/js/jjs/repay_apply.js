@@ -54,19 +54,24 @@ $(function () {
 
 //机构余额查询
 function queryInstAmount() {
+    var loading = layer.load(0, {time: 0});
     $.ajax({
         url: "/manage/jjs/amount/query",
         method: "get",
         dataType: "json",
         success: function (data) {
+            layer.close(loading);
             if (data.code == "00000") {
+                $("#accountName").text(data.data.accountName);
+                $("#sepAcctNum").text(data.data.sepAcctNum);
                 $("#instMemberNo").text(data.data.instMember);
-                $("#instAmount").text(data.data.availableAmt);
+                $("#instAmount").text(data.data.availableAmt + "元");
             } else {
                 layer.alert(data.msg);
             }
         },
         error: function () {
+            layer.close(loading);
             layer.alert("系统开小差，请稍后再试");
         }
     });
@@ -95,11 +100,11 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             limit: 10,
             //单元格设置
             cols: [[
-                {field: 'hldName', title: '姓名'},
-                {field: 'cerNum', title: '身份证号'},
-                {field: 'acctNum', title: '银行卡号'},
-                {field: 'tradeAmount', title: '金额(元)'},
-                {field: 'result', title: '验证结果'},
+                {field: 'hldName', width: 100, title: '姓名'},
+                {field: 'cerNum', width: 200, title: '身份证号'},
+                {field: 'acctNum', width: 200, title: '银行卡号'},
+                {field: 'tradeAmount', width: 150, title: '金额(元)'},
+                {field: 'result', width: 100, title: '验证结果'},
                 {field: 'remark', title: '备注'}
             ]]
         })
@@ -119,6 +124,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             data: formData,
             dataType: 'json',
             success: function (data) {
+                $("#customerFile").val("");
                 if (data.code == "00000") {
                     if ($.trim(data.data.batchNo) != "") {
                         //可发起兑付
@@ -139,6 +145,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                 }
             },
             error: function () {
+                $("#customerFile").val("");
                 layer.alert("系统开小差，请稍后再试");
             }
         });

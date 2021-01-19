@@ -66,6 +66,10 @@
                     <div class="layui-card-body" style="font-size: 20px;font-weight: bold">
                         <button class="layui-btn" onclick="queryInstAmount()" style="margin-top: 20px;">余额查询</button>
                         <p>
+                            <span>账户名称</span>：<span id="accountName">--</span>
+                            <span style="margin-left: 50px">账户号</span>：<span id="sepAcctNum">--</span>
+                        </p>
+                        <p>
                             <span>机构会员号</span>：<span id="instMemberNo">--</span>
                             <span style="margin-left: 50px">机构余额</span>：<span id="instAmount"
                                                                               style="color: red">--元</span>
@@ -103,7 +107,7 @@
                 </div>
             </div>
             <table class="layui-hide" id="repayApplyTable" lay-filter="tableFilter"></table>
-            <div style="text-align: center">
+            <div style="text-align: center;margin-bottom: 10px;">
                 <button class="hide_dom layui-btn layui-btn-normal" name="prevStep" style="margin-top:10px;width: 20%;
                 background-color: grey;opacity: 0.2;">
                     上一步

@@ -10,4 +10,6 @@ import lombok.Data;
 public class JJSInstAmountVO {
     private String instMember;
     private String availableAmt;
+    private String accountName;
+    private String sepAcctNum;
 }
