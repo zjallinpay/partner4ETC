@@ -75,8 +75,8 @@ public class CommonConstant {
     public static final String RESPONSE_SUCCESS_0000 = "0000";
     public static final String EXCEL_XLSX = ".xlsx";
 
-    public static final String JJS_BALANCE_MONEY = "https://issue.allinpay.com/jjs/balance/money";
-    public static final String JJS_INFORMATION_VERIFY = "https://issue.allinpay.com/jjs/information/verify";
-    public static final String JJS_BATCH_PAYMENTS = "https://issue.allinpay.com/jjs/batch/payments";
-    public static final String JJS_TRADE_QUERY = "https://issue.allinpay.com/jjs/repayment/trade/query";
+    public static final String JJS_BALANCE_MONEY = "http://172.16.211.22:20070/jjs/balance/money";
+    public static final String JJS_INFORMATION_VERIFY = "http://172.16.211.22:20070/jjs/information/verify";
+    public static final String JJS_BATCH_PAYMENTS = "http://172.16.211.22:20070/jjs/batch/payments";
+    public static final String JJS_TRADE_QUERY = "http://172.16.211.22:20070/jjs/repayment/trade/query";
 }
