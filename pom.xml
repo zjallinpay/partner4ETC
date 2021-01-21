@@ -44,9 +44,7 @@
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/ojdbc6.jar</systemPath>
+            <version>11.2.0.2.0</version>
         </dependency>
 
         <!-- easyexcel start -->
@@ -63,18 +61,13 @@
                     <groupId>org.apache.poi</groupId>
                     <artifactId>poi-ooxml-schemas</artifactId>
                 </exclusion>
-               <exclusion>
+                <exclusion>
                     <groupId>org.apache.poi</groupId>
                     <artifactId>poi</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <!-- easyexcel end -->
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -170,6 +163,12 @@
         </dependency>
 
         <!-- 验证码-->
+        <dependency>
+            <groupId>org.patchca</groupId>
+            <artifactId>captcha</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+
         <!--H5收银台码牌-->
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -195,9 +194,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <includeSystemScope>true</includeSystemScope>
-                </configuration>
             </plugin>
         </plugins>
     </build>
