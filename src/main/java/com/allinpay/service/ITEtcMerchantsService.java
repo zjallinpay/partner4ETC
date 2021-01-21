@@ -16,6 +16,8 @@ public interface ITEtcMerchantsService {
     //分页条件查询
     ResponseBean queryPage(MerchantQueryVo merchantQueryVo);
 
+    ResponseBean query(MerchantQueryVo merchantQueryVo);
+
     //新增和更新
     ResponseBean saveOrUpdata(MultipartHttpServletRequest request, TEtcMerchants tEtcMerchants);
 
@@ -29,7 +31,7 @@ public interface ITEtcMerchantsService {
     ResponseBean batchImport(MultipartFile multipartFile);
 
     //批量导出商户
-    ResponseBean batchOutput(List<Integer> merIds, HttpServletResponse response) throws IOException;
+    ResponseBean batchOutput(MerchantQueryVo merchantQueryVo,HttpServletResponse response) throws IOException;
 
     //下载商家附件
     ResponseEntity<FileSystemResource> downloadMerFile(Integer merId);

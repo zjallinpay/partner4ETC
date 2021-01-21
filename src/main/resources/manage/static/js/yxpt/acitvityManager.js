@@ -78,6 +78,7 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
             limit: 10,
             //单元格设置
             cols: [[
+                {type:'checkbox', width: 90},
                 {field: 'activityId', width: 90, title: '活动ID'},
                 {field: 'activityName', width: 90, title: '活动名称'},
                 {field: 'activityChnnal', width: 80, title: '活动渠道'},

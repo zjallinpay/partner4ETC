@@ -70,6 +70,24 @@ public class TEtcMerchantsServiceImpl implements ITEtcMerchantsService {
     }
 
     @Override
+    public ResponseBean query(MerchantQueryVo merchantQueryVo) {
+
+        List<TEtcMerchants> merchantLists= (List) tEtcMerchantsMapper.selectList(
+                new QueryWrapper<TEtcMerchants>()
+                        .eq(StringUtils.isNotBlank(merchantQueryVo.getBelongIndustry()),"BELONG_INDUSTRY",merchantQueryVo.getBelongIndustry())
+                        .eq(StringUtils.isNotBlank(merchantQueryVo.getArea()),"AREA",merchantQueryVo.getArea())
+                        .eq(StringUtils.isNotBlank(merchantQueryVo.getIsAllinpaymer()),"IS_ALLINPAYMER",merchantQueryVo.getIsAllinpaymer())
+                        .like(StringUtils.isNotBlank(merchantQueryVo.getMerName()),"MER_NAME",merchantQueryVo.getMerName())
+                        .like(StringUtils.isNotBlank(merchantQueryVo.getBrandName()),"BRAND_NAME",merchantQueryVo.getBrandName())
+                        .like(StringUtils.isNotBlank(merchantQueryVo.getTradingArea()),"TRADING_AREA",merchantQueryVo.getTradingArea())
+                        .like(StringUtils.isNotBlank(merchantQueryVo.getExpandChannl()),"EXPAND_CHANNL",merchantQueryVo.getExpandChannl())
+                        .orderByDesc("MER_ID")
+        );
+        return ResponseBean.ok(merchantLists);
+    }
+
+
+    @Override
     public ResponseBean saveOrUpdata(MultipartHttpServletRequest request, TEtcMerchants tEtcMerchants) {
         Integer merid=tEtcMerchants.getMerId();
         String filePath= FileUtil.updataFile(request.getFile(CommonConstant.MER_FILE),
@@ -133,14 +151,11 @@ public class TEtcMerchantsServiceImpl implements ITEtcMerchantsService {
     }
 
     @Override
-    public ResponseBean batchOutput(List<Integer> merIds, HttpServletResponse response) throws IOException {
+    public ResponseBean batchOutput(MerchantQueryVo merchantQueryVo, HttpServletResponse response) throws IOException {
         //获取数据
-        List<TEtcMerchants> tEtcMerchants=null;
-        if (null==merIds){
-            tEtcMerchants=tEtcMerchantsMapper.selectList( new QueryWrapper<TEtcMerchants>().orderByAsc("MER_ID"));
-        }else {
-            tEtcMerchants=tEtcMerchantsMapper.selectBatchIds(merIds);
-        }
+        ResponseBean responseBean=query(merchantQueryVo);
+        List<TEtcMerchants> tEtcMerchants= (List<TEtcMerchants>) responseBean.getData();
+
         //转换成excel实例 用数据库实例会发身mybaits错误
         List<MerchantsExcelModal> merchantsExcelModals=new ArrayList<>();
         for (TEtcMerchants tEtcMerchant:tEtcMerchants){

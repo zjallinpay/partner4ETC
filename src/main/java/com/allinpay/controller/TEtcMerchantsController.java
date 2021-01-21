@@ -68,8 +68,8 @@ public class TEtcMerchantsController {
 
     //批量导出商户
     @RequestMapping("/batchOutput")
-    public ResponseBean batchOutput(MerchantOutputVo merchantOutputVo, HttpServletResponse response) throws IOException {
-        return merchantsService.batchOutput(merchantOutputVo.getMerIds(),response);
+    public ResponseBean batchOutput( MerchantQueryVo merchantQueryVo, HttpServletResponse response) throws IOException {
+        return merchantsService.batchOutput(merchantQueryVo,response);
     }
 
     //批量导入商户

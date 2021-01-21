@@ -53,6 +53,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             limit: 10,
             //单元格设置
             cols: [[
+                {type:'checkbox', width: 90},
                 {field: 'merId', width: 90, title: '店铺ID'},
                 {field: 'merName', width: 90, title: '商户名称'},
                 {field: 'createTime', width: 150, title: '商户添加时间'},
@@ -112,9 +113,11 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
     });
 
 
-    //导出商户
+   /* //导出商户
     $("#batchOutputBtn").on("click", function () {
-        var datas=table.cache.merchantTable;
+
+
+       /!* var datas=table.cache.merchantTable;
         var dataIds=[];
         for (var data of datas){
             dataIds.push(data.merId)
@@ -123,9 +126,9 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                         'merIds':dataIds
                     };
 
-        postExcelFile(params);
+        postExcelFile(params);*!/
 
-    });
+    });*/
 
     layui.use(["upload"], function() {
         var upload = layui.upload;
@@ -153,6 +156,12 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
     //下载模板
     $("#downloadTemplate").on("click", function () {
         window.location.href = "/manage/merchants/downloadTemplate";
+    });
+
+    //批量删除
+    $("#batchDeteleBtn").on("click",function () {
+        var checkStatus = layui.table.checkStatus('merchantTable').data;
+        window.console.log(JSON.stringify(checkStatus));
     });
 
     //监听table行工具事件 如详情、编辑、删除操作
@@ -222,6 +231,23 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
 
     });
 
+    //导出商家
+    form.on('submit(outputMerchantFilter)',function (data) {
+
+       // var url = "/manage/merchants/batchOutput";
+
+        var formData = {
+            "merName": $.trim($("#merName").val()),
+            "belongIndustry": $.trim($("#belongIndustry").val()),
+            "brandName": $.trim($("#brandName").val()),
+            "tradingArea": $.trim($("#tradingArea").val()),
+            "area": $.trim($("#area").val()),
+            "isAllinpaymer": $.trim($("#isAllinpaymer").val()),
+            "expandChannl": $.trim($("#expandChannl").val())
+        }
+        window.console.info("开始处理"+JSON.stringify(formData));
+        postExcelFile(formData);
+    });
 
     //提交新增编辑表单
     form.on('submit(saveMerchantFilter)',function (data) {

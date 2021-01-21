@@ -43,7 +43,7 @@
         </div>
 
         <!--查询条件-->
-        <form class="layui-form"  lay-filter="queryFilter">
+        <form class="layui-form" id="queryForm" lay-filter="queryFilter">
             <div class="layui-form-item" style="margin-top: 20px;">
                 <div class="layui-inline">
                     <label class="layui-form-label">商户名称</label>
@@ -128,8 +128,9 @@
                     <button class="layui-btn layui-btn-primary" id="resetBtn">重置</button>
                     <button class="layui-btn layui-btn-normal" id="addBtn">新增商户</button>
                     <button class="layui-btn layui-btn-normal" id="batchAddBtn">批量导入商户</button>
-                    <button class="layui-btn layui-btn-normal" id="batchOutputBtn">导出商户</button>
+                    <button class="layui-btn layui-btn-normal" id="batchOutputBtn" lay-submit  lay-filter="outputMerchantFilter">导出商户</button>
                     <button class="layui-btn layui-btn-normal" id="downloadTemplate">下载模板</button>
+                    <button class="layui-btn layui-btn-normal" id="batchDeteleBtn">批量删除</button>
                 </div>
             </div>
         </form>
