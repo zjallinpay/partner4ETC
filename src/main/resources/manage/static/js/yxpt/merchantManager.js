@@ -53,7 +53,6 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             limit: 10,
             //单元格设置
             cols: [[
-                {type:'checkbox', width: 90},
                 {field: 'merId', width: 90, title: '店铺ID'},
                 {field: 'merName', width: 90, title: '商户名称'},
                 {field: 'createTime', width: 150, title: '商户添加时间'},
@@ -158,11 +157,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
         window.location.href = "/manage/merchants/downloadTemplate";
     });
 
-    //批量删除
-    $("#batchDeteleBtn").on("click",function () {
-        var checkStatus = layui.table.checkStatus('merchantTable').data;
-        window.console.log(JSON.stringify(checkStatus));
-    });
+
 
     //监听table行工具事件 如详情、编辑、删除操作
     table.on('tool(tableFilter)', function (obj) {

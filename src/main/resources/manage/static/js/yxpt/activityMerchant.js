@@ -47,7 +47,6 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             limit: 10,
             //单元格设置
             cols: [[
-                {type:'checkbox', width: 90},
                 {field: 'merId', width: 90, title: '店铺ID'},
                 {field: 'merName', width: 90, title: '商户名称'},
                 {field: 'belongIndustry', width: 80, title: '所属行业'},
