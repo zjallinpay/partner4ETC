@@ -125,10 +125,10 @@ public class RepayApplyServiceImpl implements IRepayApplyService {
         numberFormat.setGroupingUsed(false);
         String value;
         switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 value = cell.getStringCellValue();
                 break;
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 value = numberFormat.format(cell.getNumericCellValue());
                 break;
             default:
