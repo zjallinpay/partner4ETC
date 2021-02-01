@@ -33,12 +33,13 @@
 <div class="layui-layout layui-layout-admin">
     <!--查询页面 -->
     <div class="layui-body">
-        <input hidden id="pdfUrl"/>
+
         <!--面包屑-->
         <div style="margin: 10px">
             <span class="layui-breadcrumb">
-                <a href="">营销平台</a>
-                <a><cite>营销活动管理</cite></a>
+                <a href="javascript:history.go(-1)">营销平台</a>
+                 <a href="javascript:history.go(-1)" >  <input id="proName" th:value="${proName}" style="border:none;width:150px"></a>
+                <a><cite>子活动</cite></a>
             </span>
         </div>
 
@@ -46,6 +47,7 @@
         <form class="layui-form"  lay-filter="queryFilter">
             <div class="layui-form-item" style="margin-top: 20px;">
                 <div class="layui-inline">
+                    <input id="proId" hidden="hidden" th:value="${proId}">
                     <label class="layui-form-label">活动名称</label>
                     <div class="layui-input-inline" style="width: 180px;">
                         <input autocomplete="off" class="layui-input" id="activityName" type="text">
@@ -57,14 +59,7 @@
                         <input autocomplete="off" class="layui-input" id="activityBatchno" type="text">
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">合作机构</label>
-                    <div class="layui-input-inline" style="width: 180px;">
-                        <input autocomplete="off" class="layui-input" id="coopOrgan" type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="layui-form-item" style="margin-top: 20px;">
+
                 <div class="layui-inline">
                     <label class="layui-form-label">优惠类型</label>
                     <div class="layui-input-inline" style="width: 180px;">
@@ -77,6 +72,10 @@
                         </select>
                     </div>
                 </div>
+
+            </div>
+            <div class="layui-form-item" style="margin-top: 20px;">
+
                 <div class="layui-inline">
                     <label class="layui-form-label">活动渠道</label>
                     <div class="layui-input-inline" style="width: 180px;">
@@ -108,8 +107,7 @@
                     <button class="layui-btn" id="queryBtn">查询</button>
                     <button class="layui-btn layui-btn-primary" id="resetBtn">重置</button>
                     <button class="layui-btn layui-btn-normal" id="addBtn">新增活动</button>
-                    <button class="layui-btn layui-btn-normal" id="batchAddBtn">批量导入活动</button>
-                    <button class="layui-btn layui-btn-normal" id="downloadTemplate">下载模板</button>
+                    <button class="layui-btn layui-btn-normal" id="batchDetele">批量删除</button>
                 </div>
             </div>
         </form>
@@ -121,6 +119,8 @@
     <!-- 新增表单 -->
     <form class="layui-form" id="addForm" lay-filter="addFilter"
           style="display: none;margin: 10px; text-align: center">
+        <input name="proId" hidden="hidden" th:value="${proId}">
+        <input name="proName" hidden="hidden" th:value="${proName}">
         <input name="activityId" hidden="hidden">
         <div class="layui-form-item">
             <div class="layui-input-block">
@@ -186,14 +186,6 @@
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <label class="layui-form-label">活动拓展人*</label>
-                <div class="layui-input-inline">
-                    <input class="layui-input" lay-verify="required" maxlength="40" name="activityMaster" type="text">
-                </div>
-            </div>
-        </div>
 
         <div class="layui-form-item">
             <div class="layui-input-block">
@@ -266,9 +258,13 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <label class="layui-form-label">合作机构*</label>
-                <div class="layui-input-inline" style="width: 200px;">
-                    <input class="layui-input"  maxlength="40" name="coopOrgan" type="text" lay-verify="required" >
+                <label class="layui-form-label">活动类型*</label>
+                <div class="layui-input-inline">
+                    <select  name="activityType" lay-verify="required">
+                        <option value="">请选择活动类型</option>
+                        <option value="商圈">商圈</option>
+                        <option value="物业">物业</option>
+                    </select>
                 </div>
             </div>
         </div>

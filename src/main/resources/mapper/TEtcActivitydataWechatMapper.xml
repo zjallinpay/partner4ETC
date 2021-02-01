@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.TEtcActivitydataWechatMapper">
+
+    <resultMap type="com.allinpay.entity.TEtcActivtydataWechat" id="TEtcActivtydataWechatMap">
+        <result property="acWeId" column="AC_WE_ID" />
+        <result property="acBatchId" column="AC_BATCH_ID" />
+        <result property="acDiscountId" column="AC_DISCOUNT_ID" />
+        <result property="acDiscountType" column="AC_DISCOUNT_TYPE" />
+        <result property="acDiscountNum" column="AC_DISCOUNT_NUM"/>
+        <result property="acOrderAmount" column="AC_ORDER_AMOUNT" />
+        <result property="acExchangeType" column="AC_EXCHANGE_TYPE" />
+        <result property="acPaymentId" column="AC_PAYMENT_ID"/>
+        <result property="acPaytime" column="AC_PAYTIME" />
+        <result property="acPaymerchantId" column="AC_PAYMERCHANT_ID" />
+        <result property="acPaymerchantName" column="AC_PAYMERCHANT_NAME" />
+        <result property="acEquimentId" column="AC_EQUIMENT_ID"/>
+        <result property="acBankNum" column="AC_BANK_NUM" />
+        <result property="cteateTime" column="CTEATE_TIME" />
+        <result property="modifyTime" column="MODIFY_TIME" />
+    </resultMap>
+
+    <sql id="wechatcolumn">
+          AC_WE_ID, AC_BATCH_ID, AC_DISCOUNT_ID, AC_DISCOUNT_TYPE, AC_DISCOUNT_NUM, AC_ORDER_AMOUNT, AC_EXCHANGE_TYPE, AC_PAYMENT_ID, AC_PAYTIME, AC_PAYMERCHANT_ID, AC_PAYMERCHANT_NAME, AC_EQUIMENT_ID, AC_BANK_NUM, CTEATE_TIME, MODIFY_TIME
+    </sql>
+
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT ALL
+        <foreach collection="list" item="item" index="index">
+            INTO T_ETC_ACTIVTYDATA_WECHAT(
+                AC_BATCH_ID, AC_DISCOUNT_ID, AC_DISCOUNT_TYPE, AC_DISCOUNT_NUM, AC_ORDER_AMOUNT, AC_EXCHANGE_TYPE, AC_PAYMENT_ID, AC_PAYTIME, AC_PAYMERCHANT_ID, AC_PAYMERCHANT_NAME, AC_EQUIMENT_ID, AC_BANK_NUM, CTEATE_TIME, MODIFY_TIME
+            ) VALUES(
+                #{item.acBatchId},
+                #{item.acDiscountId},
+                #{item.acDiscountType},
+                #{item.acDiscountNum},
+                #{item.acOrderAmount},
+                #{item.acExchangeType},
+                #{item.acPaymentId},
+                #{item.acPaytime},
+                #{item.acPaymerchantId},
+                #{item.acPaymerchantName},
+                #{item.acEquimentId},
+                #{item.acBankNum},
+                #{item.cteateTime},
+                #{item.modifyTime}
+            )
+        </foreach>
+        SELECT 1 FROM DUAL
+    </insert>
+
+
+    <resultMap type="com.allinpay.entity.MerchantStatsModal" id="MerchantStatsModalMap">
+        <result property="acMerchantId" column="AC_MERCHANT_ID" />
+        <result property="merName" column="MER_NAME" />
+        <result property="discountNum" column="DISCOUNT_NUM" />
+        <result property="area" column="AREA" />
+        <result property="tradingArea" column="TRADING_AREA" />
+        <result property="checkNum" column="CHECK_NUM" />
+        <result property="discountAmount" column="DISCOUNT_AMOUNT" />
+        <result property="equipId" column="EQUIP_ID" />
+    </resultMap>
+
+    <select id="selectMerchantStatsDatas" resultMap="MerchantStatsModalMap" >
+        SELECT
+        wechat.AC_PAYMERCHANT_ID as "AC_MERCHANT_ID",
+        wechat.AC_PAYMERCHANT_NAME as "MER_NAME",
+        MAX(wechat.AC_DISCOUNT_NUM) as "DISCOUNT_NUM",
+        wechat.AC_EQUIMENT_ID as "EQUIP_ID",
+        COUNT(case  when wechat.AC_EXCHANGE_TYPE='支付' then 1 else null end
+         )-COUNT( case  when wechat.AC_EXCHANGE_TYPE='退款' then 1 else null end) as "CHECK_NUM",
+         MAX(wechat.AC_DISCOUNT_NUM)*(COUNT(case  when wechat.AC_EXCHANGE_TYPE='支付' then 1 else null end
+         )-COUNT( case  when wechat.AC_EXCHANGE_TYPE='退款' then 1 else null end)) as DISCOUNT_AMOUNT
+            FROM T_ETC_ACTIVTYDATA_WECHAT wechat
+            WHERE wechat.AC_BATCH_ID=#{acBatchId} AND wechat.AC_PAYTIME
+            BETWEEN #{reStartTime} and #{reEndTime}
+            GROUP BY wechat.AC_PAYMERCHANT_ID,wechat.AC_PAYMERCHANT_NAME, wechat.AC_EQUIMENT_ID
+
+    </select>
+
+
+    <resultMap type="com.allinpay.entity.PropertyStatsModal" id="PropertyStatsModalMap">
+        <result property="acMerchantId" column="AC_MERCHANT_ID" />
+        <result property="merName" column="MER_NAME" />
+        <result property="discountNum" column="DISCOUNT_NUM" />
+        <result property="area" column="AREA" />
+        <result property="checkNum" column="CHECK_NUM" />
+        <result property="wechatAmount" column="WECHAT_AMOUNT" />
+        <result property="activeUserCount" column="ACTIVE_USER_COUNT" />
+    </resultMap>
+
+    <select id="selectPropertStatsDatas" resultMap="PropertyStatsModalMap">
+
+        SELECT
+			wechat.AC_PAYMERCHANT_ID as "AC_MERCHANT_ID",
+			mer.MER_NAME as "MER_NAME",
+			MAX(wechat.AC_DISCOUNT_NUM) as "DISCOUNT_NUM",
+			mer.AREA as "AREA",
+			COUNT(case  when wechat.AC_EXCHANGE_TYPE='支付' then 1 else null end
+			)-COUNT( case  when wechat.AC_EXCHANGE_TYPE='退款' then 1 else null end) as "CHECK_NUM"
+			FROM T_ETC_ACTIVTYDATA_WECHAT wechat  LEFT JOIN T_ETC_MERCHANTS mer
+            ON wechat.AC_PAYMERCHANT_ID=mer.WXPAY_MERID
+            WHERE wechat.AC_BATCH_ID=#{acBatchId} AND wechat.AC_PAYTIME
+            BETWEEN #{reStartTime} and #{reEndTime}
+            GROUP BY wechat.AC_PAYMERCHANT_ID,wechat.AC_PAYMERCHANT_NAME,mer.AREA,mer.MER_NAME
+    </select>
+
+
+    <select id="selectPropertStatsAmountDatas"  resultMap="PropertyStatsModalMap">
+        	SELECT
+            acamount.AC_PAYMERCHANT_NAME as "MER_NAME",
+            acamount.AC_PAYMERCHANT_ID  as "AC_MERCHANT_ID",
+            SUM(case  when acamount.AC_EXCHANGE_TYPE='支付' then acamount.AC_ORDER_AMOUNT else 0 end)
+            -SUM(case  when acamount.AC_EXCHANGE_TYPE='退款' then acamount.AC_ORDER_AMOUNT else 0 end) as WECHAT_AMOUNT,
+            COUNT(1) as ACTIVE_USER_COUNT
+            FROM
+            (
+                SELECT DISTINCT AC_BANK_NUM ,AC_PAYMERCHANT_NAME,AC_PAYMERCHANT_ID,AC_ORDER_AMOUNT,AC_EXCHANGE_TYPE,AC_EQUIMENT_ID
+                from T_ETC_ACTIVTYDATA_WECHAT
+                WHERE AC_BATCH_ID=#{acBatchId} AND AC_PAYTIME
+                BETWEEN #{reStartTime} and #{reEndTime}
+            ) acamount
+            GROUP BY acamount.AC_PAYMERCHANT_NAME,acamount.AC_PAYMERCHANT_ID
+
+    </select>
+
+</mapper>

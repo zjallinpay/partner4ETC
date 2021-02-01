@@ -17,6 +17,8 @@ public class AcitvityQueryVo {
 
     private String fundType;
 
+    private String proId;
+
     private Integer pageNo;
 
     private Integer pageSize;

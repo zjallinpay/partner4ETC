@@ -1,8 +1,10 @@
 package com.allinpay.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.allinpay.core.common.ResponseBean;
 import com.allinpay.core.common.ResponseData;
 import com.allinpay.core.constant.CommonConstant;
+import com.allinpay.core.exception.AllinpayException;
 import com.allinpay.core.util.FileDownloader;
 import com.allinpay.entity.TEtcMerchants;
 import com.allinpay.entity.vo.MerchantOutputVo;
@@ -22,6 +24,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/manage/merchants")
@@ -85,12 +89,25 @@ public class TEtcMerchantsController {
     }
 
 
+    @RequestMapping("/batchDelete")
+    public ResponseBean batchDelete(@RequestBody Map params){
+        if (params==null||params.get("deleteIds")==null){
+            throw new AllinpayException("参数不能为空");
+        }
+        log.info(JSON.toJSONString(params));
+        List ids= (List) params.get("deleteIds");
+        return merchantsService.batchDelete(ids);
+    }
+
+/*
+
     //下载商家附件
     @RequestMapping("/downloadMerFile")
     public ResponseEntity<FileSystemResource> downloadActFile(@RequestParam("merId") Integer merId) {
         log.info("下载活动附件");
         return merchantsService.downloadMerFile(merId);
     }
+*/
 
 
 }

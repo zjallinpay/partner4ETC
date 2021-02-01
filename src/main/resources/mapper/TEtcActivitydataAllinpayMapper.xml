@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.TEtcActivitydataAllinpayMapper">
+
+    <resultMap type="com.allinpay.entity.TEtcActivitydataAllinpay" id="TEtcActivitydataAllinpayMap">
+        <result property="acAllinId" column="AC_ALLIN_ID" />
+        <result property="acPayNum" column="AC_PAY_NUM" />
+        <result property="acPayNumex" column="AC_PAY_NUMEX" />
+        <result property="acBatchId" column="AC_BATCH_ID" />
+        <result property="acMerchantId" column="AC_MERCHANT_ID" />
+        <result property="acMerchantName" column="AC_MERCHANT_NAME" />
+        <result property="acEquimentId" column="AC_EQUIMENT_ID" />
+        <result property="acBankName" column="AC_BANK_NAME"/>
+        <result property="acAccountType" column="AC_ACCOUNT_TYPE"/>
+        <result property="acAccountNum" column="AC_ACCOUNT_NUM" />
+        <result property="acExchangeType" column="AC_EXCHANGE_TYPE" />
+        <result property="acExchangeStatues" column="AC_EXCHANGE_STATUES" />
+        <result property="acExchangeSourcenum" column="AC_EXCHANGE_SOURCENUM"/>
+        <result property="acExchangeRealnum" column="AC_EXCHANGE_REALNUM"/>
+        <result property="acDiscountNum" column="AC_DISCOUNT_NUM" />
+        <result property="acOrganPaynum" column="AC_ORGAN_PAYNUM"/>
+        <result property="acMerchantPaynum" column="AC_MERCHANT_PAYNUM" />
+        <result property="acCooporganId" column="AC_COOPORGAN_ID" />
+        <result property="createTime" column="CREATE_TIME" />
+        <result property="modifyTime" column="MODIFY_TIME" />
+    </resultMap>
+
+
+    <sql id="allinpaycolumn">
+         AC_ALLIN_ID, AC_PAY_NUM, AC_PAY_NUMEX, AC_BATCH_ID, AC_MERCHANT_ID, AC_MERCHANT_NAME, AC_EQUIMENT_ID, AC_BANK_NAME, AC_ACCOUNT_TYPE, AC_ACCOUNT_NUM, AC_EXCHANGE_TYPE, AC_EXCHANGE_STATUES, AC_EXCHANGE_SOURCENUM, AC_EXCHANGE_REALNUM, AC_DISCOUNT_NUM, AC_ORGAN_PAYNUM, AC_MERCHANT_PAYNUM, AC_COOPORGAN_ID, CREATE_TIME, MODIFY_TIME
+    </sql>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT ALL
+        <foreach collection="list" item="item" index="index">
+            INTO T_ETC_ACTIVITYDATA_ALLINPAY(
+                AC_PAY_NUM, AC_PAY_NUMEX, AC_BATCH_ID, AC_MERCHANT_ID, AC_MERCHANT_NAME, AC_EQUIMENT_ID, AC_BANK_NAME, AC_ACCOUNT_TYPE, AC_ACCOUNT_NUM, AC_EXCHANGE_TYPE, AC_EXCHANGE_STATUES, AC_EXCHANGE_SOURCENUM, AC_EXCHANGE_REALNUM, AC_DISCOUNT_NUM, AC_ORGAN_PAYNUM, AC_MERCHANT_PAYNUM, AC_COOPORGAN_ID, CREATE_TIME, MODIFY_TIME
+            ) VALUES(
+                #{item.acPayNum},
+                #{item.acPayNumex},
+                #{item.acBatchId},
+                #{item.acMerchantId},
+                #{item.acMerchantName},
+                #{item.acEquimentId},
+                #{item.acBankName},
+                #{item.acAccountType},
+                #{item.acAccountNum},
+                #{item.acExchangeType},
+                #{item.acExchangeStatues},
+                #{item.acExchangeSourcenum},
+                #{item.acExchangeRealnum},
+                #{item.acDiscountNum},
+                #{item.acOrganPaynum},
+                #{item.acMerchantPaynum},
+                #{item.acCooporganId},
+                #{item.createTime},
+                #{item.modifyTime}
+            )
+        </foreach>
+        SELECT 1 FROM DUAL
+    </insert>
+
+    <resultMap type="com.allinpay.entity.PropertyStatsModal" id="PropertyStatsModalMap">
+        <result property="acMerchantId" column="AC_MERCHANT_ID" />
+        <result property="merName" column="MER_NAME" />
+        <result property="discountNum" column="DISCOUNT_NUM" />
+        <result property="area" column="AREA" />
+        <result property="checkNum" column="CHECK_NUM" />
+        <result property="wechatAmount" column="WECHAT_AMOUNT" />
+        <result property="activeUserCount" column="ACTIVE_USER_COUNT" />
+    </resultMap>
+
+    <select id="selectPropertStatsDatas" resultMap="PropertyStatsModalMap">
+		SELECT
+			allinpay.AC_MERCHANT_ID as "AC_MERCHANT_ID",
+			allinpay.AC_MERCHANT_NAME as "MER_NAME",
+			MAX(allinpay.AC_DISCOUNT_NUM) as "DISCOUNT_NUM",
+			mer.AREA as "AREA",
+			COUNT(case  when allinpay.AC_EXCHANGE_STATUES='处理成功' then 1 else null end)
+			-COUNT( case  when allinpay.AC_EXCHANGE_STATUES='已撤销' then 1 else null end) as "CHECK_NUM",
+			SUM(case  when allinpay.AC_EXCHANGE_STATUES='处理成功' then allinpay.AC_EXCHANGE_SOURCENUM else 0 end)
+            -SUM(case  when allinpay.AC_EXCHANGE_STATUES='已撤销' then allinpay.AC_EXCHANGE_SOURCENUM else 0 end) as BANK_AMOUNT,
+            COUNT(1) as ACTIVE_USER_COUNT
+			FROM T_ETC_ACTIVITYDATA_ALLINPAY allinpay LEFT JOIN T_ETC_MERCHANTS mer
+            ON allinpay.AC_MERCHANT_ID=mer.ALLINPAY_MERID
+            WHERE allinpay.AC_BATCH_ID=#{acBatchId} AND allinpay.CREATE_TIME
+            BETWEEN #{reStartTime} and #{reEndTime}
+            GROUP BY allinpay.AC_MERCHANT_ID,allinpay.AC_MERCHANT_NAME,mer.AREA
+    </select>
+</mapper>

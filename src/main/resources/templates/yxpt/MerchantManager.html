@@ -51,34 +51,23 @@
                         <input autocomplete="off" class="layui-input" id="merName" type="text">
                     </div>
                 </div>
-                <div class="layui-inline">
-                    <label class="layui-form-label">品牌名称</label>
-                    <div class="layui-input-inline" style="width: 180px;">
-                        <input autocomplete="off" class="layui-input" id="brandName" type="text">
-                    </div>
-                </div>
+
                 <div class="layui-inline">
                     <label class="layui-form-label">商圈名称</label>
                     <div class="layui-input-inline" style="width: 180px;">
                         <input autocomplete="off" class="layui-input" id="tradingArea" type="text">
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item" style="margin-top: 20px;">
+
                 <div class="layui-inline">
                     <label class="layui-form-label">所属行业</label>
                     <div class="layui-input-inline" style="width: 180px;">
-                        <select  id="belongIndustry" style="width: 200px">
-                            <option value="">请选择所属行业</option>
-                            <option value="连锁零售">连锁零售</option>
-                            <option value="连锁餐饮">连锁餐饮</option>
-                            <option value="商圈零售">商圈零售</option>
-                            <option value="商圈餐饮">商圈餐饮</option>
-                            <option value="物业">物业</option>
-                            <option value="其他">其他</option>
-                        </select>
+                        <input autocomplete="off" class="layui-input" id="belongIndustry" type="text">
                     </div>
                 </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 20px;">
+
                 <div class="layui-inline">
                     <label class="layui-form-label">所属地区</label>
                     <div class="layui-input-inline" style="width: 180px;">
@@ -109,8 +98,6 @@
                     </div>
                 </div>
 
-            </div>
-            <div class="layui-form-item" style="margin-top: 20px;">
                 <div class="layui-inline">
                     <label class="layui-form-label">拓展渠道</label>
                     <div class="layui-input-inline" style="width: 180px;">
@@ -121,7 +108,9 @@
                         </select>
                     </div>
                 </div>
+
             </div>
+
             <div class="layui-form-item">
                 <div class="layui-input-block" style="margin-left: 145px;">
                     <button class="layui-btn" id="queryBtn">查询</button>
@@ -130,7 +119,7 @@
                     <button class="layui-btn layui-btn-normal" id="batchAddBtn">批量导入商户</button>
                     <button class="layui-btn layui-btn-normal" id="batchOutputBtn" lay-submit  lay-filter="outputMerchantFilter">导出商户</button>
                     <button class="layui-btn layui-btn-normal" id="downloadTemplate">下载模板</button>
-                    <button class="layui-btn layui-btn-normal" id="batchDeteleBtn">批量删除</button>
+                    <button class="layui-btn layui-btn-normal" id="batchDetele">批量删除</button>
                 </div>
             </div>
         </form>
@@ -155,27 +144,12 @@
             <div class="layui-input-block">
                 <label class="layui-form-label">所属行业*</label>
                 <div class="layui-input-inline">
-                    <select  name="belongIndustry" lay-verify="required">
-                        <option value="">请选择所属行业</option>
-                        <option value="连锁零售">连锁零售</option>
-                        <option value="连锁餐饮">连锁餐饮</option>
-                        <option value="商圈零售">商圈零售</option>
-                        <option value="商圈餐饮">商圈餐饮</option>
-                        <option value="物业">物业</option>
-                        <option value="其他">其他</option>
-                    </select>
+                    <input class="layui-input" lay-verify="required" maxlength="40" name="belongIndustry" type="text">
                 </div>
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <label class="layui-form-label">品牌名称</label>
-                <div class="layui-input-inline" style="width: 200px;">
-                    <input class="layui-input"  maxlength="40" name="brandName" type="text">
-                </div>
-            </div>
-        </div>
+
 
         <div class="layui-form-item">
             <div class="layui-input-block">
@@ -230,29 +204,7 @@
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <label class="layui-form-label">是否签约</label>
-                <div class="layui-input-inline">
-                    <select  name="isSigned" >
-                        <option value="否" selected="selected">否</option>
-                        <option value="是">是</option>
-                    </select>
-                </div>
-            </div>
-        </div>
 
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <label class="layui-form-label">是否测试</label>
-                <div class="layui-input-inline">
-                    <select  name="isTest" >
-                        <option value="否" selected="selected">否</option>
-                        <option value="是">是</option>
-                    </select>
-                </div>
-            </div>
-        </div>
 
         <div class="layui-form-item">
             <div class="layui-input-block">
@@ -310,14 +262,7 @@
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <label class="layui-form-label">附件材料</label>
-                <div class="layui-input-inline">
-                    <input class="layui-input"   name="mer_file" type="file">
-                </div>
-            </div>
-        </div>
+
 
         <div class="layui-form-item">
             <div class="layui-input-block">

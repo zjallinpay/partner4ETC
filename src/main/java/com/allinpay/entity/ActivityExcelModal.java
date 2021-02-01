@@ -48,54 +48,53 @@ public class ActivityExcelModal extends BaseRowModel implements Serializable {
     /**
      * 枚举类型值：免充值、预充值（垫资）、预充值（不垫资）
      */
-    @ExcelProperty(value="资金模式",index=7)
+    @ExcelProperty(value="资金模式",index=6)
     private String fundType;
     /**
      * 活动主办人
      */
-    @ExcelProperty(value="活动拓展人",index=8)
+    @ExcelProperty(value="活动拓展人",index=7)
     private String activityMaster;
 
     /**
      * 活动开始时间
      */
-    @ExcelProperty(value="活动开始时间",index=5)
+    @ExcelProperty(value="活动开始时间",index=4)
     private Date startTime;
     /**
      * 活动结束时间
      */
-    @ExcelProperty(value="活动结束时间",index=6)
+    @ExcelProperty(value="活动结束时间",index=5)
     private Date endTime;
     /**
      * 可用开始时间
      */
-    @ExcelProperty(value="活动可用时间段开始时间",index=10)
+    @ExcelProperty(value="活动可用时间段开始时间",index=9)
     private String ablestartTime;
     /**
      * 可用结束时间
      */
-    @ExcelProperty(value="活动可用时间段结束时间",index=11)
+    @ExcelProperty(value="活动可用时间段结束时间",index=10)
     private String ableendTime;
     /**
      * 可用的周
      */
-    @ExcelProperty(value="活动可用日期周",index=9)
+    @ExcelProperty(value="活动可用日期周",index=8)
     private String ableWeek;
     /**
      * 发卡行限制
      */
-    @ExcelProperty(value="发卡行限制",index=12)
+    @ExcelProperty(value="发卡行限制",index=11)
     private String bankLimit;
     /**
      * 活动说明
      */
-    @ExcelProperty(value="活动说明",index=13)
+    @ExcelProperty(value="活动说明",index=12)
     private String activityRemark;
+
     /**
-     * 合作机构
-     * */
-    @ExcelProperty(value="合作机构",index=4)
-    private String coopOrgan;
-
-
+     * 活动类型 商圈、物业
+     */
+    @ExcelProperty(value="活动类型",index=13)
+    private String activityType;
 }

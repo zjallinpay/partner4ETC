@@ -56,12 +56,12 @@ public class TEtcActivityServiceImpl implements ITEtcActivityService {
         PageHelper.startPage(acitvityQueryVo.getPageNo(), acitvityQueryVo.getPageSize());
         List<TEtcActivity> tEtcActivities=tEtcActivityMapper.selectList(
                 new QueryWrapper<TEtcActivity>()
+                .eq(StringUtils.isNotBlank(acitvityQueryVo.getProId()),"PRO_ID",acitvityQueryVo.getProId())
                 .eq(StringUtils.isNotBlank(acitvityQueryVo.getDiscountType()),"DISCOUNT_TYPE",acitvityQueryVo.getDiscountType())
                 .eq(StringUtils.isNotBlank(acitvityQueryVo.getActivityBatchno()),"ACTIVITY_BATCHNO",acitvityQueryVo.getActivityBatchno())
                 .eq(StringUtils.isNotBlank(acitvityQueryVo.getActivityChnnal()),"ACTIVITY_CHNNAL",acitvityQueryVo.getActivityChnnal())
                 .eq(StringUtils.isNotBlank(acitvityQueryVo.getFundType()),"FUND_TYPE",acitvityQueryVo.getFundType())
                 .like(StringUtils.isNotBlank(acitvityQueryVo.getActivityName()),"ACTIVITY_NAME",acitvityQueryVo.getActivityName())
-                .like(StringUtils.isNotBlank(acitvityQueryVo.getCoopOrgan()),"COOP_ORGAN",acitvityQueryVo.getCoopOrgan())
                 .orderByDesc("ACTIVITY_ID")
         );
         PageInfo<TEtcActivity> pageInfo = new PageInfo<TEtcActivity>(tEtcActivities);
@@ -78,7 +78,6 @@ public class TEtcActivityServiceImpl implements ITEtcActivityService {
         if (null==actId){
             //新增
             tEtcActivity.setActivityFile(filePath);
-
             tEtcActivity.setCreateTime(new Date());
             tEtcActivity.setModifyTime(new Date());
             return ResponseBean.ok(tEtcActivityMapper.insert(tEtcActivity)>0);
@@ -88,20 +87,16 @@ public class TEtcActivityServiceImpl implements ITEtcActivityService {
         if (StringUtils.isNotBlank(filePath)){
             oldActivity.setActivityFile(filePath);
         }
-        oldActivity.setActivityName(tEtcActivity.getActivityName());
-        oldActivity.setActivityBatchno(tEtcActivity.getActivityBatchno());
-        oldActivity.setActivityChnnal(tEtcActivity.getActivityChnnal());
-        oldActivity.setDiscountType(tEtcActivity.getDiscountType());
-        oldActivity.setCoopOrgan(tEtcActivity.getCoopOrgan());
+
         oldActivity.setStartTime(tEtcActivity.getStartTime());
         oldActivity.setEndTime(tEtcActivity.getEndTime());
         oldActivity.setFundType(tEtcActivity.getFundType());
-        oldActivity.setActivityMaster(tEtcActivity.getActivityMaster());
         oldActivity.setAblestartTime(tEtcActivity.getAblestartTime());
         oldActivity.setAbleendTime(tEtcActivity.getAbleendTime());
         oldActivity.setAbleWeek(tEtcActivity.getAbleWeek());
         oldActivity.setBankLimit(tEtcActivity.getBankLimit());
         oldActivity.setActivityRemark(tEtcActivity.getActivityRemark());
+
         tEtcActivity.setModifyTime(new Date());
         return ResponseBean.ok(tEtcActivityMapper.updateById(oldActivity)>0);
     }
@@ -117,7 +112,7 @@ public class TEtcActivityServiceImpl implements ITEtcActivityService {
         return ResponseBean.ok(tEtcActivityMapper.deleteById(actId)>0);
     }
 
-    @Override
+   /* @Override
     public ResponseBean batchImport(MultipartFile multipartFile) {
         //读取数据
         log.info("文件名{}"+ multipartFile.getOriginalFilename());
@@ -135,7 +130,7 @@ public class TEtcActivityServiceImpl implements ITEtcActivityService {
         }
         return ResponseBean.ok(count);
     }
-
+*/
     @Override
     public ResponseEntity<FileSystemResource> downloadActFile(Integer actId) {
         TEtcActivity tEtcActivity=tEtcActivityMapper.selectById(actId);
@@ -220,5 +215,10 @@ public class TEtcActivityServiceImpl implements ITEtcActivityService {
         merchantActivityVo.setMerId(merId);
         merchantActivityVo.setActivityId(actId);
         return ResponseBean.ok(tEtcActivityMapper.deleteByMerId(merchantActivityVo)>0);
+    }
+
+    @Override
+    public ResponseBean batchDelete(List ids) {
+        return  ResponseBean.ok(tEtcActivityMapper.deleteBatchIds(ids)==ids.size());
     }
 }

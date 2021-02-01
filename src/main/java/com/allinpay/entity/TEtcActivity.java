@@ -60,12 +60,7 @@ public class TEtcActivity implements Serializable {
     @NotBlank
     @TableField("FUND_TYPE")
     private String fundType;
-    /**
-     * 活动主办人
-     */
-    @NotBlank
-    @TableField("ACTIVITY_MASTER")
-    private String activityMaster;
+
     /**
      * 补充活动中涉及的其余附件材料（例签署的协议附件材料） 多个地址间以 ; 分割 默认为"无"
      */
@@ -112,11 +107,24 @@ public class TEtcActivity implements Serializable {
      */
     @TableField("ACTIVITY_REMARK")
     private String activityRemark;
+
     /**
-     * 合作机构
-     * */
-    @TableField("COOP_ORGAN")
-    private String coopOrgan;
+     * 活动类型 商圈、物业
+     */
+
+    private String activityType;
+
+    /**
+     * 所属项目id
+     */
+    private Integer proId;
+
+
+    /**
+     * 所属项目名
+     */
+    private String proName;
+
     /**
      * 创建时间
      */

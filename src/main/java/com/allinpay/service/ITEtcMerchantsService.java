@@ -33,6 +33,7 @@ public interface ITEtcMerchantsService {
     //批量导出商户
     ResponseBean batchOutput(MerchantQueryVo merchantQueryVo,HttpServletResponse response) throws IOException;
 
-    //下载商家附件
-    ResponseEntity<FileSystemResource> downloadMerFile(Integer merId);
+    ResponseBean batchDelete(List ids);
+
+    TEtcMerchants queryByMerName(String merName);
 }

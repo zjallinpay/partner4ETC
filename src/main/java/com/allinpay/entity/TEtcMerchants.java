@@ -41,11 +41,7 @@ public class TEtcMerchants implements Serializable {
     @NotBlank
     @TableField("BELONG_INDUSTRY")
     private String belongIndustry;
-    /**
-     * 品牌名
-     */
-    @TableField("BRAND_NAME")
-    private String brandName;
+
     /**
      * 商圈
      */
@@ -127,11 +123,6 @@ public class TEtcMerchants implements Serializable {
     @TableField("MODIFY_TIME")
     private Date modifyTime;
 
-    /**
-     * 是否签约
-     * */
-    @TableField("IS_SIGNED")
-    private String isSigned;
 
 
     /**
@@ -141,16 +132,4 @@ public class TEtcMerchants implements Serializable {
     private String equipId;
 
 
-    /**
-     * 是否测试
-     * */
-    @TableField("IS_TEST")
-    private String isTest;
-
-
-    /**
-     * 附件
-     * */
-    @TableField("MER_FILE")
-    private String merFile;
 }

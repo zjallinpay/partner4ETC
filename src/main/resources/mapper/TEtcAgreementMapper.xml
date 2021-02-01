@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.allinpay.mapper.TEtcAgreementMapper">
+
+
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT ALL
+        <foreach collection="list" item="item" index="index">
+            INTO T_ETC_PRO_AGREEMENT(
+            PRO_ID, ARG_ID, CREATE_TIME, MODIIFY_TIME
+            ) VALUES(
+            #{item.proId},
+            #{item.argId},
+            #{item.createTime},
+            #{item.modiifyTime}
+            )
+        </foreach>
+        SELECT 1 FROM DUAL
+    </insert>
+
+    <delete id="deteleConect">
+        delete from T_ETC_PRO_AGREEMENT
+        where PRO_ID=#{proId} and ARG_ID in
+        <foreach item="item" index="index" collection="argIds" open="("  close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="queryArgByProId" parameterType="int" resultType="java.lang.Integer">
+        select ARG_ID from T_ETC_PRO_AGREEMENT WHERE PRO_ID = #{proId}
+    </select>
+
+
+    <delete id="deteleByProId" parameterType="int">
+        delete from T_ETC_PRO_AGREEMENT where PRO_ID =#{proId}
+    </delete>
+
+
+    <delete id="deteleByArgId" parameterType="int">
+        delete from T_ETC_PRO_AGREEMENT where ARG_ID =#{argId}
+    </delete>
+</mapper>

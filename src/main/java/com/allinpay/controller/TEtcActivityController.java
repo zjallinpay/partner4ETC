@@ -1,7 +1,9 @@
 package com.allinpay.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.allinpay.core.common.ResponseBean;
 import com.allinpay.core.constant.CommonConstant;
+import com.allinpay.core.exception.AllinpayException;
 import com.allinpay.core.util.FileDownloader;
 import com.allinpay.entity.TEtcActivity;
 import com.allinpay.entity.TEtcMerchants;
@@ -25,6 +27,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/manage/activity")
@@ -67,11 +71,11 @@ public class TEtcActivityController {
 
 
 
-    //批量引入活动
+    /* //批量引入活动
     @RequestMapping("/batchImport")
     public ResponseBean batchImport(@RequestParam MultipartFile multipartFile){
         return activityService.batchImport(multipartFile);
-    }
+    }*/
 
     //下载模板
     @RequestMapping("/downloadTemplate")
@@ -123,6 +127,18 @@ public class TEtcActivityController {
     @GetMapping("/deleteByMerId")
     public ResponseBean deleteByMerId(Integer actId,Integer merId){
         return activityService.deleteByMerId(merId,actId);
+    }
+
+
+
+    @RequestMapping("/batchDelete")
+    public ResponseBean batchDelete(@RequestBody Map params){
+        if (params==null||params.get("deleteIds")==null){
+            throw new AllinpayException("参数不能为空");
+        }
+        log.info(JSON.toJSONString(params));
+        List ids= (List) params.get("deleteIds");
+        return activityService.batchDelete(ids);
     }
 
 

@@ -134,8 +134,52 @@ public class TEtcPageController {
         modelAndView.addObject("menu", menu);
         modelAndView.addObject("operate", "edit");
         return modelAndView;
-
     }
 
 
+    //跳转页面
+    @GetMapping("/activityPage")
+    public ModelAndView activityPage(String proId,String proName) {
+        ModelAndView modelAndView = new ModelAndView("yxpt/ActivityManager");
+        modelAndView.addObject("proId", proId);
+        modelAndView.addObject("proName", proName);
+        return modelAndView;
+    }
+
+    //跳转页面
+    @GetMapping("/acwechatdataPage")
+    public ModelAndView acwechatdataPage(String acBatchId,String activityName) {
+        ModelAndView modelAndView = new ModelAndView("yxpt/WechatDataManager");
+        modelAndView.addObject("acBatchId", acBatchId);
+        modelAndView.addObject("activityName", activityName);
+        return modelAndView;
+    }
+
+    //跳转页面
+    @GetMapping("/acallinpaydataPage")
+    public ModelAndView acallinpaydataPage(String acBatchId,String activityName) {
+        ModelAndView modelAndView = new ModelAndView("yxpt/AllinpayDataManager");
+        modelAndView.addObject("acBatchId", acBatchId);
+        modelAndView.addObject("activityName", activityName);
+        return modelAndView;
+    }
+
+
+    //跳转页面
+    @GetMapping("/statsRecordPage")
+    public ModelAndView statsRecordPage(String acBatchId,String activityName) {
+        ModelAndView modelAndView = new ModelAndView("yxpt/StatsRecordManager");
+        modelAndView.addObject("acBatchId", acBatchId);
+        modelAndView.addObject("activityName", activityName);
+        return modelAndView;
+    }
+
+
+    //跳转页面
+    @GetMapping("/connectAgreePage")
+    public ModelAndView connectAgreePage(String proId) {
+        ModelAndView modelAndView = new ModelAndView("yxpt/ConnectAgreeManager");
+        modelAndView.addObject("proId", proId);
+        return modelAndView;
+    }
 }

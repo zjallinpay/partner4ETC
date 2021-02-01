@@ -81,13 +81,19 @@ public class CommonConstant {
     //public static String ACT_SOURCE_PATH = "/project/manage/file";
     //活动附件字段
     public static String ACTIVITY_FILE = "activity_file";
-    //商品附件字段
-    public static String MER_FILE = "mer_file";
 
+    //协议附件字段
+    public static String AGREEMENT_ATTCH = "agreement_attch";
     /**
      * 用于放置活动附件的目录
      */
     public static String SUB_DIR_ACTLICENSE = "/actlicense/";
+
+
+    /**
+     * 用于放置活动附件的目录
+     */
+    public static String SUB_DIR_AGREEMENTATTCH = "/agreementattch/";
 
     /**
      * 用于放置商家附件的目录
@@ -108,6 +114,7 @@ public class CommonConstant {
     public static int QR_IMAGE_WIDTH = 350;
     public static int QR_IMAGE_LENGTH = 300;
     public static String QR_URL = "https://issue.allinpay.com/h5pay/sjq/index/";
+
 
     public static final String RESPONSE_SUCCESS_0000 = "0000";
     public static final String EXCEL_XLSX = ".xlsx";

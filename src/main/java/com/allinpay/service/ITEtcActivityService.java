@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public interface ITEtcActivityService {
 
@@ -32,8 +33,8 @@ public interface ITEtcActivityService {
     //根据id删除活动
     ResponseBean deleteById(int actId);
 
-    //批量导入活动
-    ResponseBean batchImport(MultipartFile multipartFile);
+   /* //批量导入活动
+    ResponseBean batchImport(MultipartFile multipartFile);*/
 
     //下载活动附件
     ResponseEntity<FileSystemResource> downloadActFile(Integer actId);
@@ -50,4 +51,6 @@ public interface ITEtcActivityService {
 
     //删除参与商户
     ResponseBean deleteByMerId(Integer merId,Integer actId);
+
+    ResponseBean batchDelete(List ids);
 }

@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -56,11 +57,10 @@ public class TEtcMerchantsServiceImpl implements ITEtcMerchantsService {
          PageHelper.startPage(merchantQueryVo.getPageNo(), merchantQueryVo.getPageSize());
         List<TEtcMerchants> merchantLists= (List) tEtcMerchantsMapper.selectList(
                 new QueryWrapper<TEtcMerchants>()
-                .eq(StringUtils.isNotBlank(merchantQueryVo.getBelongIndustry()),"BELONG_INDUSTRY",merchantQueryVo.getBelongIndustry())
                 .eq(StringUtils.isNotBlank(merchantQueryVo.getArea()),"AREA",merchantQueryVo.getArea())
                 .eq(StringUtils.isNotBlank(merchantQueryVo.getIsAllinpaymer()),"IS_ALLINPAYMER",merchantQueryVo.getIsAllinpaymer())
+                .like(StringUtils.isNotBlank(merchantQueryVo.getBelongIndustry()),"BELONG_INDUSTRY",merchantQueryVo.getBelongIndustry())
                 .like(StringUtils.isNotBlank(merchantQueryVo.getMerName()),"MER_NAME",merchantQueryVo.getMerName())
-                .like(StringUtils.isNotBlank(merchantQueryVo.getBrandName()),"BRAND_NAME",merchantQueryVo.getBrandName())
                 .like(StringUtils.isNotBlank(merchantQueryVo.getTradingArea()),"TRADING_AREA",merchantQueryVo.getTradingArea())
                 .like(StringUtils.isNotBlank(merchantQueryVo.getExpandChannl()),"EXPAND_CHANNL",merchantQueryVo.getExpandChannl())
                 .orderByDesc("MER_ID")
@@ -74,13 +74,12 @@ public class TEtcMerchantsServiceImpl implements ITEtcMerchantsService {
 
         List<TEtcMerchants> merchantLists= (List) tEtcMerchantsMapper.selectList(
                 new QueryWrapper<TEtcMerchants>()
-                        .eq(StringUtils.isNotBlank(merchantQueryVo.getBelongIndustry()),"BELONG_INDUSTRY",merchantQueryVo.getBelongIndustry())
                         .eq(StringUtils.isNotBlank(merchantQueryVo.getArea()),"AREA",merchantQueryVo.getArea())
                         .eq(StringUtils.isNotBlank(merchantQueryVo.getIsAllinpaymer()),"IS_ALLINPAYMER",merchantQueryVo.getIsAllinpaymer())
                         .like(StringUtils.isNotBlank(merchantQueryVo.getMerName()),"MER_NAME",merchantQueryVo.getMerName())
-                        .like(StringUtils.isNotBlank(merchantQueryVo.getBrandName()),"BRAND_NAME",merchantQueryVo.getBrandName())
                         .like(StringUtils.isNotBlank(merchantQueryVo.getTradingArea()),"TRADING_AREA",merchantQueryVo.getTradingArea())
                         .like(StringUtils.isNotBlank(merchantQueryVo.getExpandChannl()),"EXPAND_CHANNL",merchantQueryVo.getExpandChannl())
+                        .like(StringUtils.isNotBlank(merchantQueryVo.getBelongIndustry()),"BELONG_INDUSTRY",merchantQueryVo.getBelongIndustry())
                         .orderByDesc("MER_ID")
         );
         return ResponseBean.ok(merchantLists);
@@ -90,31 +89,22 @@ public class TEtcMerchantsServiceImpl implements ITEtcMerchantsService {
     @Override
     public ResponseBean saveOrUpdata(MultipartHttpServletRequest request, TEtcMerchants tEtcMerchants) {
         Integer merid=tEtcMerchants.getMerId();
-        String filePath= FileUtil.updataFile(request.getFile(CommonConstant.MER_FILE),
-                fileSourcePath  + CommonConstant.SUB_DIR_MERLICENSE);
+
         if (null==merid){
             //新增
-            tEtcMerchants.setMerFile(filePath);
             tEtcMerchants.setCreateTime(new Date());
             tEtcMerchants.setModifyTime(new Date());
             return ResponseBean.ok(tEtcMerchantsMapper.insert(tEtcMerchants)>0);
         }
         //修改
         TEtcMerchants oldMerchants=tEtcMerchantsMapper.selectById(merid);
-        if (StringUtils.isNotBlank(filePath)){
-            oldMerchants.setMerFile(filePath);
-        }
-        oldMerchants.setMerName(tEtcMerchants.getMerName());
         oldMerchants.setAllinpayMerid(tEtcMerchants.getAllinpayMerid());
         oldMerchants.setAlipayMerid(tEtcMerchants.getAlipayMerid());
         oldMerchants.setCloudpayMerid(tEtcMerchants.getCloudpayMerid());
         oldMerchants.setWxpayMerid(tEtcMerchants.getWxpayMerid());
-        oldMerchants.setBrandName(tEtcMerchants.getBrandName());
         oldMerchants.setArea(tEtcMerchants.getArea());
         oldMerchants.setBelongIndustry(tEtcMerchants.getBelongIndustry());
-        oldMerchants.setIsAllinpaymer(tEtcMerchants.getIsAllinpaymer());
         oldMerchants.setExpandChannl(tEtcMerchants.getExpandChannl());
-        oldMerchants.setExpandPerson(tEtcMerchants.getExpandPerson());
         oldMerchants.setContactsWay(tEtcMerchants.getContactsWay());
         oldMerchants.setContacts(tEtcMerchants.getContacts());
         oldMerchants.setRemark(tEtcMerchants.getRemark());
@@ -170,6 +160,25 @@ public class TEtcMerchantsServiceImpl implements ITEtcMerchantsService {
     }
 
     @Override
+    public ResponseBean batchDelete(List ids) {
+        return  ResponseBean.ok(tEtcMerchantsMapper.deleteBatchIds(ids)==ids.size());
+    }
+
+    @Override
+    public TEtcMerchants queryByMerName(String merName) {
+        TEtcMerchants tEtcMerchants=new TEtcMerchants();
+        List<TEtcMerchants> merchantLists= (List) tEtcMerchantsMapper.selectList(
+                new QueryWrapper<TEtcMerchants>()
+                        .like("MER_NAME",merName)
+
+        );
+        if (merchantLists.size()>0){
+            tEtcMerchants=merchantLists.get(0);
+        }
+        return tEtcMerchants;
+    }
+
+/*    @Override
     public ResponseEntity<FileSystemResource> downloadMerFile(Integer merId) {
         TEtcMerchants tEtcMerchants=tEtcMerchantsMapper.selectById(merId);
         String fileName=tEtcMerchants.getMerFile();
@@ -179,7 +188,7 @@ public class TEtcMerchantsServiceImpl implements ITEtcMerchantsService {
         String path=fileSourcePath  + CommonConstant.SUB_DIR_MERLICENSE;
         String filePath=path+fileName;
         return FileDownloader.download(filePath,fileName);
-    }
+    }*/
 
 
 }

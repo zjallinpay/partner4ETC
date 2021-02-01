@@ -44,11 +44,11 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
             page: true,
             //请求参数
             where: {
+                proId: $.trim($("#proId").val()),
                 activityName: $.trim($("#activityName").val()),
                 discountType: $.trim($("#discountType").val()),
                 activityBatchno: $.trim($("#activityBatchno").val()),
                 activityChnnal: $.trim($("#activityChnnal").val()),
-                coopOrgan: $.trim($("#coopOrgan").val()),
                 fundType: $.trim($("#fundType").val())
             },
             //分页信息
@@ -78,16 +78,15 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
             limit: 10,
             //单元格设置
             cols: [[
+                {width: 90, type: 'checkbox'},
                 {field: 'activityId', width: 90, title: '活动ID'},
                 {field: 'activityName', width: 90, title: '活动名称'},
-                {field: 'activityChnnal', width: 80, title: '活动渠道'},
+                {field: 'activityChnnal', width: 120, title: '活动渠道'},
                 {field: 'activityBatchno', width: 90, title: '活动批次号'},
                 {field: 'discountType', width: 100, title: '优惠类型'},
-                {field: 'coopOrgan', width: 90, title: '合作机构'},
                 {field: 'startTime', title: '活动开始时间', width: 90},
                 {field: 'endTime', title: '活动结束时间', width: 90},
                 {field: 'fundType', title: '资金模式', width: 100},
-                {field: 'activityMaster', title: '活动拓展人', width: 120},
                 {
                     field: 'zk',
                     title: '参与商户',
@@ -99,6 +98,7 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
                     templet: '<div>{{# if( d.activityFile == null){ }} 无    {{# } else { }}<a class="iconfont icon-chakanbaogao" style="margin-left: 3%; color: #2196F3;border-radius: 5px; cursor: pointer;text-decoration: underline;" target="_blank" lay-event="downloadattch">  查看 </a>{{# } }}</div>'
                 },
                 {field: 'activityStatus', title: '活动状态', width: 120},
+                {field: 'activityType', title: '活动类型', width: 120},
                 {fixed: 'right', title: '操作', toolbar: '#operator', width: 120}
             ]]
         });
@@ -115,15 +115,54 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
     $("#resetBtn").on("click", function () {
         $("#activityName").val("");
         $("#activityBatchno").val("");
-        $("#coopOrgan").val("");
         $("#discountType").val("");
         $("#activityChnnal").val("");
         $("#fundType").val("");
     });
 
+    //批量删除
+    $("#batchDetele").on("click", function () {
+        var checkStatus = table.checkStatus('activityTable'); //获取选中行
+        var length=checkStatus.data.length;
+        if (length==0){
+            return;
+        }
+        var deleteData={
+            deleteIds:[]
+        };
+
+        for (var activity of checkStatus.data){
+            deleteData.deleteIds.push(activity.activityId);
+        }
+
+        var index = layer.confirm("确定要删除选中的"+length+"项吗？", function () {
+            var url = '/manage/activity/batchDelete';
+            $.ajax({
+                type:'post',
+                url:url,
+                contentType :'application/json',
+                data:JSON.stringify(deleteData),
+                dataType:'json',
+                success:function (res) {
+                    layer.close(index);
+                    if (res.code=="00000"){
+                        layer.alert("操作成功",function () {
+                            layer.closeAll();
+                            search();
+                        });
+                    } else {
+                        layer.alert("操作失败："+res.msg);
+                    }
+                }
+            });
+        })
 
 
-    //新增商户
+    });
+
+
+
+    //新增活动
     $("#addBtn").on("click", function () {
         openModal("新增活动", "addForm");
 
@@ -137,7 +176,6 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
 
         $("#addForm").find("select[name='fundType']").attr("disabled", false);
 
-        $("#addForm").find("input[name='activityMaster']").attr('readonly',false);
 
         $("#addForm").find("input[name='activity_file']").show();
         $("#activityFile").hide();
@@ -154,13 +192,15 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
 
         $("#addForm").find("input[name='bankLimit']").attr('readonly',false);
 
-        $("#addForm").find("input[name='coopOrgan']").attr('readonly',false);
+        $("#addForm").find("select[name='activityType']").attr("disabled", false);
 
         $("#addForm").find("textarea[name='activityRemark']").attr('readonly',false);
         $("#addSubmit").show();
         $("#editbtn").hide();
 
         $("#addForm")[0].reset();
+        $("#addForm").find("input[name='proId']").val($.trim($("#proId").val()));
+        $("#addForm").find("input[name='proName']").val($.trim($("#proName").val()));
         form.render();
     });
 
@@ -168,7 +208,7 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
 
 
 
-    //批导活动
+  /*  //批导活动
     layui.use(["upload"], function() {
         var upload = layui.upload;
         upload.render({
@@ -189,13 +229,13 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
                 search();
             }
         });
-    });
+    });*/
 
 
-    //下载模板
+  /*  //下载模板
     $("#downloadTemplate").on("click", function () {
         window.location.href = "/manage/activity/downloadTemplate";
-    });
+    });*/
 
     //监听table行工具事件 如详情、编辑、删除操作
     table.on('tool(tableFilter)', function (obj) {
@@ -233,8 +273,7 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
             $("#addForm").find("select[name='fundType']").attr("disabled", "disabled");
             $("#addForm").find("select[name='fundType']").val(myData.fundType);
 
-            $("#addForm").find("input[name='activityMaster']").attr('readonly',true);
-            $("#addForm").find("input[name='activityMaster']").val(myData.activityMaster);
+
 
             $("#addForm").find("input[name='activity_file']").hide();
             //$("#addForm").find("input[name='activityFile']").attr('readonly',true);
@@ -260,8 +299,8 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
             $("#addForm").find("input[name='bankLimit']").attr('readonly',true);
             $("#addForm").find("input[name='bankLimit']").val(myData.bankLimit);
 
-            $("#addForm").find("input[name='coopOrgan']").attr('readonly',true);
-            $("#addForm").find("input[name='coopOrgan']").val(myData.coopOrgan);
+            $("#addForm").find("select[name='activityType']").attr("disabled", "disabled");
+            $("#addForm").find("select[name='activityType']").val(myData.activityType);
 
             $("#addForm").find("textarea[name='activityRemark']").attr('readonly',true);
             $("#addForm").find("textarea[name='activityRemark']").val(myData.activityRemark);
@@ -270,6 +309,8 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
 
             $("#addSubmit").hide();
             $("#editbtn").show();
+            $("#addForm").find("input[name='proId']").val($.trim($("#proId").val()));
+            $("#addForm").find("input[name='proName']").val($.trim($("#proName").val()));
             form.render();
         }
 
@@ -300,9 +341,20 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
     });
 
 
+
+
     //提交新增编辑表单
     form.on('submit(saveActivityFilter)',function (data) {
         window.console.info("开始处理");
+
+        $("#addForm").find("select[name='activityChnnal']").attr("disabled", false);
+
+        $("#addForm").find("select[name='discountType']").attr("disabled", false);
+
+        $("#addForm").find("select[name='fundType']").attr("disabled", false);
+
+        $("#addForm").find("select[name='fundType']").attr("disabled", false);
+
         var formData = new FormData(document.getElementById("addForm"));
         var url = '/manage/activity/saveOrUpdata';
         $.ajax({
@@ -334,23 +386,22 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
     //编辑表单
     form.on('submit(editActivityFilter)',function (data) {
         var mydata=data.field;
-        $("#addForm").find("input[name='activityName']").attr('readonly',false);
+        $("#addForm").find("input[name='activityName']").attr('readonly',true);
         $("#addForm").find("input[name='activityName']").val(mydata.activityName);
 
-        $("#addForm").find("select[name='activityChnnal']").attr("disabled",false);
+        $("#addForm").find("select[name='activityChnnal']").attr("disabled","disabled");
         $("#addForm").find("select[name='activityChnnal']").val(mydata.activityChnnal);
 
-        $("#addForm").find("input[name='activityBatchno']").attr('readonly',false);
+        $("#addForm").find("input[name='activityBatchno']").attr('readonly',true);
         $("#addForm").find("input[name='activityBatchno']").val(mydata.activityBatchno);
 
-        $("#addForm").find("select[name='discountType']").attr("disabled",false);
+        $("#addForm").find("select[name='discountType']").attr("disabled","disabled");
         $("#addForm").find("select[name='discountType']").val(mydata.discountType);
 
-        $("#addForm").find("select[name='fundType']").attr("disabled",false);
+        $("#addForm").find("select[name='fundType']").attr("disabled","disabled");
         $("#addForm").find("select[name='fundType']").val(mydata.fundType);
 
-        $("#addForm").find("input[name='activityMaster']").attr('readonly',false);
-        $("#addForm").find("input[name='activityMaster']").val(mydata.activityMaster);
+
 
         $("#addForm").find("input[name='activity_file']").show();
         $("#activityFile").hide();
@@ -374,8 +425,8 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
         $("#addForm").find("input[name='bankLimit']").attr('readonly',false);
         $("#addForm").find("input[name='bankLimit']").val(mydata.bankLimit);
 
-        $("#addForm").find("input[name='coopOrgan']").attr('readonly',false);
-        $("#addForm").find("input[name='coopOrgan']").val(mydata.coopOrgan);
+        $("#addForm").find("select[name='activityType']").attr("disabled","disabled");
+        $("#addForm").find("select[name='activityType']").val(mydata.activityType);
 
         $("#addForm").find("textarea[name='activityRemark']").attr('readonly',false);
         $("#addForm").find("textarea[name='activityRemark']").val(mydata.activityRemark);
@@ -384,6 +435,9 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
 
         $("#addSubmit").show();
         $("#editbtn").hide();
+
+        $("#addForm").find("input[name='proId']").val($.trim($("#proId").val()));
+        $("#addForm").find("input[name='proName']").val($.trim($("#proName").val()));
         form.render();
 
         return false;

@@ -33,15 +33,11 @@ public class MerchantsExcelModal extends BaseRowModel implements Serializable {
      */
     @ExcelProperty(value="所属行业",index=1)
     private String belongIndustry;
-    /**
-     * 品牌名
-     */
-    @ExcelProperty(value="品牌名称",index=3)
-    private String brandName;
+
     /**
      * 商圈
      */
-    @ExcelProperty(value="商圈名称",index=4)
+    @ExcelProperty(value="商圈名称",index=3)
     private String tradingArea;
     /**
      * 地区 枚举类型值：舟山市,杭州市,嘉兴市,温州市,宁波市,绍兴市,湖州市,丽水市,台州市,金华市,衢州市。
@@ -51,78 +47,67 @@ public class MerchantsExcelModal extends BaseRowModel implements Serializable {
     /**
      * 是否为通联商户 枚举类型值：通联、非通联
      */
-    @ExcelProperty(value="商户所属",index=5)
+    @ExcelProperty(value="商户所属",index=4)
     private String isAllinpaymer;
     /**
      * 表示商户的来源渠道 展现形式：通联自拓 合作方推荐-合作方名
      */
-    @ExcelProperty(value="商户拓展渠道",index=6)
+    @ExcelProperty(value="商户拓展渠道",index=5)
     private String expandChannl;
     /**
      * 商户拓展人
      */
-    @ExcelProperty(value="商户拓展人",index=7)
+    @ExcelProperty(value="商户拓展人",index=6)
     private String expandPerson;
     /**
      * 收银宝商户id
      */
-    @ExcelProperty(value="收银宝商户号",index=8)
+    @ExcelProperty(value="收银宝商户号",index=7)
     private String allinpayMerid;
     /**
      * 支付宝子商户id
      */
-    @ExcelProperty(value="支付宝子商户号",index=10)
+    @ExcelProperty(value="支付宝子商户号",index=9)
     private String alipayMerid;
     /**
      * 微信子商户id
      */
-    @ExcelProperty(value="微信子商户号",index=9)
+    @ExcelProperty(value="微信子商户号",index=8)
     private String wxpayMerid;
     /**
      * 云闪付商户id
      */
-    @ExcelProperty(value="云闪付子商户号",index=11)
+    @ExcelProperty(value="云闪付子商户号",index=10)
     private String cloudpayMerid;
     /**
      * 联系人
      */
-    @ExcelProperty(value="联系人",index=12)
+    @ExcelProperty(value="联系人",index=11)
     private String contacts;
     /**
      * 联系方式
      */
-    @ExcelProperty(value="联系方式",index=13)
+    @ExcelProperty(value="联系方式",index=12)
     private String contactsWay;
     /**
      * 联系地址
      */
-    @ExcelProperty(value="联系地址",index=14)
+    @ExcelProperty(value="联系地址",index=13)
     private String contactsAddress;
     /**
      * 备注
      */
-    @ExcelProperty(value="备注",index=15)
+    @ExcelProperty(value="备注",index=14)
     private String remark;
-
-    /**
-     * 是否签约
-     * */
-    @ExcelProperty(value="是否签约",index=16)
-    private String isSigned;
-
 
     /**
      * 设备ID
      * */
-    @ExcelProperty(value="设备ID",index=17)
+    @ExcelProperty(value="设备ID",index=15)
     private String equipId;
 
 
-    /**
-     * 是否测试
-     * */
-    @ExcelProperty(value="是否测试",index=18)
-    private String isTest;
+
 
 
 }
