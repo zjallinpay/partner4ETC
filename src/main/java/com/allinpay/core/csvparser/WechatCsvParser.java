@@ -29,7 +29,7 @@ public class WechatCsvParser  {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(is,"GBK"));
             boolean sign = false;       //用来跳过第一行的名称
-            int count=0;
+            int count=1;
             while(reader.ready()) {
                 String line = reader.readLine();
                 StringTokenizer st = new StringTokenizer(line, ",");
