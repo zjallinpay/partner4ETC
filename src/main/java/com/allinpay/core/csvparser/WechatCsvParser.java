@@ -20,16 +20,16 @@ public class WechatCsvParser  {
     public static void readCSV(MultipartFile multipartFile, List<TEtcActivtydataWechat> list) {
         String filename = multipartFile.getOriginalFilename();
         InputStream is = null;
+        int count=1;
         try {
         if (filename != null &&filename.toLowerCase().endsWith(".csv")) {
             is = multipartFile.getInputStream();
         } else {
             throw new AllinpayException("上传文件非csv文件");
         }
-
             BufferedReader reader = new BufferedReader(new InputStreamReader(is,"GBK"));
             boolean sign = false;       //用来跳过第一行的名称
-            int count=1;
+
             while(reader.ready()) {
                 String line = reader.readLine();
                 StringTokenizer st = new StringTokenizer(line, ",");
@@ -72,7 +72,9 @@ public class WechatCsvParser  {
             throw new AllinpayException("解析csv文件出错");
         } catch (ParseException e) {
             e.printStackTrace();
-            throw new AllinpayException("解析csv文件出错");
+            throw new AllinpayException("第"+count+"行转换日期格式出错");
+        } catch (NumberFormatException e){
+            throw new AllinpayException("第"+count+"行"+e.getMessage());
         }
     }
 }
