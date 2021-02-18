@@ -105,7 +105,7 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
             elem: "#batchAddBtn",//导入id
             url: "/manage/activitydatawechat/batchImport",
             field:'multipartFile',
-            size: '2048',
+            size: '20480',
             accept: "file",
             exts: 'xls|xlsx|csv',
             method:'post',

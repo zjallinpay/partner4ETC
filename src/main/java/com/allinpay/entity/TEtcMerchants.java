@@ -38,7 +38,6 @@ public class TEtcMerchants implements Serializable {
     /**
      * 所属行业
      */
-    @NotBlank
     @TableField("BELONG_INDUSTRY")
     private String belongIndustry;
 
@@ -62,13 +61,11 @@ public class TEtcMerchants implements Serializable {
     /**
      * 表示商户的来源渠道 展现形式：通联自拓 合作方推荐-合作方名
      */
-    @NotBlank
     @TableField("EXPAND_CHANNL")
     private String expandChannl;
     /**
      * 商户拓展人
      */
-    @NotBlank
     @TableField("EXPAND_PERSON")
     private String expandPerson;
     /**

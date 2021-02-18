@@ -167,16 +167,23 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
 
     layui.use(["upload"], function() {
         var upload = layui.upload;
+        var loading =null;
         upload.render({
             elem: "#batchAddBtn",//导入id
             url: "/manage/merchants/batchImport",
             field:'multipartFile',
-            size: '2048',
+            size: '20480',
             accept: "file",
             exts: 'xls|xlsx',
             method:'post',
             contentType:'multipart/form-data;charset=utf-8',
+            choose: function(obj){
+                loading=layer.load(1, {
+                    shade: false
+                });
+            },
             done: function (result) {
+                layer.close(loading);
                 if (result.code == "00000") {
                     layer.alert("批导成功，共"+result.data+"条。");
                 } else {

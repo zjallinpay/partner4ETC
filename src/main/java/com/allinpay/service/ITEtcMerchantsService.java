@@ -5,6 +5,7 @@ import com.allinpay.entity.TEtcMerchants;
 import com.allinpay.entity.vo.MerchantQueryVo;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -28,6 +29,7 @@ public interface ITEtcMerchantsService {
     ResponseBean deleteById(int merId);
 
     //批量导入商户
+    @Transactional
     ResponseBean batchImport(MultipartFile multipartFile);
 
     //批量导出商户
