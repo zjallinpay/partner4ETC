@@ -52,6 +52,8 @@ public class QrcodeServiceImpl implements IQrcodeService {
         log.info("查询结果：{}",JSON.toJSONString(merchant));
         if (merchant!=null)
             return ResponseData.failure("5001","商户已经存在");
+
+        qrcode.setSignType("1".equals(qrcode.getPartnerModel())?"RSA":"MD5");
         qrcodeMapper.saveMerchant(qrcode);
         return ResponseData.success();
     }
@@ -126,6 +128,7 @@ public class QrcodeServiceImpl implements IQrcodeService {
                     qrcode.setAppKey(ExcelRead.getCellFormatValue(row.getCell(3)).toString().trim());
                     qrcode.setPartnerModel(ExcelRead.getCellFormatValue(row.getCell(4)).toString());
                     qrcode.setOrgId(ExcelRead.getCellFormatValue(row.getCell(5)).toString());
+                    qrcode.setSignType("1".equals(qrcode.getPartnerModel())?"RSA":"MD5");
                     qrcodeList.add(qrcode);
                 }
             }

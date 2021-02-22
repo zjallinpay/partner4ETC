@@ -17,6 +17,6 @@ public class Qrcode {
     private String status;
     private String partnerModel;
     private String updateTime;
-
+    private String signType;
     private Integer pageSize;
 }

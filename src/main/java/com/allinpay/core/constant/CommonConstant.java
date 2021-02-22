@@ -114,6 +114,7 @@ public class CommonConstant {
     public static int QR_IMAGE_WIDTH = 350;
     public static int QR_IMAGE_LENGTH = 300;
     public static String QR_URL = "https://issue.allinpay.com/h5pay/sjq/index/";
+    public static String TEST_URL = "http://test.pay.zj.cn/h5pay/sjq/index/";
 
 
     public static final String RESPONSE_SUCCESS_0000 = "0000";

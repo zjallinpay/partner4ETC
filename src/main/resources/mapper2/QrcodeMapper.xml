@@ -10,16 +10,18 @@
         <result column="ORG_ID" property="orgId" jdbcType="VARCHAR"/>
         <result column="STATUS" property="status" jdbcType="VARCHAR"/>
         <result column="UPDATE_TIME" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="SIGN_TYPE" property="signType" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="saveMerchant" parameterType="com.allinpay.entity.Qrcode">
         INSERT INTO T_SJQ_MERCHANT_INFO (MCHT_ID,MCHT_NAME,APP_ID,SECRET_KEY,ORG_ID,
-            INSERT_TIME,UPDATE_TIME,PARTNER_MODEL,STATUS) values
+            INSERT_TIME,UPDATE_TIME,PARTNER_MODEL,STATUS,SIGN_TYPE) values
         (#{mchtId,jdbcType=VARCHAR},
         #{mchtName,jdbcType=VARCHAR},#{appId,jdbcType=VARCHAR},
         #{appKey,jdbcType=VARCHAR},
         #{orgId,jdbcType=VARCHAR},TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),
-        TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),#{partnerModel,jdbcType=VARCHAR},'1')
+        TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),#{partnerModel,jdbcType=VARCHAR},'1'
+        ,#{signType,jdbcType=VARCHAR})
     </insert>
 
     <select id="queryMerchants" parameterType="com.allinpay.entity.Qrcode" resultMap="MerchantResultMap">
@@ -60,20 +62,20 @@
             <if test="status!=null and status!=''">
                 T.STATUS = #{status}
             </if>
-
         </set>
         WHERE T.MCHT_ID = #{mchtId}
     </update>
 
     <insert id="batchSaveMerchants" parameterType="com.allinpay.entity.Qrcode">
         INSERT INTO T_SJQ_MERCHANT_INFO (MCHT_ID,MCHT_NAME,APP_ID,SECRET_KEY,ORG_ID,
-            INSERT_TIME,UPDATE_TIME,PARTNER_MODEL,STATUS)
+            INSERT_TIME,UPDATE_TIME,PARTNER_MODEL,STATUS,SIGN_TYPE)
         <foreach collection="list" item="item" index="index" separator="union all" >
             select #{item.mchtId,jdbcType=VARCHAR},
             #{item.mchtName,jdbcType=VARCHAR},#{item.appId,jdbcType=VARCHAR},
             #{item.appKey,jdbcType=VARCHAR},
             #{item.orgId,jdbcType=VARCHAR},TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),
             TO_CHAR(SYSDATE,'yyyy-mm-dd hh24:mi:ss'),#{item.partnerModel,jdbcType=VARCHAR},'1'
+            ,#{item.signType,jdbcType=VARCHAR}
             from dual
         </foreach>
     </insert>

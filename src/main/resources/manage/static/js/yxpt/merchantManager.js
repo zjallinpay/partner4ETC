@@ -290,7 +290,7 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
     //提交新增编辑表单
     form.on('submit(saveMerchantFilter)',function (data) {
         window.console.info("开始处理");
-
+        $("#addForm").find("select[name='isAllinpaymer']").attr("disabled", false);
         var formData = new FormData(document.getElementById("addForm"));
         var url = '/manage/merchants/saveOrUpdata';
         $.ajax({
