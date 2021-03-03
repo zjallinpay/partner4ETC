@@ -5,7 +5,7 @@
     <meta content="webkit" name="renderer">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
-    <title>报表统计</title>
+    <title>活动报表统计</title>
     <link href="/manage/static/layui/css/layui.css" rel="stylesheet">
     <link href="/manage/static/css/common.css" rel="stylesheet">
     <style type="text/css">
@@ -37,21 +37,24 @@
         <div style="margin: 10px">
             <span class="layui-breadcrumb">
                 <a href="">营销平台</a>
-                <a href="javascript:history.go(-1)"><cite>数据导入与报表</cite></a>
-                  <a ><cite>报表统计</cite></a>
+
+                  <a ><cite>活动报表统计</cite></a>
             </span>
-            <div style="margin: 10px">
-                <span th:text="${activityName}"/>
-                <span th:text="${acBatchId}"/>
-            </div>
+
         </div>
 
         <!--查询条件-->
         <form class="layui-form" id="queryForm" lay-filter="queryFilter">
             <div class="layui-form-item" style="margin-top: 20px;">
-                <input hidden id="acBatchId" name="acBatchId" th:value="${acBatchId}" />
-                <input hidden id="activityName"  th:value="${activityName}"/>
 
+                <div class="layui-inline">
+                    <label class="layui-form-label">活动批次号</label>
+                    <div class="layui-input-inline" style="width: 200px;">
+                        <input autocomplete="off" class="layui-input"  id="acBatchId"
+                               name="acBatchId" type="text">
+
+                    </div>
+                </div>
 
                 <div class="layui-inline">
                     <label class="layui-form-label">报表时间段</label>

@@ -15,6 +15,8 @@ public interface TEtcActivitydataWechatMapper extends BaseMapper<TEtcActivtydata
 
     List<MerchantStatsModal> selectMerchantStatsDatas(TEtcStatsrecord tEtcStatsrecord);
 
+    List<MerchantStatsModal> selectExMerchantStatsDatas(TEtcStatsrecord tEtcStatsrecord);
+
 
     List<PropertyStatsModal> selectPropertStatsDatas(TEtcStatsrecord tEtcStatsrecord);
 

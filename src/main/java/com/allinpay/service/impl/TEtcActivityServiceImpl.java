@@ -61,7 +61,10 @@ public class TEtcActivityServiceImpl implements ITEtcActivityService {
                 .eq(StringUtils.isNotBlank(acitvityQueryVo.getActivityBatchno()),"ACTIVITY_BATCHNO",acitvityQueryVo.getActivityBatchno())
                 .eq(StringUtils.isNotBlank(acitvityQueryVo.getActivityChnnal()),"ACTIVITY_CHNNAL",acitvityQueryVo.getActivityChnnal())
                 .eq(StringUtils.isNotBlank(acitvityQueryVo.getFundType()),"FUND_TYPE",acitvityQueryVo.getFundType())
+                .eq(StringUtils.isNotBlank(acitvityQueryVo.getActivityType()),"ACTIVITY_TYPE",acitvityQueryVo.getActivityType())
+                .eq(StringUtils.isNotBlank(acitvityQueryVo.getIsOutActivity()),"IS_OUT_ACTIVITY",acitvityQueryVo.getIsOutActivity())
                 .like(StringUtils.isNotBlank(acitvityQueryVo.getActivityName()),"ACTIVITY_NAME",acitvityQueryVo.getActivityName())
+                .like(StringUtils.isNotBlank(acitvityQueryVo.getProName()),"PRO_NAME",acitvityQueryVo.getProName())
                 .orderByDesc("ACTIVITY_ID")
         );
         PageInfo<TEtcActivity> pageInfo = new PageInfo<TEtcActivity>(tEtcActivities);

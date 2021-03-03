@@ -11,5 +11,5 @@ public interface ITEtcStatsrecordService {
 
     ResponseBean downloadRecord(Integer reId, HttpServletResponse response) throws IOException;
 
-    ResponseBean queryAll(String acBatchId, Integer pageNo, Integer pageSize);
+    ResponseBean queryAll(Integer pageNo, Integer pageSize);
 }

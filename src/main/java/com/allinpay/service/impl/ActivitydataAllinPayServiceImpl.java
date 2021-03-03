@@ -136,6 +136,11 @@ public class ActivitydataAllinPayServiceImpl implements IEtcActivitydataAllinPay
         return ResponseBean.ok(ExcelUtils.outPutExcel(activitydataAllinpayExcelModals,response,ActivitydataAllinpayExcelModal.class,fileName+".xls",fileName));
     }
 
+    @Override
+    public ResponseBean deleteByActId(String barchId) {
+        int index=activitydataAllinpayMapper.delete( new QueryWrapper<TEtcActivitydataAllinpay>().eq("AC_BATCH_ID",barchId));
+        return ResponseBean.ok(index+"条数据被删除");
+    }
 
 
     private int batchInsertData(List<TEtcActivitydataAllinpay> insertData){

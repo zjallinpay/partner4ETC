@@ -25,4 +25,7 @@ public interface IEtcActivitydataWechatService {
 
     //批量导出微信数据
     ResponseBean batchOutput(ActivitydataWechatQueryVo activitydataWechatQueryVo, HttpServletResponse response) throws IOException;
+
+    //删除批次号下所有数据
+    ResponseBean deleteByActId(String barchId);
 }

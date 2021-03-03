@@ -18,4 +18,5 @@ public interface IEtcActivitydataAllinPayService {
 
     ResponseBean batchOutput(ActivitydataAllinPayQueryVo activitydataAllinPayQueryVo, HttpServletResponse response) throws IOException;
 
+    ResponseBean deleteByActId(String barchId);
 }

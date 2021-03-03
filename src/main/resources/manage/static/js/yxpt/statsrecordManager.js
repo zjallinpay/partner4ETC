@@ -32,7 +32,6 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
             page: true,
             //请求参数
             where: {
-                acBatchId: $.trim($("#acBatchId").val())
             },
             //分页信息
             request: {
@@ -61,6 +60,10 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
             limit: 10,
             //单元格设置
             cols: [[
+                {field: 'activityName', width: 120, title: '活动名称'},
+                {field: 'acBatchId', width: 120, title: '批次号'},
+                {field: 'activityType', width: 120, title: '活动类型'},
+                {field: 'isOutActivity', width: 120, title: '是否为外部活动'},
                 {field: 'createTime', width: 120, title: '导出时间'},
                 {field: 'reStartTime', width: 120, title: '起始时间'},
                 {field: 'reEndTime', width: 120, title: '截止时间'},

@@ -139,6 +139,12 @@ public class TEtcActivity implements Serializable {
     @TableField(exist = false)
     private String activityStatus;
 
+    /**
+     * 是否外部活动 是 否
+     */
+    @NotBlank
+    private String isOutActivity;
+
     public String getActivityStatus() {
         if (null==startTime||endTime==null||System.currentTimeMillis()<startTime.getTime()){
             return "未开始";

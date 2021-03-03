@@ -52,32 +52,42 @@
 
 
     <resultMap type="com.allinpay.entity.MerchantStatsModal" id="MerchantStatsModalMap">
-        <result property="acMerchantId" column="AC_MERCHANT_ID" />
+        <result property="acBatchId" column="AC_BATCH_ID" />
         <result property="merName" column="MER_NAME" />
         <result property="discountNum" column="DISCOUNT_NUM" />
         <result property="area" column="AREA" />
         <result property="tradingArea" column="TRADING_AREA" />
         <result property="checkNum" column="CHECK_NUM" />
         <result property="discountAmount" column="DISCOUNT_AMOUNT" />
-        <result property="equipId" column="EQUIP_ID" />
     </resultMap>
 
     <select id="selectMerchantStatsDatas" resultMap="MerchantStatsModalMap" >
-        SELECT
-        wechat.AC_PAYMERCHANT_ID as "AC_MERCHANT_ID",
-        wechat.AC_PAYMERCHANT_NAME as "MER_NAME",
-        MAX(wechat.AC_DISCOUNT_NUM) as "DISCOUNT_NUM",
-        wechat.AC_EQUIMENT_ID as "EQUIP_ID",
-        COUNT(case  when wechat.AC_EXCHANGE_TYPE='支付' then 1 else null end
-         )-COUNT( case  when wechat.AC_EXCHANGE_TYPE='退款' then 1 else null end) as "CHECK_NUM",
-         MAX(wechat.AC_DISCOUNT_NUM)*(COUNT(case  when wechat.AC_EXCHANGE_TYPE='支付' then 1 else null end
-         )-COUNT( case  when wechat.AC_EXCHANGE_TYPE='退款' then 1 else null end)) as DISCOUNT_AMOUNT
-            FROM T_ETC_ACTIVTYDATA_WECHAT wechat
-            WHERE wechat.AC_BATCH_ID=#{acBatchId} AND wechat.AC_PAYTIME
-            BETWEEN #{reStartTime} and #{reEndTime}
-            GROUP BY wechat.AC_PAYMERCHANT_ID,wechat.AC_PAYMERCHANT_NAME, wechat.AC_EQUIMENT_ID
-
+        	SELECT wechat.AC_BATCH_ID,mer.MER_NAME,mer.AREA,mer.TRADING_AREA,
+			MAX(wechat.AC_DISCOUNT_NUM) as "DISCOUNT_NUM",
+			COUNT(case  when wechat.AC_EXCHANGE_TYPE='支付' then 1 else null end)-COUNT( case  when wechat.AC_EXCHANGE_TYPE='退款' and abs(wechat.AC_DISCOUNT_NUM) >=20 then 1 else null end) as "CHECK_NUM",
+            SUM(case  when wechat.AC_EXCHANGE_TYPE='支付' then abs(wechat.AC_DISCOUNT_NUM) else 0 end)-SUM( case  when wechat.AC_EXCHANGE_TYPE='退款'  then abs(wechat.AC_DISCOUNT_NUM) else 0 end) as "DISCOUNT_AMOUNT"
+			FROM T_ETC_ACTIVTYDATA_WECHAT wechat LEFT JOIN T_ETC_MERCHANTS mer
+			ON wechat.AC_PAYMERCHANT_ID=mer.WXPAY_MERID
+			and (mer.EQUIP_ID IS NULL OR mer.EQUIP_ID=wechat.AC_EQUIMENT_ID)
+			WHERE wechat.AC_BATCH_ID=#{acBatchId}
+			AND wechat.AC_PAYTIME
+			BETWEEN #{reStartTime} and #{reEndTime}
+			GROUP BY wechat.AC_PAYMERCHANT_ID,mer.EQUIP_ID, wechat.AC_BATCH_ID,mer.MER_NAME,mer.AREA,mer.TRADING_AREA
     </select>
+
+
+    <select id="selectExMerchantStatsDatas" resultMap="MerchantStatsModalMap" >
+       	SELECT wechat.AC_BATCH_ID,wechat.AC_PAYMERCHANT_NAME as "MER_NAME",
+       	MAX(wechat.AC_DISCOUNT_NUM) as "DISCOUNT_NUM",
+		COUNT(case  when wechat.AC_EXCHANGE_TYPE='支付' then 1 else null end)-COUNT( case  when wechat.AC_EXCHANGE_TYPE='退款' and abs(wechat.AC_DISCOUNT_NUM) >=20 then 1 else null end) as "CHECK_NUM",
+        SUM(case  when wechat.AC_EXCHANGE_TYPE='支付' then abs(wechat.AC_DISCOUNT_NUM) else 0 end)-SUM( case  when wechat.AC_EXCHANGE_TYPE='退款'  then abs(wechat.AC_DISCOUNT_NUM) else 0 end) as "DISCOUNT_AMOUNT"
+		FROM T_ETC_ACTIVTYDATA_WECHAT wechat
+		WHERE wechat.AC_BATCH_ID=#{acBatchId}
+		AND wechat.AC_PAYTIME
+		BETWEEN #{reStartTime} and #{reEndTime}
+		GROUP BY wechat.AC_PAYMERCHANT_NAME, wechat.AC_BATCH_ID
+    </select>
+
 
 
     <resultMap type="com.allinpay.entity.PropertyStatsModal" id="PropertyStatsModalMap">
@@ -94,16 +104,25 @@
 
         SELECT
 			wechat.AC_PAYMERCHANT_ID as "AC_MERCHANT_ID",
-			mer.MER_NAME as "MER_NAME",
 			MAX(wechat.AC_DISCOUNT_NUM) as "DISCOUNT_NUM",
-			mer.AREA as "AREA",
 			COUNT(case  when wechat.AC_EXCHANGE_TYPE='支付' then 1 else null end
 			)-COUNT( case  when wechat.AC_EXCHANGE_TYPE='退款' then 1 else null end) as "CHECK_NUM"
-			FROM T_ETC_ACTIVTYDATA_WECHAT wechat  LEFT JOIN T_ETC_MERCHANTS mer
-            ON wechat.AC_PAYMERCHANT_ID=mer.WXPAY_MERID
-            WHERE wechat.AC_BATCH_ID=#{acBatchId} AND wechat.AC_PAYTIME
-            BETWEEN #{reStartTime} and #{reEndTime}
-            GROUP BY wechat.AC_PAYMERCHANT_ID,wechat.AC_PAYMERCHANT_NAME,mer.AREA,mer.MER_NAME
+			FROM T_ETC_ACTIVTYDATA_WECHAT wechat
+            WHERE  wechat.AC_PAYTIME BETWEEN #{reStartTime} and #{reEndTime}
+            AND
+            <choose>
+                <when test="acBatchIds!=null and acBatchIds.size()>0">
+                    wechat.AC_BATCH_ID in
+                    <foreach item="item" index="index" collection="acBatchIds" open="("  close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </when>
+                <otherwise>
+                    wechat.AC_BATCH_ID=#{acBatchId}
+                </otherwise>
+            </choose>
+
+            GROUP BY wechat.AC_PAYMERCHANT_ID
     </select>
 
 
@@ -118,8 +137,19 @@
             (
                 SELECT DISTINCT AC_BANK_NUM ,AC_PAYMERCHANT_NAME,AC_PAYMERCHANT_ID,AC_ORDER_AMOUNT,AC_EXCHANGE_TYPE,AC_EQUIMENT_ID
                 from T_ETC_ACTIVTYDATA_WECHAT
-                WHERE AC_BATCH_ID=#{acBatchId} AND AC_PAYTIME
-                BETWEEN #{reStartTime} and #{reEndTime}
+                WHERE AC_PAYTIME BETWEEN #{reStartTime} and #{reEndTime}
+                 AND
+                <choose>
+                    <when test="acBatchIds!=null and acBatchIds.size()>0">
+                        AC_BATCH_ID in
+                        <foreach item="item" index="index" collection="acBatchIds" open="("  close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </when>
+                    <otherwise>
+                        AC_BATCH_ID=#{acBatchId}
+                    </otherwise>
+                </choose>
             ) acamount
             GROUP BY acamount.AC_PAYMERCHANT_NAME,acamount.AC_PAYMERCHANT_ID
 

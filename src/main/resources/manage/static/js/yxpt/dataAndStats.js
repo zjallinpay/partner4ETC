@@ -19,7 +19,13 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
             page: true,
             //请求参数
             where: {
-                activityBatchno: $.trim($("#activityBatchno").val())
+                activityName: $.trim($("#activityName").val()),
+                discountType: $.trim($("#discountType").val()),
+                activityBatchno: $.trim($("#activityBatchno").val()),
+                activityChnnal: $.trim($("#activityChnnal").val()),
+                activityType:$.trim($("#activityType").val()),
+                isOutActivity:$.trim($("#isOutActivity").val()),
+                proName:$.trim($("#proName").val())
             },
             //分页信息
             request: {
@@ -59,12 +65,12 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
                     field: 'ds',
                     title: '数据统计',
                     templet: '<div><a class="iconfont icon-chakanbaogao" style="margin-left: 3%; color: #2196F3;border-radius: 5px; cursor: pointer;text-decoration: underline;" target="_blank" lay-event="showData">查看</a></div>'
-                },
+                }/*,
                 {
                     field: 'rs',
                     title: '报表统计',
                     templet: '<div><a class="iconfont icon-chakanbaogao" style="margin-left: 3%; color: #2196F3;border-radius: 5px; cursor: pointer;text-decoration: underline;" target="_blank" lay-event="showStats">查看</a></div>'
-                }
+                }*/
             ]]
         });
     };
@@ -78,7 +84,14 @@ layui.use(['table', 'element', 'layer', 'form'], function () {
 
     //重置参数
     $("#resetBtn").on("click", function () {
+        $("#activityName").val("");
+        $("#discountType").val("");
         $("#activityBatchno").val("");
+        $("#activityChnnal").val("");
+        $("#activityType").val("");
+        $("#isOutActivity").val("");
+        $("#proName").val("");
+
     });
 
 

@@ -1,6 +1,7 @@
 package com.allinpay.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 报表导出记录(TEtcStatsrecord)实体类
@@ -57,7 +59,18 @@ public class TEtcStatsrecord implements Serializable {
      * 活动类型 商圈、物业
      */
     private String activityType;
+    /**
+     * 活动名称
+     */
 
+    private String activityName;
+
+
+    /**
+     * 是否为外部活动
+     */
+
+    private String isOutActivity;
 
     /**
      * 生成时间
@@ -69,7 +82,9 @@ public class TEtcStatsrecord implements Serializable {
      */
     private Date modifyTime;
 
-
+    //多个活动批次id同时处理
+    @TableField(exist = false)
+    private List<String> acBatchIds;
 
 
 }

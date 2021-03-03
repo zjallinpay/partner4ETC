@@ -49,7 +49,9 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
                 discountType: $.trim($("#discountType").val()),
                 activityBatchno: $.trim($("#activityBatchno").val()),
                 activityChnnal: $.trim($("#activityChnnal").val()),
-                fundType: $.trim($("#fundType").val())
+                fundType: $.trim($("#fundType").val()),
+                activityType:$.trim($("#activityType").val()),
+                isOutActivity:$.trim($("#isOutActivity").val())
             },
             //分页信息
             request: {
@@ -99,6 +101,7 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
                 },
                 {field: 'activityStatus', title: '活动状态', width: 120},
                 {field: 'activityType', title: '活动类型', width: 120},
+                {field: 'isOutActivity', title: '是否是外部活动', width: 90},
                 {fixed: 'right', title: '操作', toolbar: '#operator', width: 120}
             ]]
         });
@@ -194,6 +197,8 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
 
         $("#addForm").find("select[name='activityType']").attr("disabled", false);
 
+        $("#addForm").find("select[name='isOutActivity']").attr("disabled", false);
+
         $("#addForm").find("textarea[name='activityRemark']").attr('readonly',false);
         $("#addSubmit").show();
         $("#editbtn").hide();
@@ -245,7 +250,6 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
         //查看参与商户
         if (obj.event === 'showMers'){
             window.location.href = "/manage/activityMer/actMersPage?actId="+myData.activityId;
-
         }
         //下载附件
         if (obj.event ==='downloadattch'){
@@ -302,6 +306,9 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
             $("#addForm").find("select[name='activityType']").attr("disabled", "disabled");
             $("#addForm").find("select[name='activityType']").val(myData.activityType);
 
+            $("#addForm").find("select[name='isOutActivity']").attr("disabled", "disabled");
+            $("#addForm").find("select[name='isOutActivity']").val(myData.isOutActivity);
+
             $("#addForm").find("textarea[name='activityRemark']").attr('readonly',true);
             $("#addForm").find("textarea[name='activityRemark']").val(myData.activityRemark);
 
@@ -353,7 +360,10 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
 
         $("#addForm").find("select[name='fundType']").attr("disabled", false);
 
-        $("#addForm").find("select[name='fundType']").attr("disabled", false);
+        $("#addForm").find("select[name='activityType']").attr("disabled", false);
+
+        $("#addForm").find("select[name='isOutActivity']").attr("disabled", false);
+
 
         var formData = new FormData(document.getElementById("addForm"));
         var url = '/manage/activity/saveOrUpdata';
@@ -427,6 +437,9 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
 
         $("#addForm").find("select[name='activityType']").attr("disabled","disabled");
         $("#addForm").find("select[name='activityType']").val(mydata.activityType);
+
+        $("#addForm").find("select[name='isOutActivity']").attr("disabled","disabled");
+        $("#addForm").find("select[name='isOutActivity']").val(mydata.isOutActivity);
 
         $("#addForm").find("textarea[name='activityRemark']").attr('readonly',false);
         $("#addForm").find("textarea[name='activityRemark']").val(mydata.activityRemark);

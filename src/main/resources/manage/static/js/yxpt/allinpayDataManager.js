@@ -135,7 +135,29 @@ layui.use(['table', 'element', 'layer', 'form', 'laydate'], function () {
     });
 
 
-
+    //数据清除
+    $("#deleteAll").on("click", function () {
+        var getUrl='/manage/activitydataAllinPay/deleteByActId?barchId='+$("#acBatchId").val();
+        var index = layer.confirm("确定要清除数据吗？", function () {
+            $.ajax({
+                url: getUrl,
+                type: 'get',
+                data: '',
+                dataType: 'json',
+                success: function (data) {
+                    layer.close(index);
+                    if (data.code == "00000") {
+                        search();
+                    } else {
+                        layer.alert(data.msg);
+                    }
+                },
+                error: function () {
+                    layer.alert("操作失败，请重试！");
+                }
+            });
+        })
+    });
 
     //导出商家
     form.on('submit(outputDataFilter)',function (data) {

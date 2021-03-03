@@ -183,6 +183,8 @@ public class ActivitydataWechatServiceImpl implements IEtcActivitydataWechatServ
     }
 
 
+
+
     private int batchInsertData(List<TEtcActivtydataWechat> insertData){
         //为了防止SQL语句超出长度出错，分成几次插入
         int count=0;
@@ -220,5 +222,11 @@ public class ActivitydataWechatServiceImpl implements IEtcActivitydataWechatServ
         }
         sb.delete(sb.length() - 1, sb.length());
         return sb.toString();
+    }
+
+    @Override
+    public ResponseBean deleteByActId(String barchId) {
+        int index=tEtcActivitydataWechatMapper.delete( new QueryWrapper<TEtcActivtydataWechat>().eq("AC_BATCH_ID",barchId));
+        return ResponseBean.ok(index+"条数据被删除");
     }
 }

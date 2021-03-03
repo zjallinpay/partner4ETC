@@ -75,16 +75,14 @@
 			allinpay.AC_MERCHANT_ID as "AC_MERCHANT_ID",
 			allinpay.AC_MERCHANT_NAME as "MER_NAME",
 			MAX(allinpay.AC_DISCOUNT_NUM) as "DISCOUNT_NUM",
-			mer.AREA as "AREA",
 			COUNT(case  when allinpay.AC_EXCHANGE_STATUES='处理成功' then 1 else null end)
 			-COUNT( case  when allinpay.AC_EXCHANGE_STATUES='已撤销' then 1 else null end) as "CHECK_NUM",
 			SUM(case  when allinpay.AC_EXCHANGE_STATUES='处理成功' then allinpay.AC_EXCHANGE_SOURCENUM else 0 end)
             -SUM(case  when allinpay.AC_EXCHANGE_STATUES='已撤销' then allinpay.AC_EXCHANGE_SOURCENUM else 0 end) as BANK_AMOUNT,
             COUNT(1) as ACTIVE_USER_COUNT
-			FROM T_ETC_ACTIVITYDATA_ALLINPAY allinpay LEFT JOIN T_ETC_MERCHANTS mer
-            ON allinpay.AC_MERCHANT_ID=mer.ALLINPAY_MERID
+			FROM T_ETC_ACTIVITYDATA_ALLINPAY allinpay
             WHERE allinpay.AC_BATCH_ID=#{acBatchId} AND allinpay.CREATE_TIME
             BETWEEN #{reStartTime} and #{reEndTime}
-            GROUP BY allinpay.AC_MERCHANT_ID,allinpay.AC_MERCHANT_NAME,mer.AREA
+            GROUP BY allinpay.AC_MERCHANT_ID,allinpay.AC_MERCHANT_NAME
     </select>
 </mapper>

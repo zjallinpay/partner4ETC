@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class AcitvityQueryVo {
 
+    private String proName;
+
     private String activityName;
 
     private String discountType;
@@ -18,6 +20,10 @@ public class AcitvityQueryVo {
     private String fundType;
 
     private String proId;
+
+    private String activityType;
+
+    private String isOutActivity;
 
     private Integer pageNo;
 

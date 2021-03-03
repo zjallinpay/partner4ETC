@@ -31,9 +31,7 @@ public class MerchantStatsModal extends BaseRowModel implements Serializable {
     //门店
     @ExcelProperty(value="门店",index=4)
     private String merName;
-    //商户号
-    @ExcelIgnore
-    private String acMerchantId;
+
 
     //满减
     @ExcelIgnore
@@ -49,9 +47,7 @@ public class MerchantStatsModal extends BaseRowModel implements Serializable {
     //优惠金额（万元）
     @ExcelProperty(value="优惠金额（万元）",index=6)
     private BigDecimal discountAmount;
-    //设备号
-    @ExcelIgnore
-    private String equipId;
+
 
     public String getDiscountAndCheckText() {
         if (StringUtils.isNotBlank(discountAndCheckText)){

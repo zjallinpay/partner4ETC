@@ -46,5 +46,10 @@ public class ActivtydataWechatController {
         return activitydataWechatService.batchOutput(activitydataWechatQueryVo,response);
     }
 
+    @RequestMapping("/deleteByActId")
+    public ResponseBean deleteByActId(String barchId){
+        return activitydataWechatService.deleteByActId(barchId);
+    }
+
 
 }

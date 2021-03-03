@@ -45,5 +45,10 @@ public class ActivtydataAllinPayController {
         return activitydataAllinPayService.batchOutput(activitydataAllinPayQueryVo,response);
     }
 
+    @RequestMapping("/deleteByActId")
+    public ResponseBean deleteByActId(String barchId){
+        return activitydataAllinPayService.deleteByActId(barchId);
+    }
+
 
 }

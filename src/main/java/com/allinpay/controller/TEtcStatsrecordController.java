@@ -44,8 +44,8 @@ public class TEtcStatsrecordController {
 
     //查询所有活动所属记录
     @RequestMapping("/queryAll")
-    public ResponseBean queryAll(String acBatchId,Integer pageNo,Integer pageSize){
-        return itEtcStatsrecordService.queryAll(acBatchId,pageNo,pageSize);
+    public ResponseBean queryAll(Integer pageNo,Integer pageSize){
+        return itEtcStatsrecordService.queryAll(pageNo,pageSize);
     }
 
 
