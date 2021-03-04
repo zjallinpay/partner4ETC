@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -95,7 +96,17 @@ public class TEtcActivtydataWechat implements Serializable {
 
     private Date modifyTime;
 
+    public void setAcPaymentId(String acPaymentId) {
+        if (StringUtils.isBlank(acPaymentId))
+            return;
 
+        this.acPaymentId = acPaymentId.replace("`","");
+    }
 
+    public void setAcBankNum(String acBankNum) {
+        if (StringUtils.isBlank(acBankNum))
+            return;
 
+        this.acBankNum = acBankNum.replace("`","");
+    }
 }
